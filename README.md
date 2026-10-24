@@ -13,11 +13,11 @@ aplus-menu/
 ├── icon-512.png          phone home-screen icon
 ├── manifest.webmanifest  lets phones "Add to Home Screen" like an app
 ├── sw.js                 offline support
-├── admin.html            photo studio (runs on your computer, not deployed)
+├── admin.html            photo studio, live at aplus-sy.com/admin
 ├── 404.html              "this cup is empty" page for wrong addresses
 ├── og.png                preview card shown when the link is shared
 ├── robots.txt, sitemap.xml
-├── Dockerfile, nginx.conf, security-headers.conf   deployment (see DEPLOY.md)
+├── server.js, Dockerfile  the server (site + studio API) and its container (see DEPLOY.md)
 ├── images/               drink and snack photos (names below)
 └── fonts/                Montserrat Arabic .woff2 files (names below)
 ```
@@ -37,15 +37,14 @@ After changing prices, bump `VERSION` in `sw.js` so phones that saved the menu o
 
 ## Adding photos (admin)
 
-Open `admin.html` in **Chrome or Edge on a computer** (http://localhost:5500/admin.html), press "Choose folder" and pick this `aplus-menu` folder.
+**Live:** open https://aplus-sy.com/admin on any phone or computer and log in with the studio password (`ADMIN_PASSWORD` in Coolify, see [DEPLOY.md](DEPLOY.md)). Saved photos show on the menu right away.
 
-- Click or drop a photo on any item, drag and zoom it inside the arch, and press Save. It is written to `images/` with the exact name the menu expects.
-- Drop your whole old photos folder on the big box to import everything at once. Files are matched by name, so `iced latte.JPG` goes to Iced Latte.
+**On this computer:** `ADMIN_PASSWORD=pick-one DATA_DIR=./data node server.js` gives the same login screen at http://localhost/admin. Or, with `python -m http.server`, open admin.html in Chrome or Edge and press "Choose folder" to write straight into `images/`.
+
+- Click or drop a photo on any item, drag and zoom it inside the arch, and press Save. It's stored with the exact name the menu expects.
+- Drop or pick many photos at once: files are matched to items by name, so `iced latte.JPG` goes to Iced Latte.
 - The ring shows how many items have a photo, and "Missing" lists the ones still to do.
 - Photos are saved as 900×1080 JPEGs, small enough to load fast on phones.
-- Saving also bumps `VERSION` in `sw.js`, so phones get the new photos.
-
-It works on your own copy of the files. Upload the folder to your host afterwards to update the live site. Nobody can change your photos through `admin.html` on the live site, but you can leave it out when uploading if you prefer.
 
 ## Table QR cards
 

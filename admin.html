@@ -64,6 +64,10 @@ header{background:var(--hero-bg);color:var(--hero-ink);border-radius:0 0 32px 32
 .connect p{color:var(--muted);margin:0 0 20px}
 .connect code{background:var(--brand-soft);padding:1px 6px;border-radius:6px;font-size:13px}
 .connect .err{color:var(--danger);font-weight:600;font-size:14px;margin-top:14px}
+.connect form{display:flex;flex-direction:column;gap:10px;max-width:320px;margin-inline:auto}
+.connect input{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:13px 16px;font-size:16px;text-align:center;letter-spacing:.08em}
+.connect input:focus{outline:none;border-color:var(--sage);box-shadow:0 0 0 4px color-mix(in srgb,var(--sage) 18%,transparent)}
+.hd button.out{color:var(--hero-ink);font-weight:700;font-size:14px;border:1px solid rgba(238,245,218,.28);border-radius:999px;padding:8px 14px;background:none}
 
 /* TOOLS */
 .tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-block:22px 6px}
@@ -85,7 +89,7 @@ header{background:var(--hero-bg);color:var(--hero-ink);border-radius:0 0 32px 32
 .bulk span{color:var(--muted);font-size:13.5px}
 
 /* GRID */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;padding-block:14px 60px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,160px),1fr));gap:14px;padding-block:14px 60px}
 .it{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:10px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);transition:border-color .2s,transform .2s var(--ease)}
 .it.over{border-color:var(--gold-a);transform:translateY(-3px) scale(1.01)}
 .frame{position:relative;width:100%;aspect-ratio:5/6;border-radius:200px 200px 14px 14px;overflow:hidden;background:linear-gradient(170deg,var(--brand-soft),color-mix(in srgb,var(--brand-soft) 60%,var(--surface)));display:grid;place-items:center;color:var(--sage);border:0;padding:0}
@@ -148,16 +152,26 @@ header{background:var(--hero-bg);color:var(--hero-ink);border-radius:0 0 32px 32
     <div class="grow"><h1>Photo studio</h1><p id="hdSub">Add and crop the photos for every item on the menu.</p></div>
     <div class="ring" id="ring" hidden><svg viewBox="0 0 86 86"><circle class="bg" cx="43" cy="43" r="37"/><circle class="fg" id="ringFg" cx="43" cy="43" r="37" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/></svg><b id="ringTxt"></b></div>
     <a href="index.html" target="_blank" rel="noopener">Open menu ↗</a>
+    <button class="out" id="logoutBtn" type="button" hidden>Log out</button>
   </div>
 </header>
 
 <main class="wrap">
   <section class="connect" id="connect">
-    <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 11v5M9.5 13.5h5"/></svg></div>
-    <h2>Open the menu folder</h2>
-    <p>Choose the <code>aplus-menu</code> folder (the one with <code>index.html</code> in it). Photos you add are saved straight into its <code>images</code> folder.</p>
-    <button class="gold" id="pickBtn" type="button">Choose folder</button>
-    <button class="ghost" id="resumeBtn" type="button" hidden style="margin-inline-start:8px"></button>
+    <div id="localBox" hidden>
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 11v5M9.5 13.5h5"/></svg></div>
+      <h2>Open the menu folder</h2>
+      <p>Choose the <code>aplus-menu</code> folder (the one with <code>index.html</code> in it). Photos you add are saved straight into its <code>images</code> folder.</p>
+      <button class="gold" id="pickBtn" type="button">Choose folder</button>
+      <button class="ghost" id="resumeBtn" type="button" hidden style="margin-inline-start:8px"></button>
+    </div>
+    <form id="loginBox" hidden>
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V7.5a3.5 3.5 0 0 1 7 0v3M12 14.5v2.5"/></svg></div>
+      <h2>Staff login</h2>
+      <p>Enter the studio password to add menu photos.</p>
+      <input id="pw" type="password" autocomplete="current-password" placeholder="Password" required>
+      <button class="gold" type="submit">Log in</button>
+    </form>
     <div class="err" id="connErr" hidden></div>
   </section>
 
@@ -216,50 +230,111 @@ const idb = (mode, fn) => new Promise((res, rej) => {
 const saveHandle = h => idb('readwrite', s => s.put(h, 'root')).catch(()=>{});
 const loadHandle = () => idb('readonly', s => s.get('root')).catch(()=>null);
 
+/* ---------- where photos are saved ----------
+   live:  on aplus-sy.com through server.js, password protected, from any phone or computer.
+   local: into a folder on this computer (Chrome / Edge), when the site runs without server.js. */
+let store = null;
+async function call(method, route, body){
+  const headers = body instanceof Blob ? {'Content-Type':'image/jpeg'} : body ? {'Content-Type':'application/json'} : {};
+  const r = await fetch('/api/' + route, {method, body, headers, credentials:'same-origin', cache:'no-store'});
+  const data = await r.json().catch(()=>({}));
+  if(r.status === 401 && route !== 'login') showLogin('Your session ended. Log in again.');
+  if(!r.ok) throw new Error(data.error || `Server error ${r.status}`);
+  return data;
+}
+const LIVE = {
+  async list(){ const {photos} = await call('GET', 'photos'); return new Map(Object.entries(photos).map(([n, p]) => [n, `images/${encodeURIComponent(n)}?v=${p.v}`])); },
+  write: (name, blob) => call('PUT', 'photos/' + encodeURIComponent(name), blob),
+  remove: name => call('DELETE', 'photos/' + encodeURIComponent(name))
+};
+const LOCAL = {
+  async list(){
+    const m = new Map();
+    for await (const [name, entry] of imgDir.entries()){
+      if(entry.kind !== 'file' || name.endsWith('.crswap')) continue;
+      /* a file open in another program can be unreadable; skip it rather than break the whole grid */
+      try{ m.set(name, URL.createObjectURL(await entry.getFile())); }catch(e){}
+    }
+    return m;
+  },
+  async write(name, blob){ const w = await (await imgDir.getFileHandle(name, {create:true})).createWritable(); await w.write(blob); await w.close(); },
+  async remove(name){ await imgDir.removeEntry(name); return {}; }
+};
+
 /* ---------- connect ---------- */
 function connErr(msg){ $('#connErr').textContent = msg; $('#connErr').hidden = !msg; }
-if(!('showDirectoryPicker' in window)){
-  $('#pickBtn').disabled = true;
-  connErr('This page needs Chrome or Edge on a computer (it saves files straight into the folder).');
-}
-$('#pickBtn').addEventListener('click', async ()=>{
-  try{ const h = await showDirectoryPicker({id:'aplus-menu', mode:'readwrite'}); await open(h); }
-  catch(e){ if(e.name !== 'AbortError') connErr(e.message); }
-});
 (async ()=>{
-  const h = await loadHandle(); if(!h) return;
-  const b = $('#resumeBtn'); b.textContent = `Continue with “${h.name}”`; b.hidden = false;
-  b.onclick = async ()=>{ try{ if(await h.requestPermission({mode:'readwrite'}) === 'granted') await open(h); }catch(e){ connErr(e.message); } };
+  let s = null;
+  try{ const r = await fetch('/api/session', {cache:'no-store'}); if(r.ok) s = await r.json(); }catch(e){}
+  if(!s) return localSetup();
+  showLogin(s.enabled ? '' : 'The studio is locked: set ADMIN_PASSWORD in Coolify, then redeploy.');
+  if(s.authed) startLive(); else $('#pw').focus();
 })();
 
+function showLogin(msg){
+  $('#studio').hidden = true; $('#ring').hidden = true; $('#logoutBtn').hidden = true;
+  $('#connect').hidden = false; $('#loginBox').hidden = false; $('#localBox').hidden = true;
+  connErr(msg);
+}
+$('#loginBox').addEventListener('submit', async e=>{
+  e.preventDefault(); connErr('');
+  try{ await call('POST', 'login', JSON.stringify({password: $('#pw').value})); $('#pw').value = ''; await startLive(); }
+  catch(err){ connErr(err.message); }
+});
+$('#logoutBtn').addEventListener('click', async ()=>{ try{ await call('POST', 'logout'); }catch(e){} showLogin(''); });
+async function startLive(){
+  store = LIVE;
+  if(!loadMenu(await (await fetch('index.html', {cache:'no-store'})).text())) return;
+  await afterLoad(`Live on ${location.host}`);
+  $('#logoutBtn').hidden = false;
+}
+
+function localSetup(){
+  $('#localBox').hidden = false;
+  if(!('showDirectoryPicker' in window)){
+    $('#pickBtn').disabled = true;
+    return connErr('This page needs Chrome or Edge on a computer (it saves files straight into the folder).');
+  }
+  $('#pickBtn').addEventListener('click', async ()=>{
+    try{ const h = await showDirectoryPicker({id:'aplus-menu', mode:'readwrite'}); await open(h); }
+    catch(e){ if(e.name !== 'AbortError') connErr(e.message); }
+  });
+  loadHandle().then(h=>{
+    if(!h) return;
+    const b = $('#resumeBtn'); b.textContent = `Continue with “${h.name}”`; b.hidden = false;
+    b.onclick = async ()=>{ try{ if(await h.requestPermission({mode:'readwrite'}) === 'granted') await open(h); }catch(e){ connErr(e.message); } };
+  });
+}
 async function open(h){
   connErr('');
   let html;
   try{ html = await (await (await h.getFileHandle('index.html')).getFile()).text(); }
   catch(e){ return connErr(`No index.html in “${h.name}”. Pick the aplus-menu folder itself.`); }
-  /* the menu data lives in index.html between "const CATS" and "const BY"; run just that block */
-  const a = html.indexOf('const CATS'), b = html.indexOf('const BY');
-  if(a < 0 || b < a) return connErr('Could not find the menu list (ITEMS) in index.html.');
-  try{ ({CATS, ITEMS} = new Function(html.slice(a, b) + ';return {CATS, ITEMS};')()); }
-  catch(e){ return connErr('The menu list in index.html has an error: ' + e.message); }
-  root = h; imgDir = await h.getDirectoryHandle('images', {create:true});
+  if(!loadMenu(html)) return;
+  root = h; imgDir = await h.getDirectoryHandle('images', {create:true}); store = LOCAL;
   await saveHandle(h);
-  await scan();
+  await afterLoad(`Folder: ${h.name}`);
+}
+
+/* the menu data lives in index.html between "const CATS" and "const BY"; run just that block */
+function loadMenu(html){
+  const a = html.indexOf('const CATS'), b = html.indexOf('const BY');
+  if(a < 0 || b < a){ connErr('Could not find the menu list (ITEMS) in index.html.'); return false; }
+  try{ ({CATS, ITEMS} = new Function(html.slice(a, b) + ';return {CATS, ITEMS};')()); return true; }
+  catch(e){ connErr('The menu list in index.html has an error: ' + e.message); return false; }
+}
+async function afterLoad(label){
+  try{ await scan(); }catch(e){ return connErr(e.message); }
   $('#connect').hidden = true; $('#studio').hidden = false; $('#ring').hidden = false;
-  $('#hdSub').textContent = `Folder: ${h.name} · ${ITEMS.length} items`;
+  $('#hdSub').textContent = `${label} · ${ITEMS.length} items`;
   $('#cats').innerHTML = [{id:'all',en:'All sections'}, ...CATS].map(c=>`<button type="button" data-c="${c.id}" class="${c.id===cat?'on':''}">${esc(c.en)}</button>`).join('');
   render();
 }
 
 const fileName = it => it.img.replace(/^images\//, '');
 async function scan(){
-  for(const u of have.values()) URL.revokeObjectURL(u);
-  have = new Map();
-  for await (const [name, entry] of imgDir.entries()){
-    if(entry.kind !== 'file' || name.endsWith('.crswap')) continue;
-    /* a file open in another program can be unreadable; skip it rather than break the whole grid */
-    try{ have.set(name, URL.createObjectURL(await entry.getFile())); }catch(e){}
-  }
+  for(const u of have.values()) if(u.startsWith('blob:')) URL.revokeObjectURL(u);
+  have = await store.list();
 }
 
 /* ---------- grid ---------- */
@@ -303,7 +378,10 @@ $('#grid').addEventListener('click', async e=>{
   if(r){
     const it = ITEMS.find(i=>i.id===r.dataset.rm);
     if(!confirm(`Remove the photo for ${it.en}?`)) return;
-    await imgDir.removeEntry(fileName(it)); await afterWrite(); toast(`Removed ${it.en}`);
+    try{
+      const res = await store.remove(fileName(it)); await afterWrite();
+      toast(res.bundled ? `Removed the upload; the ${it.en} photo from GitHub shows again` : `Removed ${it.en}`);
+    }catch(err){ toast('Could not remove: ' + err.message); }
   }
 });
 $('#oneInput').addEventListener('change', e=>{ const f = e.target.files[0]; if(f && pickFor) cropOpen(ITEMS.find(i=>i.id===pickFor), f); });
@@ -406,13 +484,11 @@ async function coverJpeg(file){
 const toBlob = c => new Promise((res, rej) => c.toBlob(b => b ? res(b) : rej(new Error('encode failed')), 'image/jpeg', QUALITY));
 
 /* ---------- writing ---------- */
-async function write(name, blob){
-  const w = await (await imgDir.getFileHandle(name, {create:true})).createWritable();
-  await w.write(blob); await w.close();
-}
-/* phones that saved the menu offline keep old photos until sw.js changes, so bump its VERSION once per session */
+const write = (name, blob) => store.write(name, blob);
+/* local folder only: bump sw.js VERSION once per session so phones drop their saved copy of the menu
+   (the live server revalidates photos on every visit, so it doesn't need this) */
 async function bumpSw(){
-  if(swBumped) return; swBumped = true;
+  if(swBumped || store !== LOCAL) return; swBumped = true;
   try{
     const fh = await root.getFileHandle('sw.js'), txt = await (await fh.getFile()).text();
     const next = txt.replace(/const VERSION = 'aplus-v(\d+)'/, (m, n) => `const VERSION = 'aplus-v${+n+1}'`);

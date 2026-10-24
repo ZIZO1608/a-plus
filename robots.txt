@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /tables
+Disallow: /admin
+Disallow: /api/
 
 Sitemap: https://aplus-sy.com/sitemap.xml

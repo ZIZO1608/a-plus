@@ -1,64 +1,65 @@
 # Deploying to aplus-sy.com with Coolify
 
-The site is a static folder served by nginx in a small Docker container (`Dockerfile`, `nginx.conf`, `security-headers.conf`).
-Coolify builds it from a Git repository and handles HTTPS for the domain.
+The site runs as one small Node container (`Dockerfile` + `server.js`, no npm packages).
+It serves the menu and the live photo studio at **https://aplus-sy.com/admin**.
+Coolify builds it from GitHub (`ZIZO1608/a-plus`, branch `main`) and handles HTTPS.
 
-## 1. DNS (at the domain registrar)
+## Coolify settings
 
-| Type | Name  | Value           |
-|------|-------|-----------------|
-| A    | `@`   | your VPS IP     |
-| A    | `www` | your VPS IP     |
+| Setting | Value |
+|---|---|
+| Build Pack | `Dockerfile` |
+| Ports Exposes | `80` |
+| Domains | `https://aplus-sy.com` and `https://www.aplus-sy.com` (port 80), redirect www → non-www |
+| Health check | path `/healthz`, port `80` |
 
-If the domain is on Cloudflare, set both records to **DNS only** (grey cloud) for the first deploy so Let's Encrypt can issue the certificate.
-You can turn the orange cloud on afterwards with SSL mode **Full (strict)**.
+### Photo studio: two extra settings (required for /admin)
 
-Check it has spread before deploying: `nslookup aplus-sy.com` should return the VPS IP.
+1. **Environment Variables → + Add**
+   - Name: `ADMIN_PASSWORD`
+   - Value: a long password only staff know (12+ characters)
+   - Leave "Build Variable" **off**.
+2. **Persistent Storage → + Add → Volume Mount**
+   - Name: `aplus-photos`
+   - Destination Path: `/data`
 
-## 2. Put the code on GitHub
+   This is where uploaded photos are kept. Without it they disappear on every redeploy.
+3. **Redeploy.**
 
-Create a **private** repository (for example `aplus-menu`) and push this folder to it:
+Then open https://aplus-sy.com/admin, log in, and add photos. They show on the menu right away, with no git push needed.
 
-```
-git init
-git add .
-git commit -m "A PLUS menu"
-git branch -M main
-git remote add origin https://github.com/<you>/aplus-menu.git
-git push -u origin main
-```
+To change the password, edit `ADMIN_PASSWORD` and redeploy (everyone gets logged out).
 
-## 3. Create the app in Coolify
+## DNS (Hostinger)
 
-1. **Projects → (your project) → + New → Private Repository (with GitHub App)**. Connect GitHub if you haven't yet, then pick `aplus-menu`, branch `main`.
-2. **Build Pack:** `Dockerfile`. **Base Directory:** `/`.
-3. **Ports Exposes:** `80`.
-4. **Domains:** `https://aplus-sy.com,https://www.aplus-sy.com`.
-5. In **Advanced**, set the www redirect to **Redirect to non-www**, so everything ends up on `https://aplus-sy.com`.
-6. **Health check:** path `/healthz`, port `80`. The container also has its own Docker health check.
-7. Press **Deploy**. When it's done, open https://aplus-sy.com.
+hPanel → Domains → aplus-sy.com → DNS / Nameservers → DNS records:
 
-Turn on **Auto Deploy** so every `git push` updates the live site.
+| Type | Name | Points to |
+|---|---|---|
+| A | `@` | the VPS IP |
+| CNAME | `www` | `aplus-sy.com` |
 
-## 4. Check it
+Delete any `AAAA` record for `@`.
 
-- https://aplus-sy.com: the menu, with a padlock in the address bar
-- https://www.aplus-sy.com should redirect to the address without www
-- https://aplus-sy.com/feedback: the complaints page
-- https://aplus-sy.com/tables: QR table cards (already set to aplus-sy.com)
-- https://aplus-sy.com/anything-wrong: the "empty cup" 404 page
-- Paste https://aplus-sy.com into WhatsApp: a preview card with the logo should appear (WhatsApp caches previews, so the first try can take a minute)
+## Updating the menu
+
+- **Photos:** use https://aplus-sy.com/admin from any phone or computer.
+- **Prices / items:** edit `index.html`, then `git add . && git commit -m "update menu" && git push`. Coolify redeploys (turn on Auto Deploy).
+  Uploaded photos are not affected, because they live in the volume.
+
+## How it works
+
+- `/images/<name>` is served from the volume first (`/data/images`), then from the repo's `images/` folder.
+- The studio can only write the exact photo names used in `index.html`, only real JPEGs, up to 6 MB, and only after logging in.
+- Login: 8 wrong tries from one address locks it for 15 minutes. Sessions last 12 hours (HttpOnly, SameSite=Strict, Secure cookie).
+- Pages and photos are revalidated on each visit (fast 304 responses), so changes appear immediately. Text is gzipped.
+- Short links: `/feedback`, `/tables`, `/admin`. Unknown addresses show the "empty cup" 404 page.
+- Server logs (Coolify → Logs) show every saved/removed photo and every wrong password attempt.
+
+## Checklist after deploying
+
+- https://aplus-sy.com shows the menu with a padlock
 - https://aplus-sy.com/healthz shows `ok`
-
-## Updating the menu later
-
-1. Change prices in `index.html`, or add photos with `admin.html` (on your computer, http://localhost:5500/admin.html).
-2. If you edited prices by hand, bump `VERSION` in `sw.js` (the photo studio does this for you).
-3. `git add . && git commit -m "update menu" && git push`. Coolify redeploys in about a minute.
-
-## What's in the container
-
-- `admin.html` and the `.md` files are left out of the image (`.dockerignore`). The photo studio only works on your computer anyway.
-- Pages and `sw.js` are never cached long, so price changes show up right away. Photos and fonts are cached for a week.
-- Gzip, `nosniff`, `X-Frame-Options`, `Referrer-Policy` and HSTS headers are on.
-- Short links: `/feedback` → complaints page, `/tables` → QR cards, and `/complaints` works without `.html`.
+- https://aplus-sy.com/admin shows "Staff login" (if it says "studio is locked", `ADMIN_PASSWORD` is missing)
+- Upload one photo, then open the menu: it's there
+- Redeploy, and the photo is still there (that means the volume is working)
