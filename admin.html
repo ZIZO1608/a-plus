@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#46523A">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<title>A PLUS Photo Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Tajawal:wght@500;700&display=swap">
+<style>
+/* Staff page: add menu photos. Uses the browser's folder access (Chrome / Edge on a computer)
+   to write straight into images/ with the exact file names index.html expects. */
+:root{
+  --bg:#F2F6E6; --surface:#FBFDF4; --ink:#262D1E; --muted:#5C6650; --line:rgba(70,82,58,.15);
+  --brand:#46523A; --on-brand:#EEF5DA; --sage:#6A7A4F; --brand-soft:#E2EAC9;
+  --gold-a:#B98A3E; --gold-b:#F4D58D; --hero-bg:#46523A; --hero-ink:#EEF5DA; --hero-muted:rgba(238,245,218,.72);
+  --danger:#B4442E; --shadow:0 1px 2px rgba(38,45,30,.06),0 8px 24px rgba(38,45,30,.07); --scrim:rgba(18,22,13,.6);
+  --f:"Montserrat","Montserrat Arabic","Tajawal",system-ui,sans-serif; --ease:cubic-bezier(.2,.85,.2,1);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#13180F; --surface:#1C2318; --ink:#EEF5DA; --muted:#A8B494; --line:rgba(238,245,218,.11);
+  --brand:#A9BC83; --on-brand:#13180F; --sage:#93A672; --brand-soft:#253020; --hero-bg:#222B1B; --danger:#E7806A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#13180F; --surface:#1C2318; --ink:#EEF5DA; --muted:#A8B494; --line:rgba(238,245,218,.11);
+  --brand:#A9BC83; --on-brand:#13180F; --sage:#93A672; --brand-soft:#253020; --hero-bg:#222B1B; --danger:#E7806A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.25); color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--gold-a);outline-offset:2px;border-radius:8px}
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:16px}
+.gold{border:0;border-radius:14px;padding:12px 20px;font-weight:800;background:linear-gradient(100deg,var(--gold-a),var(--gold-b) 55%,var(--gold-a));color:#2B230F;box-shadow:0 8px 20px rgba(185,138,62,.25);transition:transform .15s}
+.gold:active{transform:scale(.97)}
+.ghost{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 14px;font-weight:700;font-size:13px}
+
+/* HEADER */
+header{background:var(--hero-bg);color:var(--hero-ink);border-radius:0 0 32px 32px;padding:18px 0 28px}
+.hd{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.hd img{width:46px;height:46px}
+.hd h1{margin:0;font-weight:900;font-size:clamp(24px,5vw,34px);line-height:1.1;letter-spacing:-.02em}
+.hd p{margin:2px 0 0;color:var(--hero-muted);font-size:14px}
+.hd .grow{flex:1;min-width:200px}
+.ring{position:relative;width:86px;height:86px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:8}
+.ring .bg{stroke:rgba(238,245,218,.14)}
+.ring .fg{stroke:url(#rg);stroke-linecap:round;transition:stroke-dashoffset .8s var(--ease)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-weight:900;font-size:19px;line-height:1;font-variant-numeric:tabular-nums}
+.ring b small{display:block;font-size:10.5px;font-weight:600;color:var(--hero-muted);margin-top:3px}
+.hd a{color:var(--hero-ink);font-weight:700;font-size:14px;text-decoration:none;border:1px solid rgba(238,245,218,.28);border-radius:999px;padding:8px 14px}
+
+/* CONNECT */
+.connect{max-width:560px;margin:40px auto;text-align:center;background:var(--surface);border:1px solid var(--line);border-radius:160px 160px 28px 28px;padding:56px 28px 30px;box-shadow:var(--shadow)}
+.connect .ic{width:72px;height:72px;margin:0 auto 14px;border-radius:36px 36px 14px 14px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center}
+.connect .ic svg{width:34px;height:34px}
+.connect h2{margin:0 0 6px;font-weight:900;font-size:24px}
+.connect p{color:var(--muted);margin:0 0 20px}
+.connect code{background:var(--brand-soft);padding:1px 6px;border-radius:6px;font-size:13px}
+.connect .err{color:var(--danger);font-weight:600;font-size:14px;margin-top:14px}
+
+/* TOOLS */
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding-block:22px 6px}
+.search{flex:1;min-width:220px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:11px 14px;font-size:15px}
+.search:focus{outline:none;border-color:var(--sage);box-shadow:0 0 0 4px color-mix(in srgb,var(--sage) 18%,transparent)}
+.seg{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:3px}
+.seg button{border:0;background:none;border-radius:11px;padding:8px 13px;font-weight:700;font-size:13px;color:var(--muted)}
+.seg button.on{background:var(--brand);color:var(--on-brand)}
+.cats{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-block:6px 4px}
+.cats button{flex:none;border:1px dashed var(--line);background:none;border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap}
+.cats button.on{border-style:solid;border-color:var(--gold-a);color:var(--ink);background:color-mix(in srgb,var(--gold-b) 26%,transparent)}
+
+/* BULK DROP */
+.bulk{margin-block:14px 6px;border:2px dashed var(--line);border-radius:22px;padding:18px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;transition:background .2s,border-color .2s}
+.bulk.over{border-color:var(--gold-a);background:color-mix(in srgb,var(--gold-b) 18%,transparent)}
+.bulk svg{width:34px;height:34px;color:var(--sage);flex:none}
+.bulk div{flex:1;min-width:200px}
+.bulk b{display:block}
+.bulk span{color:var(--muted);font-size:13.5px}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;padding-block:14px 60px}
+.it{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:10px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);transition:border-color .2s,transform .2s var(--ease)}
+.it.over{border-color:var(--gold-a);transform:translateY(-3px) scale(1.01)}
+.frame{position:relative;width:100%;aspect-ratio:5/6;border-radius:200px 200px 14px 14px;overflow:hidden;background:linear-gradient(170deg,var(--brand-soft),color-mix(in srgb,var(--brand-soft) 60%,var(--surface)));display:grid;place-items:center;color:var(--sage);border:0;padding:0}
+.frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:fadeIn .5s var(--ease)}
+.frame .ph{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12.5px;font-weight:700}
+.frame .ph svg{width:30px;height:30px}
+.frame .badge{position:absolute;bottom:10px;inset-inline-end:10px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--brand);color:var(--on-brand);z-index:1}
+.frame .badge svg{width:14px;height:14px}
+.frame:hover .hov{opacity:1}
+.hov{position:absolute;inset:0;z-index:2;display:grid;place-items:center;background:rgba(18,22,13,.45);color:#fff;font-weight:800;font-size:14px;opacity:0;transition:opacity .2s}
+@keyframes fadeIn{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:none}}
+.it h3{margin:0;font-size:15px;font-weight:800;line-height:1.25}
+.it .ar{font-family:"Tajawal",sans-serif;font-weight:700;color:var(--muted);font-size:14px;direction:rtl;text-align:start}
+.it .fn{font-size:11.5px;color:var(--muted);font-family:ui-monospace,Consolas,monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.it .acts{display:flex;gap:6px;margin-top:auto}
+.it .acts button{flex:1;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:8px;font-weight:700;font-size:13px}
+.it .acts .rm{flex:none;color:var(--danger)}
+.it .acts .rm svg{width:15px;height:15px;display:block}
+.none{grid-column:1/-1;text-align:center;color:var(--muted);padding:50px 0}
+
+/* CROPPER */
+.scrim{position:fixed;inset:0;z-index:40;background:var(--scrim);opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.on{opacity:1;pointer-events:auto}
+.crop{position:fixed;z-index:41;inset:0;display:grid;place-items:center;padding:16px;pointer-events:none}
+.crop-box{pointer-events:auto;width:min(100%,440px);max-height:100%;overflow:auto;background:var(--surface);border-radius:28px;padding:20px;box-shadow:0 30px 80px rgba(0,0,0,.35);transform:translateY(20px) scale(.97);opacity:0;transition:transform .4s var(--ease),opacity .3s}
+.crop.on .crop-box{transform:none;opacity:1}
+.crop-box h2{margin:0;font-size:20px;font-weight:900}
+.crop-box .sub{color:var(--muted);font-size:13px;margin:2px 0 14px}
+.stage{position:relative;width:min(100%,300px);margin-inline:auto;aspect-ratio:5/6;border-radius:200px 200px 18px 18px;overflow:hidden;background:#111;touch-action:none;cursor:grab;user-select:none}
+.stage:active{cursor:grabbing}
+.stage img{position:absolute;left:50%;top:50%;max-width:none;transform-origin:center;pointer-events:none;-webkit-user-drag:none}
+.stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.18),rgba(255,255,255,.18)) 33.33% 0/1px 100% no-repeat,linear-gradient(rgba(255,255,255,.18),rgba(255,255,255,.18)) 66.66% 0/1px 100% no-repeat,linear-gradient(rgba(255,255,255,.18),rgba(255,255,255,.18)) 0 33.33%/100% 1px no-repeat,linear-gradient(rgba(255,255,255,.18),rgba(255,255,255,.18)) 0 66.66%/100% 1px no-repeat;opacity:0;transition:opacity .2s}
+.stage.drag::after{opacity:1}
+.zoom{display:flex;align-items:center;gap:10px;margin:16px 4px 4px;color:var(--muted)}
+.zoom svg{width:18px;height:18px;flex:none}
+.zoom input{flex:1;accent-color:var(--gold-a)}
+.hint{font-size:12px;color:var(--muted);text-align:center;margin:4px 0 14px}
+.crop-acts{display:flex;gap:8px}
+.crop-acts button{flex:1}
+.crop-acts .ghost{padding:12px}
+
+/* TOAST */
+.toast{position:fixed;z-index:60;bottom:22px;left:50%;translate:-50% 0;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:14px;font-weight:700;font-size:14px;display:flex;gap:10px;align-items:center;box-shadow:0 12px 30px rgba(0,0,0,.25);
+  transform:translateY(120px);transition:transform .45s var(--ease);max-width:calc(100vw - 32px)}
+.toast.on{transform:none}
+.toast svg{width:18px;height:18px;color:var(--gold-b);flex:none}
+
+/* confetti for 100% */
+.burst{position:fixed;pointer-events:none;z-index:70;width:9px;height:9px;border-radius:2px;animation:burst 1.4s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes burst{to{transform:translate(var(--x),var(--y)) rotate(var(--r));opacity:0}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs><linearGradient id="rg" x1="0" x2="1"><stop offset="0" stop-color="#B98A3E"/><stop offset="1" stop-color="#F4D58D"/></linearGradient></defs></svg>
+
+<header>
+  <div class="wrap hd">
+    <img src="logo.svg" alt="">
+    <div class="grow"><h1>Photo studio</h1><p id="hdSub">Add and crop the photos for every item on the menu.</p></div>
+    <div class="ring" id="ring" hidden><svg viewBox="0 0 86 86"><circle class="bg" cx="43" cy="43" r="37"/><circle class="fg" id="ringFg" cx="43" cy="43" r="37" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/></svg><b id="ringTxt"></b></div>
+    <a href="index.html" target="_blank" rel="noopener">Open menu ↗</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="connect" id="connect">
+    <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 11v5M9.5 13.5h5"/></svg></div>
+    <h2>Open the menu folder</h2>
+    <p>Choose the <code>aplus-menu</code> folder (the one with <code>index.html</code> in it). Photos you add are saved straight into its <code>images</code> folder.</p>
+    <button class="gold" id="pickBtn" type="button">Choose folder</button>
+    <button class="ghost" id="resumeBtn" type="button" hidden style="margin-inline-start:8px"></button>
+    <div class="err" id="connErr" hidden></div>
+  </section>
+
+  <div id="studio" hidden>
+    <div class="tools">
+      <input class="search" id="q" type="search" placeholder="Search items" autocomplete="off">
+      <div class="seg" id="seg"><button type="button" data-v="all" class="on">All</button><button type="button" data-v="missing">Missing</button><button type="button" data-v="done">Has photo</button></div>
+    </div>
+    <div class="cats" id="cats"></div>
+    <label class="bulk" id="bulk">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>
+      <div><b>Drop your old photos here, all at once</b><span>Each file goes to the item with the same name (like <i>Latte.jpg</i>). Or drop one photo on any card below.</span></div>
+      <span class="ghost">Pick files</span>
+      <input type="file" id="bulkInput" accept="image/*" multiple hidden>
+    </label>
+    <div class="grid" id="grid"></div>
+  </div>
+</main>
+
+<input type="file" id="oneInput" accept="image/*" hidden>
+<div class="scrim" id="scrim"></div>
+<div class="crop" id="crop" role="dialog" aria-modal="true" aria-labelledby="cropTitle">
+  <div class="crop-box">
+    <h2 id="cropTitle"></h2>
+    <div class="sub" id="cropSub"></div>
+    <div class="stage" id="stage"><img id="cropImg" alt=""></div>
+    <div class="zoom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M8 11h6"/></svg>
+      <input type="range" id="zoom" min="1" max="4" step="0.01" value="1" aria-label="Zoom">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M8 11h6M11 8v6"/></svg></div>
+    <div class="hint">Drag to move · scroll or pinch to zoom. This is exactly how it shows on the menu.</div>
+    <div class="crop-acts"><button class="ghost" type="button" id="cropCancel">Cancel</button><button class="gold" type="button" id="cropSave">Save photo</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span></span></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const OUT_W = 900, OUT_H = 1080, QUALITY = .86;   /* saved size: same 5:6 arch as the menu's detail sheet */
+const ICON = {
+  photo:'<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>'
+};
+const ic = (k,sw=2) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${ICON[k]}</svg>`;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+let root, imgDir, CATS = [], ITEMS = [], have = new Map(), view = 'all', cat = 'all', query = '', swBumped = false;
+
+/* ---------- remember the folder between visits (IndexedDB holds the handle) ---------- */
+const idb = (mode, fn) => new Promise((res, rej) => {
+  const o = indexedDB.open('aplus-admin', 1);
+  o.onupgradeneeded = () => o.result.createObjectStore('kv');
+  o.onsuccess = () => { const tx = o.result.transaction('kv', mode); const r = fn(tx.objectStore('kv')); tx.oncomplete = () => res(r && r.result); tx.onerror = () => rej(tx.error); };
+  o.onerror = () => rej(o.error);
+});
+const saveHandle = h => idb('readwrite', s => s.put(h, 'root')).catch(()=>{});
+const loadHandle = () => idb('readonly', s => s.get('root')).catch(()=>null);
+
+/* ---------- connect ---------- */
+function connErr(msg){ $('#connErr').textContent = msg; $('#connErr').hidden = !msg; }
+if(!('showDirectoryPicker' in window)){
+  $('#pickBtn').disabled = true;
+  connErr('This page needs Chrome or Edge on a computer (it saves files straight into the folder).');
+}
+$('#pickBtn').addEventListener('click', async ()=>{
+  try{ const h = await showDirectoryPicker({id:'aplus-menu', mode:'readwrite'}); await open(h); }
+  catch(e){ if(e.name !== 'AbortError') connErr(e.message); }
+});
+(async ()=>{
+  const h = await loadHandle(); if(!h) return;
+  const b = $('#resumeBtn'); b.textContent = `Continue with “${h.name}”`; b.hidden = false;
+  b.onclick = async ()=>{ try{ if(await h.requestPermission({mode:'readwrite'}) === 'granted') await open(h); }catch(e){ connErr(e.message); } };
+})();
+
+async function open(h){
+  connErr('');
+  let html;
+  try{ html = await (await (await h.getFileHandle('index.html')).getFile()).text(); }
+  catch(e){ return connErr(`No index.html in “${h.name}”. Pick the aplus-menu folder itself.`); }
+  /* the menu data lives in index.html between "const CATS" and "const BY"; run just that block */
+  const a = html.indexOf('const CATS'), b = html.indexOf('const BY');
+  if(a < 0 || b < a) return connErr('Could not find the menu list (ITEMS) in index.html.');
+  try{ ({CATS, ITEMS} = new Function(html.slice(a, b) + ';return {CATS, ITEMS};')()); }
+  catch(e){ return connErr('The menu list in index.html has an error: ' + e.message); }
+  root = h; imgDir = await h.getDirectoryHandle('images', {create:true});
+  await saveHandle(h);
+  await scan();
+  $('#connect').hidden = true; $('#studio').hidden = false; $('#ring').hidden = false;
+  $('#hdSub').textContent = `Folder: ${h.name} · ${ITEMS.length} items`;
+  $('#cats').innerHTML = [{id:'all',en:'All sections'}, ...CATS].map(c=>`<button type="button" data-c="${c.id}" class="${c.id===cat?'on':''}">${esc(c.en)}</button>`).join('');
+  render();
+}
+
+const fileName = it => it.img.replace(/^images\//, '');
+async function scan(){
+  for(const u of have.values()) URL.revokeObjectURL(u);
+  have = new Map();
+  for await (const [name, entry] of imgDir.entries()){
+    if(entry.kind !== 'file' || name.endsWith('.crswap')) continue;
+    /* a file open in another program can be unreadable; skip it rather than break the whole grid */
+    try{ have.set(name, URL.createObjectURL(await entry.getFile())); }catch(e){}
+  }
+}
+
+/* ---------- grid ---------- */
+function render(){
+  const visible = ITEMS.filter(it=>{
+    const has = have.has(fileName(it));
+    if(view==='missing' && has) return false;
+    if(view==='done' && !has) return false;
+    if(cat!=='all' && it.c!==cat) return false;
+    if(query){ const q = query.toLowerCase(); return [it.en, it.ar, fileName(it)].some(s=>s.toLowerCase().includes(q)); }
+    return true;
+  });
+  $('#grid').innerHTML = visible.length ? visible.map(it=>{
+    const url = have.get(fileName(it));
+    return `<div class="it" data-id="${it.id}">
+      <button class="frame" type="button" data-pick="${it.id}" aria-label="${url?'Replace':'Add'} photo for ${esc(it.en)}">
+        ${url ? `<img src="${url}" alt=""><span class="badge">${ic('check',3)}</span>` : `<span class="ph">${ic('photo',1.6)}No photo yet</span>`}
+        <span class="hov">${url?'Replace':'Add photo'}</span></button>
+      <div><h3>${esc(it.en)}${it.sz?` · ${esc(it.sz)}`:''}</h3><div class="ar">${esc(it.ar)}</div></div>
+      <div class="fn" title="${esc(fileName(it))}">images/${esc(fileName(it))}</div>
+      <div class="acts"><button type="button" data-pick="${it.id}">${url?'Replace':'Upload'}</button>${url?`<button class="rm" type="button" data-rm="${it.id}" aria-label="Remove photo">${ic('trash')}</button>`:''}</div>
+    </div>`;
+  }).join('') : `<div class="none">${view==='missing' ? 'Every item here has a photo. 🎉' : 'Nothing matches.'}</div>`;
+  progress();
+}
+function progress(){
+  const done = ITEMS.filter(it=>have.has(fileName(it))).length, pct = ITEMS.length ? done/ITEMS.length : 0;
+  $('#ringFg').style.strokeDashoffset = 100 - pct*100;
+  $('#ringTxt').innerHTML = `${done}/${ITEMS.length}<small>photos</small>`;
+  return done;
+}
+
+$('#q').addEventListener('input', e=>{ query = e.target.value.trim(); render(); });
+$('#seg').addEventListener('click', e=>{ const b = e.target.closest('[data-v]'); if(!b) return; view = b.dataset.v; $('#seg').querySelectorAll('button').forEach(x=>x.classList.toggle('on', x===b)); render(); });
+$('#cats').addEventListener('click', e=>{ const b = e.target.closest('[data-c]'); if(!b) return; cat = b.dataset.c; $('#cats').querySelectorAll('button').forEach(x=>x.classList.toggle('on', x===b)); render(); });
+
+let pickFor = null;
+$('#grid').addEventListener('click', async e=>{
+  const p = e.target.closest('[data-pick]'), r = e.target.closest('[data-rm]');
+  if(p){ pickFor = p.dataset.pick; $('#oneInput').value = ''; $('#oneInput').click(); }
+  if(r){
+    const it = ITEMS.find(i=>i.id===r.dataset.rm);
+    if(!confirm(`Remove the photo for ${it.en}?`)) return;
+    await imgDir.removeEntry(fileName(it)); await afterWrite(); toast(`Removed ${it.en}`);
+  }
+});
+$('#oneInput').addEventListener('change', e=>{ const f = e.target.files[0]; if(f && pickFor) cropOpen(ITEMS.find(i=>i.id===pickFor), f); });
+
+/* drop one photo on a card */
+$('#grid').addEventListener('dragover', e=>{ const c = e.target.closest('.it'); if(!c) return; e.preventDefault(); document.querySelectorAll('.it.over').forEach(x=>x!==c&&x.classList.remove('over')); c.classList.add('over'); });
+$('#grid').addEventListener('dragleave', e=>{ const c = e.target.closest('.it'); if(c && !c.contains(e.relatedTarget)) c.classList.remove('over'); });
+$('#grid').addEventListener('drop', e=>{
+  const c = e.target.closest('.it'); if(!c) return; e.preventDefault(); c.classList.remove('over');
+  const f = [...e.dataTransfer.files].find(f=>f.type.startsWith('image/')); if(f) cropOpen(ITEMS.find(i=>i.id===c.dataset.id), f);
+});
+
+/* a photo dropped anywhere else would make the browser leave the page to show it */
+['dragover','drop'].forEach(t=>addEventListener(t, e=>e.preventDefault()));
+
+/* ---------- bulk import: match old files to items by name ---------- */
+const bulk = $('#bulk');
+['dragenter','dragover'].forEach(t=>bulk.addEventListener(t, e=>{ e.preventDefault(); bulk.classList.add('over'); }));
+['dragleave','drop'].forEach(t=>bulk.addEventListener(t, ()=>bulk.classList.remove('over')));
+bulk.addEventListener('drop', e=>{ e.preventDefault(); importMany([...e.dataTransfer.files]); });
+$('#bulkInput').addEventListener('change', e=>{ importMany([...e.target.files]); e.target.value=''; });
+/* "Iced Latte.JPG", "iced-latte.png" and "Iced Latte.jpg" all match the same item */
+const key = s => s.toLowerCase().replace(/\.[a-z0-9]+$/, '').replace(/[^a-z0-9]/g, '');
+async function importMany(files){
+  const byKey = new Map(ITEMS.map(it=>[key(fileName(it)), it]));
+  let ok = 0; const skipped = [];
+  for(const f of files){
+    const it = byKey.get(key(f.name));
+    if(!it || !f.type.startsWith('image/')){ skipped.push(f.name); continue; }
+    try{ await write(fileName(it), await coverJpeg(f)); ok++; }catch(err){ skipped.push(f.name); }
+  }
+  await afterWrite();
+  toast(`${ok} photo${ok===1?'':'s'} added${skipped.length?` · ${skipped.length} had no matching item`:''}`);
+  if(skipped.length) console.info('Not matched:', skipped);
+}
+
+/* ---------- cropper ---------- */
+const stage = $('#stage'), cImg = $('#cropImg'), zoomEl = $('#zoom');
+let cr = null;   /* {it, w, h, base, z, x, y} — x/y: image centre offset from stage centre, in stage pixels */
+async function cropOpen(it, file){
+  const url = URL.createObjectURL(file);
+  cImg.src = url; await cImg.decode().catch(()=>{});
+  if(!cImg.naturalWidth){ URL.revokeObjectURL(url); return toast('That file could not be opened as an image.'); }
+  cr = {it, url, w:cImg.naturalWidth, h:cImg.naturalHeight, z:1, x:0, y:0};
+  $('#cropTitle').textContent = it.en + (it.sz ? ` · ${it.sz}` : '');
+  $('#cropSub').textContent = `Saves as images/${fileName(it)}`;
+  zoomEl.value = 1;
+  $('#crop').classList.add('on'); $('#scrim').classList.add('on');
+  fit(); $('#cropSave').focus();
+}
+function fit(){ const W = stage.clientWidth, H = stage.clientHeight; cr.W = W; cr.H = H; cr.base = Math.max(W/cr.w, H/cr.h); draw(); }
+function draw(){
+  const s = cr.base*cr.z, mx = Math.max(0,(cr.w*s-cr.W)/2), my = Math.max(0,(cr.h*s-cr.H)/2);
+  cr.x = Math.min(mx, Math.max(-mx, cr.x)); cr.y = Math.min(my, Math.max(-my, cr.y));
+  cImg.style.width = cr.w+'px'; cImg.style.height = cr.h+'px';
+  cImg.style.transform = `translate(-50%,-50%) translate(${cr.x}px,${cr.y}px) scale(${s})`;
+}
+function setZoom(z){ cr.z = Math.min(4, Math.max(1, z)); zoomEl.value = cr.z; draw(); }
+zoomEl.addEventListener('input', ()=>setZoom(+zoomEl.value));
+stage.addEventListener('wheel', e=>{ if(!cr) return; e.preventDefault(); setZoom(cr.z * Math.exp(-e.deltaY*0.0015)); }, {passive:false});
+const ptrs = new Map(); let pinch0 = 0, z0 = 1;
+stage.addEventListener('pointerdown', e=>{ if(!cr) return; stage.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY}); stage.classList.add('drag');
+  if(ptrs.size===2){ const [a,b] = [...ptrs.values()]; pinch0 = Math.hypot(a.x-b.x, a.y-b.y); z0 = cr.z; } });
+stage.addEventListener('pointermove', e=>{
+  const p = ptrs.get(e.pointerId); if(!p) return;
+  if(ptrs.size===1){ cr.x += e.clientX-p.x; cr.y += e.clientY-p.y; draw(); }
+  ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+  if(ptrs.size===2){ const [a,b] = [...ptrs.values()]; setZoom(z0 * Math.hypot(a.x-b.x, a.y-b.y) / pinch0); }
+});
+['pointerup','pointercancel'].forEach(t=>stage.addEventListener(t, e=>{ ptrs.delete(e.pointerId); if(!ptrs.size) stage.classList.remove('drag'); }));
+stage.addEventListener('dblclick', ()=>{ if(cr){ cr.x = cr.y = 0; setZoom(1); } });
+addEventListener('resize', ()=>{ if(cr) fit(); });
+
+function cropClose(){ $('#crop').classList.remove('on'); $('#scrim').classList.remove('on'); if(cr) URL.revokeObjectURL(cr.url); cr = null; }
+$('#cropCancel').addEventListener('click', cropClose);
+$('#scrim').addEventListener('click', cropClose);
+addEventListener('keydown', e=>{ if(e.key==='Escape' && cr) cropClose(); });
+$('#cropSave').addEventListener('click', async ()=>{
+  if(!cr) return;
+  const k = OUT_W/cr.W, s = cr.base*cr.z, c = document.createElement('canvas');
+  c.width = OUT_W; c.height = OUT_H;
+  const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0,0,OUT_W,OUT_H);
+  g.imageSmoothingQuality = 'high';
+  g.translate(OUT_W/2 + cr.x*k, OUT_H/2 + cr.y*k); g.scale(s*k, s*k);
+  g.drawImage(cImg, -cr.w/2, -cr.h/2);
+  const it = cr.it;
+  try{ await write(fileName(it), await toBlob(c)); cropClose(); await afterWrite(it.id); toast(`Saved ${it.en}`); }
+  catch(e){ toast('Could not save: ' + e.message); }
+});
+
+/* centre-crop without the cropper (bulk import) */
+async function coverJpeg(file){
+  const bmp = await createImageBitmap(file);
+  const c = document.createElement('canvas'); c.width = OUT_W; c.height = OUT_H;
+  const g = c.getContext('2d'), s = Math.max(OUT_W/bmp.width, OUT_H/bmp.height);
+  g.fillStyle = '#fff'; g.fillRect(0,0,OUT_W,OUT_H); g.imageSmoothingQuality = 'high';
+  g.drawImage(bmp, (OUT_W-bmp.width*s)/2, (OUT_H-bmp.height*s)/2, bmp.width*s, bmp.height*s);
+  bmp.close(); return toBlob(c);
+}
+const toBlob = c => new Promise((res, rej) => c.toBlob(b => b ? res(b) : rej(new Error('encode failed')), 'image/jpeg', QUALITY));
+
+/* ---------- writing ---------- */
+async function write(name, blob){
+  const w = await (await imgDir.getFileHandle(name, {create:true})).createWritable();
+  await w.write(blob); await w.close();
+}
+/* phones that saved the menu offline keep old photos until sw.js changes, so bump its VERSION once per session */
+async function bumpSw(){
+  if(swBumped) return; swBumped = true;
+  try{
+    const fh = await root.getFileHandle('sw.js'), txt = await (await fh.getFile()).text();
+    const next = txt.replace(/const VERSION = 'aplus-v(\d+)'/, (m, n) => `const VERSION = 'aplus-v${+n+1}'`);
+    if(next !== txt){ const w = await fh.createWritable(); await w.write(next); await w.close(); }
+  }catch(e){}
+}
+async function afterWrite(flashId){
+  const before = ITEMS.filter(it=>have.has(fileName(it))).length;
+  await scan(); render(); bumpSw();
+  if(flashId){ const el = document.querySelector(`.it[data-id="${flashId}"]`); el && el.scrollIntoView({block:'nearest', behavior:'smooth'}); }
+  const after = progress();
+  if(after === ITEMS.length && before < after) confetti();
+}
+
+let tt;
+function toast(msg){ const t = $('#toast'); t.querySelector('span').textContent = msg; t.classList.add('on'); clearTimeout(tt); tt = setTimeout(()=>t.classList.remove('on'), 2600); }
+function confetti(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const r = $('#ring').getBoundingClientRect(), cols = ['#B98A3E','#F4D58D','#A9BC83','#EEF5DA','#46523A'];
+  for(let i = 0; i < 60; i++){
+    const d = document.createElement('i'); d.className = 'burst';
+    const a = Math.random()*Math.PI*2, v = 120 + Math.random()*260;
+    d.style.cssText = `left:${r.left+r.width/2}px;top:${r.top+r.height/2}px;background:${cols[i%5]};--x:${Math.cos(a)*v}px;--y:${Math.sin(a)*v+200}px;--r:${Math.random()*720}deg`;
+    document.body.appendChild(d); setTimeout(()=>d.remove(), 1500);
+  }
+  toast('Every item has a photo now. The menu is complete!');
+}
+</script>
+</body>
+</html>

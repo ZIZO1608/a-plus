@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<title>A PLUS Table Cards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Tajawal:wght@500;700;900&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<style>
+/* Staff page: print one QR card per table. Each QR opens index.html?table=N,
+   so the WhatsApp order says which table it came from. */
+:root{--bg:#F2F6E6;--surface:#FBFDF4;--ink:#262D1E;--muted:#5C6650;--line:rgba(70,82,58,.18);--brand:#46523A;--cream:#EEF5DA;--gold-a:#B98A3E;--gold-b:#F4D58D;
+  --f:"Montserrat","Montserrat Arabic","Tajawal",system-ui,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:15px;line-height:1.5}
+button,input{font:inherit;color:inherit}
+.panel{max-width:980px;margin:0 auto;padding:24px 16px}
+.panel h1{font-weight:900;font-size:28px;margin:0 0 4px}
+.panel > p{color:var(--muted);margin:0 0 18px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:16px}
+.fields label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700;color:var(--muted)}
+.fields .wide{grid-column:1/-1}
+.fields input{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:15px;font-weight:500;color:var(--ink)}
+.fields input:focus{outline:none;border-color:#6A7A4F;box-shadow:0 0 0 4px rgba(106,122,79,.18)}
+.warn{grid-column:1/-1;font-size:13px;font-weight:600;color:#8A5A12;background:rgba(244,213,141,.35);border-radius:10px;padding:8px 12px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:16px 0 22px}
+.print{border:0;border-radius:14px;padding:12px 20px;font-weight:800;cursor:pointer;background:linear-gradient(100deg,var(--gold-a),var(--gold-b) 55%,var(--gold-a));color:#2B230F}
+.bar a{color:var(--muted);font-weight:600}
+.sheet{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;max-width:980px;margin:0 auto;padding:0 16px 40px}
+
+/* the card itself: an arch like the menu frames */
+.tc{background:var(--brand);color:var(--cream);border-radius:120px 120px 22px 22px;padding:30px 20px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;
+  break-inside:avoid;page-break-inside:avoid;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.tc .logo{width:58px;height:58px}
+.tc .brand{font-weight:900;letter-spacing:.32em;font-size:13px;padding-inline-start:.32em}
+.tc .scan{font-weight:800;font-size:17px;line-height:1.25}
+.tc .scan span{display:block;font-family:"Tajawal",sans-serif;font-weight:700;font-size:17px;direction:rtl}
+.tc .qr{background:#fff;border-radius:16px;padding:10px;width:76%;aspect-ratio:1}
+.tc .qr svg{display:block;width:100%;height:100%}
+.tc .num{display:inline-flex;gap:8px;align-items:baseline;background:linear-gradient(100deg,var(--gold-a),var(--gold-b));color:#2B230F;border-radius:999px;padding:6px 16px;font-weight:900;font-size:18px}
+.tc .num small{font-family:"Tajawal",sans-serif;font-weight:700;font-size:15px}
+.tc .wifi{font-size:11.5px;opacity:.85;line-height:1.4;direction:ltr}
+.tc .wifi b{font-weight:800}
+
+@media print{
+  @page{size:A4;margin:10mm}
+  body{background:#fff}
+  .panel{display:none}
+  .sheet{grid-template-columns:repeat(2,1fr);gap:8mm;padding:0;max-width:none}
+  .tc{height:132mm;justify-content:center}
+}
+</style>
+</head>
+<body>
+<div class="panel">
+  <h1>Table cards</h1>
+  <p>Print these and put one on each table. Scanning opens the menu, and orders sent on WhatsApp say which table they came from.</p>
+  <div class="fields">
+    <label class="wide">Menu address (where the site is online)<input id="url" type="url" placeholder="https://aplus-sy.com/" spellcheck="false"></label>
+    <label>First table<input id="from" type="number" min="1" value="1"></label>
+    <label>Last table<input id="to" type="number" min="1" value="12"></label>
+    <label>Wi-Fi name (optional)<input id="ssid" type="text"></label>
+    <label>Wi-Fi password (optional)<input id="pass" type="text"></label>
+    <div class="warn" id="warn" hidden></div>
+  </div>
+  <div class="bar"><button class="print" type="button" onclick="print()">Print cards</button><a href="index.html">Back to the menu</a></div>
+</div>
+<div class="sheet" id="sheet"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const LOGO = '<svg class="logo" viewBox="0 0 100 100"><defs><linearGradient id="tg" x1="0" x2="1"><stop offset="0" stop-color="#B98A3E"/><stop offset=".45" stop-color="#FBE2A0"/><stop offset="1" stop-color="#A97832"/></linearGradient></defs><circle cx="50" cy="50" r="46" fill="#EEF5DA"/><path fill="#46523A" d="M50 14.5 77 60.5c-5.2 0-9.6-2.4-12-6.4L50 28.4 35 54.1c-2.4 4-6.8 6.4-12 6.4z"/><path fill="#6A7A4F" d="M22.8 75 28.5 65.3c1-1.8 3-2.8 5-2.8h3.4L45.6 46c2-3.6 6.8-3.6 8.8 0l8.7 16.5h3.4c2 0 4 1 5 2.8L77.2 75H65.3L54.4 54.7c-2-3.6-6.8-3.6-8.8 0L34.7 75z"/><path fill="url(#tg)" d="M47.6 63.2h5v6.2h6.4v4.8h-6.4v7h-5v-7h-6.4v-4.8h6.4z"/></svg>';
+const FIELDS = ['url','from','to','ssid','pass'];
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* default address: this folder, when the page is already online */
+const here = location.href.replace(/[^/]*([?#].*)?$/, '');
+const online = /^https?:/.test(location.protocol) && !/^(localhost|127\.|192\.168\.|10\.)/.test(location.hostname);
+try{ const saved = JSON.parse(localStorage.getItem('aplus-tables')||'{}'); FIELDS.forEach(k=>{ if(saved[k]!=null) $('#'+k).value = saved[k]; }); }catch(e){}
+if(!$('#url').value) $('#url').value = online ? here : 'https://aplus-sy.com/';
+
+/* "https://aplus-sy.com/?table=7": the shorter the address, the simpler the QR and the easier it scans */
+function menuUrl(n){
+  let base = $('#url').value.trim() || here;
+  if(!/\.html?$/.test(base.split(/[?#]/)[0])) base = base.replace(/\/?$/, '/');
+  return `${base}?table=${encodeURIComponent(n)}`;
+}
+function qrSvg(text){
+  const qr = qrcode(0, 'M'); qr.addData(text); qr.make();
+  return qr.createSvgTag({cellSize:4, margin:0, scalable:true});
+}
+function render(){
+  const v = Object.fromEntries(FIELDS.map(k=>[k, $('#'+k).value]));
+  try{ localStorage.setItem('aplus-tables', JSON.stringify(v)); }catch(e){}
+  const addr = v.url.trim();
+  const warn = !addr ? 'Add the address where the menu is online. Until then the codes point to this computer and will not open on phones.'
+    : !/^https:\/\//.test(addr) ? 'The address should start with https:// so phones open it without warnings.' : '';
+  $('#warn').hidden = !warn; $('#warn').textContent = warn;
+  const from = Math.max(1, parseInt(v.from)||1), to = Math.min(from + 199, Math.max(from, parseInt(v.to)||from));
+  const wifi = v.ssid.trim() ? `<div class="wifi">Wi-Fi <b>${esc(v.ssid.trim())}</b>${v.pass.trim()?` · ${esc(v.pass.trim())}`:''}</div>` : '';
+  let out = '';
+  for(let n = from; n <= to; n++){
+    out += `<div class="tc">${LOGO}<div class="brand">A PLUS</div>
+      <div class="scan">Scan for the menu<span>امسح لتشوف المنيو</span></div>
+      <div class="qr">${qrSvg(menuUrl(n))}</div>
+      <div class="num">Table ${n}<small>طاولة ${n}</small></div>${wifi}</div>`;
+  }
+  $('#sheet').innerHTML = out;
+}
+FIELDS.forEach(k => $('#'+k).addEventListener('input', render));
+render();
+</script>
+</body>
+</html>

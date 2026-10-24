@@ -1,0 +1,16 @@
+{
+  "name": "A PLUS Study Zone Menu",
+  "short_name": "A PLUS",
+  "description": "Digital menu: coffee, iced drinks, mocktails, snacks.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#46523A",
+  "theme_color": "#46523A",
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    { "src": "logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

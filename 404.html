@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#46523A">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/logo.svg" type="image/svg+xml">
+<title>A PLUS · Empty cup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;900&family=Tajawal:wght@500;700;900&display=swap">
+<style>
+/* Shown by nginx for any missing address. Absolute paths: it can appear at /any/deep/path. */
+:root{--bg:#46523A;--ink:#EEF5DA;--muted:rgba(238,245,218,.7);--gold-a:#B98A3E;--gold-b:#F4D58D;--ease:cubic-bezier(.2,.85,.2,1);
+  --f:"Montserrat","Montserrat Arabic","Tajawal",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#222B1B}}
+:root[data-theme="dark"]{--bg:#222B1B}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);-webkit-font-smoothing:antialiased;display:grid;place-items:center;text-align:center;
+  padding:calc(24px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));overflow-x:hidden}
+button,a{font:inherit}
+:focus-visible{outline:2px solid var(--gold-b);outline-offset:3px;border-radius:10px}
+main{max-width:460px;width:100%}
+.code{font-weight:900;font-size:13px;letter-spacing:.4em;color:var(--gold-b);padding-inline-start:.4em;direction:ltr}
+
+/* the cup: same arch as the menu frames */
+.cup{position:relative;width:150px;aspect-ratio:150/186;margin:22px auto 26px;border-radius:75px 75px 20px 20px;border:2.5px solid rgba(238,245,218,.5);overflow:hidden;cursor:pointer;background:rgba(238,245,218,.04);
+  transition:transform .3s var(--ease)}
+.cup:hover{transform:rotate(-3deg)}
+.cup:active{transform:scale(.96)}
+.cup .liquid{position:absolute;inset:auto 0 0;height:0;background:var(--c,#B98A3E);transition:height 1.3s cubic-bezier(.45,.05,.3,1);
+  background-image:linear-gradient(90deg,rgba(0,0,0,.2),transparent 35%,rgba(255,255,255,.18) 65%,rgba(0,0,0,.1))}
+.cup .liquid::before{content:"";position:absolute;top:-7px;left:0;width:200%;height:8px;background:radial-gradient(ellipse 11px 7px at 11px 8px,var(--c,#B98A3E) 98%,transparent 100%) 0 0/22px 8px repeat-x;animation:wave 1.6s linear infinite}
+@keyframes wave{to{transform:translateX(-50%)}}
+.cup.full .liquid{height:76%}
+/* a lonely drip waiting at the rim while the cup is empty */
+.drip{position:absolute;left:50%;top:-4px;width:8px;height:12px;margin-left:-4px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:var(--gold-b);animation:drip 2.4s ease-in infinite}
+@keyframes drip{0%,30%{transform:translateY(0) scale(0);opacity:0}40%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(190px) scale(.8);opacity:.9}}
+.cup.full .drip,.cup.pouring .drip{display:none}
+.stream{position:absolute;left:50%;top:0;width:10px;margin-left:-5px;height:0;background:var(--c,#B98A3E);border-radius:0 0 6px 6px;opacity:.95}
+.cup.pouring .stream{animation:stream 1.4s var(--ease) forwards}
+@keyframes stream{0%{height:0}35%{height:100%}75%{height:100%;top:0}100%{height:0;top:100%}}
+.cup b{position:absolute;inset:0;display:grid;place-items:center;font-weight:900;font-size:30px;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.3);opacity:0;transition:opacity .5s 1.2s;z-index:2;direction:ltr}
+.cup.full b{opacity:1}
+
+h1{font-weight:900;font-size:clamp(28px,8vw,40px);line-height:1.2;margin:0 0 8px;text-wrap:balance}
+p{color:var(--muted);margin:0 auto 22px;max-width:36ch;line-height:1.6}
+.result{min-height:64px}
+.result .name{font-weight:900;font-size:22px;color:var(--gold-b);opacity:0;transform:translateY(8px);transition:opacity .5s .9s,transform .5s var(--ease) .9s}
+.result.on .name{opacity:1;transform:none}
+.acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:8px}
+.gold{border:0;border-radius:999px;padding:13px 22px;font-weight:800;cursor:pointer;text-decoration:none;color:#2B230F;
+  background:linear-gradient(100deg,var(--gold-a),var(--gold-b) 55%,var(--gold-a));box-shadow:0 8px 22px rgba(0,0,0,.22);transition:transform .15s}
+.gold:active{transform:scale(.97)}
+.line{border:1px solid rgba(238,245,218,.3);border-radius:999px;padding:12px 20px;color:var(--ink);text-decoration:none;font-weight:700;background:rgba(238,245,218,.06)}
+.brand{display:inline-flex;align-items:center;gap:10px;margin-top:34px;color:var(--muted);text-decoration:none;font-weight:800;letter-spacing:.2em;font-size:12px;direction:ltr}
+.brand img{width:28px;height:28px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<main>
+  <div class="code">404</div>
+  <button class="cup" id="cup" type="button" aria-label="Pour"><span class="drip"></span><span class="stream"></span><span class="liquid"></span><b>A+</b></button>
+  <h1 id="title"></h1>
+  <p id="sub"></p>
+  <div class="result" id="result"><div class="name" id="name"></div></div>
+  <div class="acts" id="acts"></div>
+  <a class="brand" href="/"><img src="/logo.svg" alt="">A PLUS</a>
+</main>
+<script>
+/* a few drinks to pour; ids match the menu so "Open it" lands on the item */
+const DRINKS = [
+  {id:'iced-biscoff',en:'Iced Biscoff Latte',ar:'آيس بيسكوف لاتيه',c:'#C08A4A'},
+  {id:'matcha-strawberry',en:'Matcha Strawberry',ar:'ماتشا فراولة',c:'#86A957'},
+  {id:'blue-mojito',en:'Blue Mojito',ar:'بلو موهيتو',c:'#3BA0D8'},
+  {id:'spanish-latte',en:'Spanish Latte',ar:'سبانش لاتيه',c:'#A0723A'},
+  {id:'aplus-mocktail',en:'A Plus Mocktail',ar:'موكتيل A Plus',c:'#F2C14E'},
+  {id:'hot-chocolate',en:'Hot Chocolate',ar:'هوت شوكليت',c:'#5A3424'},
+  {id:'pink-panther',en:'Pink Panther',ar:'بينك بانثر',c:'#E77BA0'},
+  {id:'iced-oreo',en:'Iced Oreo Latte',ar:'آيس أوريو لاتيه',c:'#6B5A4E'}
+];
+const T = {
+  en:{title:'This cup is empty', sub:'The page you were looking for isn’t on the menu. Tap the cup and we’ll pour you something instead.',
+      pour:'Pour me something', again:'Pour another', open:'Open it on the menu', menu:'Back to the menu', yours:'Try this:'},
+  ar:{title:'هالكاسة فاضية', sub:'الصفحة يلي عم تدوّر عليها مو موجودة بالمنيو. اضغط عالكاسة ومنصبّلك شي بدالها.',
+      pour:'صبّلي شي', again:'صبّلي غيره', open:'شوفه بالمنيو', menu:'رجوع للمنيو', yours:'جرّب هاد:'}
+};
+let lang = 'ar', last = -1, poured = null;
+try{ const s = localStorage.getItem('aplus-lang'); if(s==='en'||s==='ar') lang = s; }catch(e){}
+const L = T[lang], $ = s => document.getElementById(s);
+document.documentElement.lang = lang; document.documentElement.dir = lang==='ar' ? 'rtl' : 'ltr';
+$('title').textContent = L.title; $('sub').textContent = L.sub;
+
+function actions(){
+  $('acts').innerHTML = poured
+    ? `<a class="gold" href="/?item=${poured.id}">${L.open}</a><button class="line" type="button" id="pourBtn">${L.again}</button>`
+    : `<button class="gold" type="button" id="pourBtn">${L.pour}</button><a class="line" href="/">${L.menu}</a>`;
+  $('pourBtn').onclick = pour;
+}
+function pour(){
+  const cup = $('cup');
+  let i; do{ i = Math.floor(Math.random()*DRINKS.length); }while(i===last); last = i;
+  poured = DRINKS[i];
+  cup.classList.remove('full','pouring'); $('result').classList.remove('on');
+  void cup.offsetWidth;
+  cup.style.setProperty('--c', poured.c);
+  cup.classList.add('pouring');
+  setTimeout(()=>cup.classList.add('full'), 350);
+  $('name').textContent = `${L.yours} ${poured[lang]}`;
+  $('result').classList.add('on');
+  try{ navigator.vibrate && navigator.vibrate([8,40,8]); }catch(e){}
+  actions();
+}
+$('cup').onclick = pour;
+actions();
+</script>
+</body>
+</html>

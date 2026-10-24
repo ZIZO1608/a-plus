@@ -1,0 +1,7 @@
+.git
+.gitignore
+.dockerignore
+*.md
+admin.html
+**/PUT-*.txt
+_test-*

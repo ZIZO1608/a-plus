@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#46523A">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<title>A PLUS Support</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap">
+<style>
+@font-face{font-family:"Montserrat Arabic";src:url("fonts/MontserratArabic-Regular.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Montserrat Arabic";src:url("fonts/MontserratArabic-Bold.woff2") format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Montserrat Arabic";src:url("fonts/MontserratArabic-Black.woff2") format("woff2");font-weight:900;font-display:swap}
+/* Same palette as index.html */
+:root{
+  --bg:#F2F6E6; --surface:#FBFDF4; --ink:#262D1E; --muted:#5C6650; --line:rgba(70,82,58,.15);
+  --brand:#46523A; --on-brand:#EEF5DA; --sage:#6A7A4F; --brand-soft:#E2EAC9;
+  --gold-a:#B98A3E; --gold-b:#F4D58D; --hero-bg:#46523A; --hero-ink:#EEF5DA; --hero-muted:rgba(238,245,218,.72);
+  --f:"Montserrat","Montserrat Arabic","Tajawal",system-ui,sans-serif; --ease:cubic-bezier(.2,.85,.2,1);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#13180F; --surface:#1C2318; --ink:#EEF5DA; --muted:#A8B494; --line:rgba(238,245,218,.11);
+  --brand:#A9BC83; --on-brand:#13180F; --sage:#93A672; --brand-soft:#253020; --hero-bg:#222B1B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#13180F; --surface:#1C2318; --ink:#EEF5DA; --muted:#A8B494; --line:rgba(238,245,218,.11);
+  --brand:#A9BC83; --on-brand:#13180F; --sage:#93A672; --brand-soft:#253020; --hero-bg:#222B1B; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold-a);outline-offset:2px;border-radius:8px}
+.wrap{max-width:620px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+header{background:var(--hero-bg);color:var(--hero-ink);border-radius:0 0 32px 32px;padding:calc(14px + env(safe-area-inset-top,0px)) 0 34px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.back{display:inline-flex;align-items:center;gap:8px;color:inherit;text-decoration:none;font-weight:700;font-size:14px}
+.back img{width:34px;height:34px}
+.back svg{width:16px;height:16px}
+:root[dir="rtl"] .back svg{transform:scaleX(-1)}
+.lang{border:1px solid rgba(238,245,218,.3);background:rgba(238,245,218,.08);border-radius:999px;padding:6px 14px;font-weight:600;font-size:13px;cursor:pointer}
+h1{font-weight:900;font-size:clamp(30px,8vw,44px);line-height:1.15;margin:26px 0 8px;letter-spacing:-.02em}
+:root[lang="ar"] h1{letter-spacing:0}
+header p{margin:0;color:var(--hero-muted);max-width:46ch}
+
+form{padding-block:24px 40px;display:flex;flex-direction:column;gap:20px}
+.k{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:8px;display:block}
+.types{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.types label{cursor:pointer}
+.types input{position:absolute;opacity:0;pointer-events:none}
+.types span{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px;border-radius:24px 24px 12px 12px;border:1px solid var(--line);background:var(--surface);font-weight:700;font-size:14px;text-align:center;transition:background .2s,border-color .2s,transform .15s}
+.types span svg{width:24px;height:24px;color:var(--sage)}
+.types input:checked + span{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
+.types input:checked + span svg{color:var(--gold-b)}
+.types input:focus-visible + span{outline:2px solid var(--gold-a);outline-offset:2px}
+.types label:active span{transform:scale(.97)}
+.stars{display:flex;gap:6px;direction:ltr;justify-content:flex-end}
+:root[dir="ltr"] .stars{justify-content:flex-start}
+.stars button{width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center;transition:transform .15s,background .2s}
+.stars button svg{width:22px;height:22px;color:var(--line)}
+.stars button.on{background:color-mix(in srgb,var(--gold-b) 30%,transparent);border-color:var(--gold-a)}
+.stars button.on svg{color:var(--gold-a)}
+.stars button:active{transform:scale(.9)}
+.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+input[type=text],input[type=tel],textarea{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px;font-size:15px;transition:border-color .2s,box-shadow .2s}
+textarea{min-height:130px;resize:vertical}
+input:focus,textarea:focus{outline:none;border-color:var(--sage);box-shadow:0 0 0 4px color-mix(in srgb,var(--sage) 18%,transparent)}
+::placeholder{color:var(--muted)}
+.count{font-size:12px;color:var(--muted);text-align:end;margin-top:4px;font-variant-numeric:tabular-nums}
+.err{color:#B4442E;font-size:13px;font-weight:600;margin-top:6px}
+.send{border:0;border-radius:16px;padding:15px;font-weight:800;font-size:16px;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:10px;
+  background:linear-gradient(100deg,var(--gold-a),var(--gold-b) 55%,var(--gold-a));color:#2B230F;box-shadow:0 8px 22px rgba(185,138,62,.25);transition:transform .15s}
+.send:active{transform:scale(.98)}
+.send svg{width:20px;height:20px}
+.note{font-size:13px;color:var(--muted);text-align:center;margin:-8px 0 0}
+.done{text-align:center;padding:50px 0}
+.done .tick{width:84px;height:84px;margin:0 auto 18px;border-radius:42px 42px 18px 18px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;animation:pop .6s cubic-bezier(.3,1.6,.5,1) both}
+.done .tick svg{width:38px;height:38px}
+.done h2{font-weight:900;font-size:26px;margin:0 0 6px}
+.done p{color:var(--muted);margin:0 0 20px}
+.done a{display:inline-block;color:inherit;font-weight:700;border:1px solid var(--line);border-radius:999px;padding:10px 18px;text-decoration:none}
+@keyframes pop{from{transform:scale(0);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="top">
+      <a class="back" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg><img src="logo.svg" alt=""><span data-t="back"></span></a>
+      <button class="lang" id="langBtn" type="button"></button>
+    </div>
+    <h1 data-t="title"></h1>
+    <p data-t="sub"></p>
+  </div>
+</header>
+
+<main class="wrap">
+  <form id="form" novalidate>
+    <div>
+      <span class="k" data-t="kind"></span>
+      <div class="types" id="types"></div>
+    </div>
+    <div>
+      <span class="k" data-t="rate"></span>
+      <div class="stars" id="stars"></div>
+    </div>
+    <div>
+      <label class="k" for="msg" data-t="msgK"></label>
+      <textarea id="msg" maxlength="600"></textarea>
+      <div class="count" id="count">0 / 600</div>
+      <div class="err" id="err" hidden></div>
+    </div>
+    <div class="row">
+      <div><label class="k" for="name" data-t="nameK"></label><input id="name" type="text" autocomplete="name"></div>
+      <div><label class="k" for="table" data-t="tableK"></label><input id="table" type="text" inputmode="numeric" maxlength="6"></div>
+    </div>
+    <button class="send" type="submit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg><span data-t="send"></span></button>
+    <p class="note" data-t="note"></p>
+  </form>
+  <div class="done" id="done" hidden>
+    <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h2 data-t="thanks"></h2>
+    <p data-t="thanksSub"></p>
+    <a href="index.html" data-t="toMenu"></a>
+  </div>
+</main>
+
+<script>
+const WA = '963969717279';
+const T = {
+  en:{back:'Menu', title:'Tell us how it went', sub:'A complaint, an idea, or something you liked. It goes straight to the A PLUS team on WhatsApp.',
+    kind:'What is it about?', types:{complaint:'Complaint',idea:'Suggestion',praise:'Praise'}, rate:'Rate your visit',
+    msgK:'Your message', ph:{complaint:'What went wrong? The more detail, the faster we can fix it.',idea:'What should we add or change?',praise:'What did you enjoy?'},
+    nameK:'Name (optional)', tableK:'Table (optional)', send:'Send on WhatsApp', note:'WhatsApp opens with your message ready. Nothing is sent until you press send there.',
+    empty:'Write a few words first.', thanks:'Thank you', thanksSub:'Your message is ready in WhatsApp. We read every one.', toMenu:'Back to the menu',
+    head:'A PLUS feedback', lName:'Name', lTable:'Table', lRate:'Rating', langBtn:'عربي'},
+  ar:{back:'المنيو', title:'خبّرنا كيف كانت', sub:'شكوى أو فكرة أو شي عجبك. بتوصل مباشرة لفريق A PLUS عالواتساب.',
+    kind:'عن شو الموضوع؟', types:{complaint:'شكوى',idea:'اقتراح',praise:'مديح'}, rate:'قيّم زيارتك',
+    msgK:'رسالتك', ph:{complaint:'شو صار؟ كل ما كانت التفاصيل أكتر، كل ما صلّحناها أسرع.',idea:'شو بتحب نضيف أو نغيّر؟',praise:'شو عجبك؟'},
+    nameK:'الاسم (اختياري)', tableK:'رقم الطاولة (اختياري)', send:'ابعت عالواتساب', note:'رح يفتح واتساب والرسالة جاهزة. ما بينبعت شي لحتى تضغط إرسال هنيك.',
+    empty:'اكتب كم كلمة أول.', thanks:'شكراً إلك', thanksSub:'رسالتك جاهزة بالواتساب. منقرا كل رسالة.', toMenu:'رجوع للمنيو',
+    head:'ملاحظة لـ A PLUS', lName:'الاسم', lTable:'الطاولة', lRate:'التقييم', langBtn:'EN'}
+};
+const IC = {
+  complaint:'<path d="M4 6h16v10H8l-4 4z"/><path d="M12 9v3M12 14.5v.01"/>',
+  idea:'<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/>',
+  praise:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>'
+};
+const STAR = '<svg viewBox="0 0 24 24"><path fill="currentColor" d="m12 2.8 2.8 5.8 6.3.9-4.6 4.4 1.1 6.3L12 17.2l-5.6 3 1.1-6.3L2.9 9.5l6.3-.9z"/></svg>';
+const $ = s => document.querySelector(s);
+let lang = 'ar', kind = 'complaint', stars = 0;
+try{ const s = localStorage.getItem('aplus-lang'); if(s==='en'||s==='ar') lang = s; }catch(e){}
+try{ $('#table').value = sessionStorage.getItem('aplus-table')||''; }catch(e){}
+const L = () => T[lang];
+
+function render(){
+  const r = document.documentElement; r.lang = lang; r.dir = lang==='ar' ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-t]').forEach(el=>{ el.textContent = L()[el.dataset.t]; });
+  $('#langBtn').textContent = L().langBtn;
+  $('#types').innerHTML = Object.keys(IC).map(k=>`<label><input type="radio" name="kind" value="${k}" ${k===kind?'checked':''}><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${IC[k]}</svg>${L().types[k]}</span></label>`).join('');
+  $('#stars').innerHTML = [1,2,3,4,5].map(n=>`<button type="button" data-n="${n}" class="${n<=stars?'on':''}" aria-label="${n} / 5" aria-pressed="${n<=stars}">${STAR}</button>`).join('');
+  $('#msg').placeholder = L().ph[kind];
+}
+
+$('#types').addEventListener('change', e=>{ kind = e.target.value; $('#msg').placeholder = L().ph[kind]; });
+$('#stars').addEventListener('click', e=>{ const b = e.target.closest('[data-n]'); if(!b) return; stars = +b.dataset.n === stars ? 0 : +b.dataset.n; render(); });
+$('#msg').addEventListener('input', e=>{ $('#count').textContent = `${e.target.value.length} / 600`; $('#err').hidden = true; });
+$('#langBtn').addEventListener('click', ()=>{ lang = lang==='ar'?'en':'ar'; try{localStorage.setItem('aplus-lang',lang)}catch(e){} render(); });
+
+$('#form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const msg = $('#msg').value.trim();
+  if(!msg){ $('#err').textContent = L().empty; $('#err').hidden = false; $('#msg').focus(); return; }
+  const name = $('#name').value.trim(), table = $('#table').value.trim();
+  const lines = [`*${L().head} · ${L().types[kind]}*`];
+  if(stars) lines.push(`${L().lRate}: ${'★'.repeat(stars)}${'☆'.repeat(5-stars)}`);
+  if(table) lines.push(`${L().lTable}: ${table}`);
+  if(name) lines.push(`${L().lName}: ${name}`);
+  lines.push('', msg);
+  window.open(`https://wa.me/${WA}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener');
+  $('#form').hidden = true; $('#done').hidden = false; scrollTo({top:0});
+});
+
+render();
+</script>
+</body>
+</html>
