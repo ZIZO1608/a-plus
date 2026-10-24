@@ -54,6 +54,22 @@ header{background:var(--hero-bg);color:var(--hero-ink);border-radius:0 0 32px 32
 .ring .fg{stroke:url(#rg);stroke-linecap:round;transition:stroke-dashoffset .8s var(--ease)}
 .ring b{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-weight:900;font-size:19px;line-height:1;font-variant-numeric:tabular-nums}
 .ring b small{display:block;font-size:10.5px;font-weight:600;color:var(--hero-muted);margin-top:3px}
+.hd-acts{display:flex;gap:8px}
+.hd-acts > *{text-align:center}
+/* phones: logo, title and ring on one row, buttons as a full-width row underneath */
+@media (max-width:620px){
+  header{padding:14px 0 18px;border-radius:0 0 26px 26px}
+  .hd{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center}
+  .hd img{width:40px;height:40px}
+  .hd .grow{min-width:0}
+  .hd h1{font-size:23px}
+  .hd p{font-size:12.5px;line-height:1.4}
+  .ring{width:66px;height:66px}
+  .ring b{font-size:15px}
+  .ring b small{font-size:9.5px;margin-top:2px}
+  .hd-acts{grid-column:1/-1}
+  .hd-acts > *{flex:1;padding:10px 14px}
+}
 .hd a{color:var(--hero-ink);font-weight:700;font-size:14px;text-decoration:none;border:1px solid rgba(238,245,218,.28);border-radius:999px;padding:8px 14px}
 
 /* CONNECT */
@@ -157,8 +173,10 @@ header{background:var(--hero-bg);color:var(--hero-ink);border-radius:0 0 32px 32
     <img src="logo.svg" alt="">
     <div class="grow"><h1>Photo studio</h1><p id="hdSub">Add and crop the photos for every item on the menu.</p></div>
     <div class="ring" id="ring" hidden><svg viewBox="0 0 86 86"><circle class="bg" cx="43" cy="43" r="37"/><circle class="fg" id="ringFg" cx="43" cy="43" r="37" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/></svg><b id="ringTxt"></b></div>
-    <a href="index.html" target="_blank" rel="noopener">Open menu ↗</a>
-    <button class="out" id="logoutBtn" type="button" hidden>Log out</button>
+    <div class="hd-acts">
+      <a href="index.html" target="_blank" rel="noopener">Open menu ↗</a>
+      <button class="out" id="logoutBtn" type="button" hidden>Log out</button>
+    </div>
   </div>
 </header>
 
@@ -369,6 +387,7 @@ function render(){
 function progress(){
   const done = ITEMS.filter(it=>have.has(fileName(it))).length, pct = ITEMS.length ? done/ITEMS.length : 0;
   $('#ringFg').style.strokeDashoffset = 100 - pct*100;
+  $('#ringFg').style.opacity = done ? 1 : 0;   /* a round line cap at 0% still draws a dot */
   $('#ringTxt').innerHTML = `${done}/${ITEMS.length}<small>photos</small>`;
   return done;
 }

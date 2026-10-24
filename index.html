@@ -308,7 +308,10 @@ footer h2{font-family:var(--f-display);font-weight:800;font-size:22px;margin:0 0
 .links a{display:inline-flex;align-items:center;gap:8px;color:var(--hero-ink);text-decoration:none;border:1px solid rgba(238,245,218,.25);padding:8px 14px;border-radius:14px;font-weight:600;font-size:14px;transition:background .2s}
 .links a:hover{background:rgba(238,245,218,.1)}
 .links svg{width:17px;height:17px}
-.rights{margin-top:24px;font-size:12.5px;color:var(--hero-muted)}
+.rights{margin-top:24px;font-size:12.5px;color:var(--hero-muted);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px}
+.powered{display:inline-flex;align-items:center;gap:10px;color:var(--hero-muted);text-decoration:none;opacity:.85;transition:opacity .2s}
+.powered:hover{opacity:1}
+.powered img{height:26px;width:auto;display:block}
 
 /* FAB */
 .fab{position:fixed;z-index:30;bottom:calc(16px + env(safe-area-inset-bottom,0px));inset-inline-start:max(12px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:10px;transition:opacity .3s,transform .3s}
@@ -570,7 +573,7 @@ body.sheet-open .traybar{transform:translateY(140%)}
         </div>
       </div>
     </div>
-    <div class="rights">© 2026 A PLUS Study Zone</div>
+    <div class="rights"><span>© 2026 A PLUS Study Zone</span><a class="powered" href="https://trinode.ahmad-zaven.io" target="_blank" rel="noopener"><span data-t="powered"></span><img src="trinode.png" alt="Trinode" width="100" height="26" loading="lazy"></a></div>
   </div>
 </footer>
 
@@ -631,7 +634,7 @@ const logo = (anim) => `<svg viewBox="0 0 100 100" ${anim?'':'aria-hidden="true"
 
 /* ---------- STRINGS ---------- */
 const T = {
-  en:{eyebrow:'Study Zone · Aleppo', title:'<span class="ln"><span>Study hard.</span></span><span class="ln"><em>Sip smart.</em></span>', sub:'Coffee, cold drinks and snacks for long study sessions. Tap any item to see caffeine, sweetness and what it goes well with.', cta:'Browse the menu', search:'Search drinks and snacks', all:'All', hot:'Hot', iced:'Iced', nocaf:'No caffeine', sig:'A+ signature', caffeine:'Caffeine', sweet:'Sweetness', served:'Served', size:'Size', pairs:'Goes well with', combos:'Study combos', combosSub:'Pairings we suggest for different kinds of study sessions.', together:'Together', soon:'Coming soon', empty:'Nothing matches that. Try another word or clear the filters.', clear:'Clear filters', contact:'Follow and message us', call:'Phone', copy:'Copy', copied:'Copied', wa:'WhatsApp', complaints:'Complaints & support', where:'Coffee, drinks and sandwiches for students in Aleppo.', cafL:['None','Light','Medium','Strong'], sugL:['None','Low','Medium','Sweet'], temp:{h:'Hot',i:'Iced',c:'Chilled',r:'Ready to eat'}, cur:'SP', items:n=>`${n} items`, sigNote:'House signature. Only at A PLUS.', scroll:'Scroll', langBtn:'عربي',
+  en:{eyebrow:'Study Zone · Aleppo', title:'<span class="ln"><span>Study hard.</span></span><span class="ln"><em>Sip smart.</em></span>', sub:'Coffee, cold drinks and snacks for long study sessions. Tap any item to see caffeine, sweetness and what it goes well with.', cta:'Browse the menu', search:'Search drinks and snacks', all:'All', hot:'Hot', iced:'Iced', nocaf:'No caffeine', sig:'A+ signature', caffeine:'Caffeine', sweet:'Sweetness', served:'Served', size:'Size', pairs:'Goes well with', combos:'Study combos', combosSub:'Pairings we suggest for different kinds of study sessions.', together:'Together', soon:'Coming soon', empty:'Nothing matches that. Try another word or clear the filters.', clear:'Clear filters', contact:'Follow and message us', call:'Phone', copy:'Copy', copied:'Copied', wa:'WhatsApp', complaints:'Complaints & support', powered:'Powered by', where:'Coffee, drinks and sandwiches for students in Aleppo.', cafL:['None','Light','Medium','Strong'], sugL:['None','Low','Medium','Sweet'], temp:{h:'Hot',i:'Iced',c:'Chilled',r:'Ready to eat'}, cur:'SP', items:n=>`${n} items`, sigNote:'House signature. Only at A PLUS.', scroll:'Scroll', langBtn:'عربي',
     find:'Find my drink', step:i=>`Step ${i} of 3`,
     q1:'What kind of session is it?', q2:'Hot or iced?', q3:'How sweet?',
     o1:{exam:'Exam tomorrow',reading:'Long reading',group:'Group study',late:'Late night',chill:'Just chilling'},
@@ -641,7 +644,7 @@ const T = {
     trayEmpty:'Your tray is empty. Tap + on any item to add it.', total:'Total', top:'Back to top',
     waMsg:'Hi A PLUS, I would like to order:', trayNote:'Show this to the waiter or send it on WhatsApp.', table:n=>`Table ${n}`,
     share:'Share', linkCopied:'Link copied', shareTxt:n=>`${n} at A PLUS Study Zone`, jump:'Jump to a section', sections:'All sections'},
-  ar:{eyebrow:'ستادي زون · حلب', title:'<span class="ln"><span>ادرس بتركيز.</span></span><span class="ln"><em>واشرب بذكاء.</em></span>', sub:'قهوة ومشروبات باردة وسناكس لجلسات الدراسة الطويلة. اضغط على أي صنف لتشوف نسبة الكافيين والحلاوة وشو بيمشي معه.', cta:'تصفّح المنيو', search:'ابحث عن مشروب أو سناك', all:'الكل', hot:'ساخن', iced:'مثلّج', nocaf:'بدون كافيين', sig:'توقيع <bdi dir="ltr">A+</bdi>', caffeine:'الكافيين', sweet:'الحلاوة', served:'التقديم', size:'الحجم', pairs:'بيمشي معه', combos:'كومبو الدراسة', combosSub:'تركيبات منقترحها حسب نوع جلسة الدراسة.', together:'المجموع', soon:'قريباً', empty:'ما في نتائج. جرّب كلمة تانية أو امسح الفلاتر.', clear:'امسح الفلاتر', contact:'تابعنا وراسلنا', call:'الهاتف', copy:'نسخ', copied:'تم النسخ', wa:'واتساب', complaints:'الشكاوى والدعم', where:'قهوة ومشروبات وسندويش للطلاب في حلب.', cafL:['بدون','خفيف','متوسط','قوي'], sugL:['بدون','قليل','متوسط','حلو'], temp:{h:'ساخن',i:'مثلّج',c:'بارد',r:'جاهز'}, cur:'ل.س', items:n=>`${n} صنف`, sigNote:'توقيع المكان. موجود بس عند A PLUS.', scroll:'مرّر لتحت', langBtn:'EN',
+  ar:{eyebrow:'ستادي زون · حلب', title:'<span class="ln"><span>ادرس بتركيز.</span></span><span class="ln"><em>واشرب بذكاء.</em></span>', sub:'قهوة ومشروبات باردة وسناكس لجلسات الدراسة الطويلة. اضغط على أي صنف لتشوف نسبة الكافيين والحلاوة وشو بيمشي معه.', cta:'تصفّح المنيو', search:'ابحث عن مشروب أو سناك', all:'الكل', hot:'ساخن', iced:'مثلّج', nocaf:'بدون كافيين', sig:'توقيع <bdi dir="ltr">A+</bdi>', caffeine:'الكافيين', sweet:'الحلاوة', served:'التقديم', size:'الحجم', pairs:'بيمشي معه', combos:'كومبو الدراسة', combosSub:'تركيبات منقترحها حسب نوع جلسة الدراسة.', together:'المجموع', soon:'قريباً', empty:'ما في نتائج. جرّب كلمة تانية أو امسح الفلاتر.', clear:'امسح الفلاتر', contact:'تابعنا وراسلنا', call:'الهاتف', copy:'نسخ', copied:'تم النسخ', wa:'واتساب', complaints:'الشكاوى والدعم', powered:'مدعوم من', where:'قهوة ومشروبات وسندويش للطلاب في حلب.', cafL:['بدون','خفيف','متوسط','قوي'], sugL:['بدون','قليل','متوسط','حلو'], temp:{h:'ساخن',i:'مثلّج',c:'بارد',r:'جاهز'}, cur:'ل.س', items:n=>`${n} صنف`, sigNote:'توقيع المكان. موجود بس عند A PLUS.', scroll:'مرّر لتحت', langBtn:'EN',
     find:'شو بشرب؟', step:i=>`${i} من 3`,
     q1:'شو نوع جلسة الدراسة؟', q2:'ساخن ولا مثلّج؟', q3:'قديش بدك ياه حلو؟',
     o1:{exam:'عندي امتحان بكرا',reading:'قراية طويلة',group:'دراسة مع الشلّة',late:'سهرة دراسة',chill:'بس عم ارتاح'},
