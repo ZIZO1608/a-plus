@@ -137,6 +137,12 @@ header{background:var(--hero-bg);color:var(--hero-ink);border-radius:0 0 32px 32
 .toast.on{transform:none}
 .toast svg{width:18px;height:18px;color:var(--gold-b);flex:none}
 
+/* branded scrollbar, same as the menu */
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--gold-a),var(--gold-b) 50%,var(--gold-a));border-radius:11px 11px 6px 6px;border:3px solid var(--bg)}
+@supports (-moz-appearance:none){html{scrollbar-width:thin;scrollbar-color:var(--gold-a) transparent}}
+
 /* confetti for 100% */
 .burst{position:fixed;pointer-events:none;z-index:70;width:9px;height:9px;border-radius:2px;animation:burst 1.4s cubic-bezier(.2,.7,.3,1) forwards}
 @keyframes burst{to{transform:translate(var(--x),var(--y)) rotate(var(--r));opacity:0}}

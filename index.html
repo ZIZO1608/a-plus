@@ -172,6 +172,59 @@ button{font:inherit;color:inherit}
 .chip.on{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
 .chip.on small{color:inherit;opacity:.7}
 
+/* BRANDED SCROLL: gold scrollbar on desktop, gold progress line under the rail (phones hide scrollbars) */
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:linear-gradient(var(--gold-a),var(--gold-b) 50%,var(--gold-a));border-radius:11px 11px 6px 6px;border:3px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:var(--brand);border-width:2px}
+.sheet::-webkit-scrollbar-track,.sec-menu::-webkit-scrollbar-track{background:var(--surface)}
+.sheet::-webkit-scrollbar-thumb,.sec-menu::-webkit-scrollbar-thumb{border-color:var(--surface)}
+.finder::-webkit-scrollbar-track{background:var(--hero-bg)}
+.finder::-webkit-scrollbar-thumb{border-color:var(--hero-bg)}
+@supports (-moz-appearance:none){html,.sheet,.finder,.sec-menu{scrollbar-width:thin;scrollbar-color:var(--gold-a) transparent}}
+.rail-prog{position:absolute;inset-inline:0;bottom:-1px;height:2px;pointer-events:none;background:linear-gradient(90deg,var(--gold-a),var(--gold-b));
+  transform:scaleX(var(--sp,0));transform-origin:left;box-shadow:0 0 8px rgba(244,213,141,.6)}
+:root[dir="rtl"] .rail-prog{transform-origin:right;background:linear-gradient(270deg,var(--gold-a),var(--gold-b))}
+
+/* SECTIONS DROPDOWN */
+.rail-in{display:flex;align-items:center;gap:8px}
+.rail-in .rail-row{flex:1;min-width:0}
+.sec-btn{flex:none;width:42px;height:38px;border-radius:21px 21px 10px 10px;border:0;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;cursor:pointer;
+  box-shadow:0 4px 12px rgba(38,45,30,.18);transition:transform .15s,background .25s}
+.sec-btn:active{transform:scale(.93)}
+.sec-btn svg{width:18px;height:18px;transition:transform .45s cubic-bezier(.3,1.5,.5,1)}
+.sec-btn[aria-expanded="true"]{background:linear-gradient(100deg,var(--gold-a),var(--gold-b) 55%,var(--gold-a));color:#2B230F}
+.sec-btn[aria-expanded="true"] svg{transform:rotate(45deg) scale(1.1)}
+.sec-menu{position:absolute;top:calc(100% + 8px);inset-inline-start:max(12px,calc((100% - 1080px) / 2 + 12px));width:min(360px,calc(100% - 24px));
+  max-height:calc(100vh - 120px);max-height:calc(100svh - 120px);overflow-y:auto;overscroll-behavior:contain;
+  background:var(--surface);border:1px solid var(--line);border-radius:30px 30px 20px 20px;padding:10px;box-shadow:0 24px 60px rgba(18,22,13,.28);
+  transform-origin:top left;opacity:0;visibility:hidden;transform:translateY(-10px) scale(.96);
+  transition:opacity .2s,transform .3s var(--ease),visibility 0s .3s}
+:root[dir="rtl"] .sec-menu{transform-origin:top right}
+.sec-menu.open{opacity:1;visibility:visible;transform:none;transition:opacity .2s,transform .4s var(--ease),visibility 0s}
+.dd-head{display:flex;align-items:center;gap:8px;padding:8px 10px 8px;font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+:root[lang="ar"] .dd-head{letter-spacing:0;font-size:13px}
+.dd-head::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+:root[dir="rtl"] .dd-head::after{background:linear-gradient(270deg,var(--line),transparent)}
+.dd-item{position:relative;display:flex;align-items:center;gap:12px;width:100%;border:0;background:none;border-radius:16px;padding:7px 10px;text-align:start;cursor:pointer;
+  font-weight:650;font-size:14.5px;color:var(--ink);opacity:0;transform:translateY(8px);
+  transition:background .2s,opacity .3s,transform .4s var(--ease);transition-delay:0s}
+.sec-menu.open .dd-item{opacity:1;transform:none;transition-delay:0s,calc(var(--i) * 32ms + 60ms),calc(var(--i) * 32ms + 60ms)}
+.dd-item:hover,.dd-item:focus-visible{background:color-mix(in srgb,var(--brand-soft) 70%,transparent);outline:none}
+.dd-item .di{width:36px;height:40px;flex:none;border-radius:18px 18px 9px 9px;background:var(--brand-soft);color:var(--sage);display:grid;place-items:center;transition:background .25s,color .25s,transform .3s var(--ease)}
+.dd-item .di svg{width:19px;height:19px}
+.dd-item:hover .di{transform:translateY(-2px)}
+.dd-item small{margin-inline-start:auto;min-width:26px;height:22px;padding-inline:7px;border-radius:999px;display:grid;place-items:center;font-size:12px;font-weight:700;color:var(--muted);background:var(--bg);font-variant-numeric:tabular-nums}
+.dd-item.on .di{background:var(--brand);color:var(--on-brand)}
+.dd-item.on small{color:#2B230F;background:linear-gradient(100deg,var(--gold-a),var(--gold-b))}
+.dd-item.on::before{content:"";position:absolute;inset-inline-start:-10px;top:50%;width:4px;height:22px;margin-top:-11px;border-radius:0 4px 4px 0;background:var(--gold-a)}
+:root[dir="rtl"] .dd-item.on::before{border-radius:4px 0 0 4px}
+.dd-find{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:8px;border:0;border-radius:16px;padding:12px;font-weight:800;font-size:14px;cursor:pointer;
+  background:var(--hero-bg);color:var(--hero-ink);opacity:0;transition:opacity .3s .3s,transform .15s}
+.sec-menu.open .dd-find{opacity:1}
+.dd-find:active{transform:scale(.98)}
+.dd-find svg{width:17px;height:17px;color:var(--gold-b)}
+
 /* TOOLS */
 .tools{display:flex;flex-direction:column;gap:10px;padding-block:18px 4px}
 .search{position:relative}
@@ -413,7 +466,11 @@ body.sheet-open .traybar{transform:translateY(140%)}
 /* back to top */
 .totop{width:42px;height:42px;align-self:center;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow);
   opacity:0;transform:translateY(10px) scale(.8);pointer-events:none;transition:opacity .3s,transform .3s var(--ease)}
+.totop{position:relative}
 .totop svg{width:18px;height:18px}
+.totop .tt-ring{position:absolute;inset:-4px;width:calc(100% + 8px);height:calc(100% + 8px);transform:rotate(-90deg);pointer-events:none}
+.tt-ring circle{fill:none;stroke-width:2.5;stroke:var(--line)}
+.tt-ring circle + circle{stroke:var(--gold-a);stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100}
 .totop.on{opacity:1;transform:none;pointer-events:auto}
 
 @media (prefers-reduced-motion:reduce){
@@ -472,7 +529,18 @@ body.sheet-open .traybar{transform:translateY(140%)}
  </div>
 </header>
 
-<nav class="rail" aria-label="Menu sections"><div class="wrap"><div class="rail-row" id="rail"></div></div></nav>
+<nav class="rail" aria-label="Menu sections">
+  <div class="wrap rail-in">
+    <button class="sec-btn" id="secBtn" type="button" aria-expanded="false" aria-controls="secMenu" aria-haspopup="true"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="7" height="7" rx="2.2"/><rect x="13" y="4" width="7" height="7" rx="3.5"/><rect x="4" y="13" width="7" height="7" rx="3.5"/><rect x="13" y="13" width="7" height="7" rx="2.2"/></svg></button>
+    <div class="rail-row" id="rail"></div>
+  </div>
+  <div class="sec-menu" id="secMenu">
+    <div class="dd-head" data-t="jump"></div>
+    <div id="secList" role="menu"></div>
+    <button class="dd-find" type="button" id="ddFind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.4 5.2L20 9l-4 4 1 5.6L12 16l-5 2.6L8 13 4 9l5.6-.8z"/></svg><span data-t="find"></span></button>
+  </div>
+  <i class="rail-prog" id="railProg"></i>
+</nav>
 
 <div class="wrap">
   <div class="tools">
@@ -527,7 +595,7 @@ body.sheet-open .traybar{transform:translateY(140%)}
 </button>
 
 <div class="fab">
-  <button class="totop" id="toTop" type="button" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+  <button class="totop" id="toTop" type="button" aria-label="Back to top"><svg class="tt-ring" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="21"/><circle id="toTopRing" cx="24" cy="24" r="21" pathLength="100"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
 </div>
 
 <div class="scrim" id="scrim"></div>
@@ -572,7 +640,7 @@ const T = {
     add:'Add to tray', added:'Added', tray:'Your tray', view:'View tray', send:'Send on WhatsApp', clearTray:'Clear tray',
     trayEmpty:'Your tray is empty. Tap + on any item to add it.', total:'Total', top:'Back to top',
     waMsg:'Hi A PLUS, I would like to order:', trayNote:'Show this to the waiter or send it on WhatsApp.', table:n=>`Table ${n}`,
-    share:'Share', linkCopied:'Link copied', shareTxt:n=>`${n} at A PLUS Study Zone`},
+    share:'Share', linkCopied:'Link copied', shareTxt:n=>`${n} at A PLUS Study Zone`, jump:'Jump to a section', sections:'All sections'},
   ar:{eyebrow:'ستادي زون · حلب', title:'<span class="ln"><span>ادرس بتركيز.</span></span><span class="ln"><em>واشرب بذكاء.</em></span>', sub:'قهوة ومشروبات باردة وسناكس لجلسات الدراسة الطويلة. اضغط على أي صنف لتشوف نسبة الكافيين والحلاوة وشو بيمشي معه.', cta:'تصفّح المنيو', search:'ابحث عن مشروب أو سناك', all:'الكل', hot:'ساخن', iced:'مثلّج', nocaf:'بدون كافيين', sig:'توقيع <bdi dir="ltr">A+</bdi>', caffeine:'الكافيين', sweet:'الحلاوة', served:'التقديم', size:'الحجم', pairs:'بيمشي معه', combos:'كومبو الدراسة', combosSub:'تركيبات منقترحها حسب نوع جلسة الدراسة.', together:'المجموع', soon:'قريباً', empty:'ما في نتائج. جرّب كلمة تانية أو امسح الفلاتر.', clear:'امسح الفلاتر', contact:'تابعنا وراسلنا', call:'الهاتف', copy:'نسخ', copied:'تم النسخ', wa:'واتساب', complaints:'الشكاوى والدعم', where:'قهوة ومشروبات وسندويش للطلاب في حلب.', cafL:['بدون','خفيف','متوسط','قوي'], sugL:['بدون','قليل','متوسط','حلو'], temp:{h:'ساخن',i:'مثلّج',c:'بارد',r:'جاهز'}, cur:'ل.س', items:n=>`${n} صنف`, sigNote:'توقيع المكان. موجود بس عند A PLUS.', scroll:'مرّر لتحت', langBtn:'EN',
     find:'شو بشرب؟', step:i=>`${i} من 3`,
     q1:'شو نوع جلسة الدراسة؟', q2:'ساخن ولا مثلّج؟', q3:'قديش بدك ياه حلو؟',
@@ -582,7 +650,7 @@ const T = {
     add:'أضف للطلب', added:'انضاف', tray:'طلبك', view:'شوف الطلب', send:'ابعت عالواتساب', clearTray:'امسح الطلب',
     trayEmpty:'الطلب فاضي. اضغط + على أي صنف لتضيفه.', total:'المجموع', top:'لفوق',
     waMsg:'مرحبا A PLUS، بدي اطلب:', trayNote:'فرجيه للجرسون أو ابعته عالواتساب.', table:n=>`طاولة ${n}`,
-    share:'شارك', linkCopied:'تم نسخ الرابط', shareTxt:n=>`${n} من A PLUS ستادي زون`}
+    share:'شارك', linkCopied:'تم نسخ الرابط', shareTxt:n=>`${n} من A PLUS ستادي زون`, jump:'روح عالقسم', sections:'كل الأقسام'}
 };
 
 /* ---------- DATA ----------
@@ -729,12 +797,14 @@ function renderStatic(){
   $('#langBtn').textContent = L().langBtn;
   $('#tableTag').hidden = !table; $('#tableTag span').textContent = table ? L().table(table) : '';
   $('#q').placeholder = L().search;
+  $('#secBtn').setAttribute('aria-label', L().sections);
   $('#filters').innerHTML = ['all','hot','iced','nocaf','sig'].map(f=>`<button class="f ${f===filter?'on':''}" type="button" data-f="${f}">${L()[f]}</button>`).join('');
 }
 
 function renderMenu(){
   const visible = CATS.map(c=>({c, items:ITEMS.filter(it=>it.c===c.id && match(it))})).filter(g=>g.items.length);
   $('#rail').innerHTML = visible.map(({c,items},i)=>`<button class="chip ${i===0?'on':''}" type="button" data-sec="${c.id}">${svg(c.id,2)}${c[lang]}<small>${items.length}</small></button>`).join('');
+  $('#secList').innerHTML = visible.map(({c,items},i)=>`<button class="dd-item ${i===0?'on':''}" type="button" role="menuitem" data-sec="${c.id}" style="--i:${i}"><span class="di">${svg(c.id,1.9)}</span>${c[lang]}<small>${items.length}</small></button>`).join('');
   $('#menu').innerHTML = visible.map(({c,items})=>`<section class="sec" id="sec-${c.id}">
       <div class="sec-head"><div class="sec-ic">${svg(c.id,1.8)}</div><div><h2>${c[lang]}</h2><p>${L().items(items.length)}</p></div></div>
       <div class="grid">${items.map(card).join('')}</div></section>`).join('');
@@ -784,6 +854,7 @@ function spy(){
 function setChip(id){
   const row = $('#rail'); let target;
   row.querySelectorAll('.chip').forEach(c=>{ const on = c.dataset.sec===id; c.classList.toggle('on',on); if(on) target=c; });
+  document.querySelectorAll('#secList .dd-item').forEach(d=>d.classList.toggle('on', d.dataset.sec===id));
   if(target){
     const rr=row.getBoundingClientRect(), tr=target.getBoundingClientRect();
     row.scrollBy({left:(tr.left+tr.width/2)-(rr.left+rr.width/2),behavior:'smooth'});
@@ -838,8 +909,8 @@ function closeSheet(){
 /* ---------- EVENTS ---------- */
 document.addEventListener('click',e=>{
   const idEl = e.target.closest('[data-id]'); if(idEl){ openSheet(idEl.dataset.id); return; }
-  const chip = e.target.closest('.chip');
-  if(chip){ lockSpy=Date.now()+900; setChip(chip.dataset.sec); $('#sec-'+chip.dataset.sec).scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}); return; }
+  const chip = e.target.closest('[data-sec]');
+  if(chip){ ddOpen(false); lockSpy=Date.now()+900; setChip(chip.dataset.sec); $('#sec-'+chip.dataset.sec).scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}); return; }
   const f = e.target.closest('.f');
   if(f){ filter=f.dataset.f; renderStatic(); renderMenu(); return; }
 });
@@ -959,9 +1030,32 @@ $('#finder').addEventListener('click', e=>{
 });
 addEventListener('keydown', e=>{ if(e.key!=='Escape') return; if($('#finder').classList.contains('on')) closeFinder(); else if($('#trayPanel').classList.contains('on')) closeTray(); });
 
-/* ---------- BACK TO TOP ---------- */
-(()=>{ const b=$('#toTop'); let tk=false;
-  addEventListener('scroll',()=>{ if(tk) return; tk=true; requestAnimationFrame(()=>{ b.classList.toggle('on', scrollY > 900); tk=false; }); },{passive:true});
+/* ---------- SECTIONS DROPDOWN ---------- */
+function ddOpen(open){
+  const m = $('#secMenu'), b = $('#secBtn');
+  if(m.classList.contains('open') === open) return;
+  m.classList.toggle('open', open); b.setAttribute('aria-expanded', open);
+  if(open){ buzz(); setTimeout(()=>{ (m.querySelector('.dd-item.on') || m.querySelector('.dd-item'))?.focus({preventScroll:true}); }, 80); }
+}
+$('#secBtn').addEventListener('click', ()=>ddOpen(!$('#secMenu').classList.contains('open')));
+document.addEventListener('click', e=>{ if(!e.target.closest('#secMenu,#secBtn')) ddOpen(false); });
+$('#ddFind').addEventListener('click', ()=>{ ddOpen(false); openFinder(); });
+$('#secMenu').addEventListener('keydown', e=>{
+  const items = [...$('#secMenu').querySelectorAll('.dd-item,#ddFind')], i = items.indexOf(document.activeElement);
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); items[(i + (e.key==='ArrowDown'?1:-1) + items.length) % items.length].focus(); }
+  else if(e.key==='Home'||e.key==='End'){ e.preventDefault(); items[e.key==='Home'?0:items.length-1].focus(); }
+  else if(e.key==='Escape'){ ddOpen(false); $('#secBtn').focus(); }
+});
+
+/* ---------- BACK TO TOP + SCROLL PROGRESS (gold line under the rail, ring around the button) ---------- */
+(()=>{ const b=$('#toTop'), bar=$('#railProg'), ring=$('#toTopRing'); let tk=false;
+  const upd = () => {
+    const max = document.documentElement.scrollHeight - innerHeight, p = max > 0 ? Math.min(1, scrollY / max) : 0;
+    bar.style.setProperty('--sp', p.toFixed(4)); ring.style.strokeDashoffset = (100 - p*100).toFixed(2);
+    b.classList.toggle('on', scrollY > 900); tk=false;
+  };
+  addEventListener('scroll',()=>{ if(tk) return; tk=true; requestAnimationFrame(upd); },{passive:true});
+  addEventListener('resize', upd); upd();
   b.addEventListener('click',()=>scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}));
   b.setAttribute('aria-label', 'Back to top');
 })();
