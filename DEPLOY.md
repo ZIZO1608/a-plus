@@ -1,7 +1,7 @@
 # Deploying to aplus-sy.com with Coolify
 
 The site runs as one small Node container (`Dockerfile` + `server.js`, no npm packages).
-It serves the menu and the live photo studio at **https://aplus-sy.com/admin**.
+It serves the menu and the live menu studio at **https://aplus-sy.com/admin** (items, prices, sections, photos, sold out, history).
 Coolify builds it from GitHub (`ZIZO1608/a-plus`, branch `main`) and handles HTTPS.
 
 ## Coolify settings
@@ -13,7 +13,7 @@ Coolify builds it from GitHub (`ZIZO1608/a-plus`, branch `main`) and handles HTT
 | Domains | `https://aplus-sy.com` and `https://www.aplus-sy.com` (port 80), redirect www → non-www |
 | Health check | path `/healthz`, port `80` |
 
-### Photo studio: two extra settings (required for /admin)
+### Menu studio: two extra settings (required for /admin)
 
 1. **Environment Variables → + Add**
    - Name: `ADMIN_PASSWORD`
@@ -23,10 +23,10 @@ Coolify builds it from GitHub (`ZIZO1608/a-plus`, branch `main`) and handles HTT
    - Name: `aplus-photos`
    - Destination Path: `/data`
 
-   This is where uploaded photos are kept. Without it they disappear on every redeploy.
+   This is where the live menu, its history and the uploaded photos are kept. Without it every change disappears on the next redeploy.
 3. **Redeploy.**
 
-Then open https://aplus-sy.com/admin, log in, and add photos. They show on the menu right away, with no git push needed.
+Then open https://aplus-sy.com/admin, log in, and edit the menu. Changes show on the menu right away, with no git push needed.
 
 To change the password, edit `ADMIN_PASSWORD` and redeploy (everyone gets logged out).
 
@@ -43,14 +43,15 @@ Delete any `AAAA` record for `@`.
 
 ## Updating the menu
 
-- **Photos:** use https://aplus-sy.com/admin from any phone or computer.
-- **Prices / items:** edit `index.html`, then `git add . && git commit -m "update menu" && git push`. Coolify redeploys (turn on Auto Deploy).
-  Uploaded photos are not affected, because they live in the volume.
+- **Everything on the menu** (items, prices, sections, sold out, photos): https://aplus-sy.com/admin, from any phone or computer. Live immediately, no deploy.
+- **Code and design** (index.html, styles, server): edit, then `git push`. Coolify redeploys; the menu and photos in the volume are untouched.
+- The repo's `menu.json` is only used until the first save in the studio. To start over from it, delete `/data/menu.json` in the volume (History still has every version).
 
 ## How it works
 
-- `/images/<name>` is served from the volume first (`/data/images`), then from the repo's `images/` folder.
-- The studio can only write the exact photo names used in `index.html`, only real JPEGs, up to 6 MB, and only after logging in.
+- `/menu.json` and `/images/<name>` are served from the volume first (`/data`), then from the repo.
+- Every menu save is checked on the server (names, prices, sections, photo names, no HTML) and the previous version goes to `/data/history` (last 60 kept).
+- The studio can only write photo names used by an item in the menu, only real JPEGs, up to 6 MB, and only after logging in.
 - Login: 8 wrong tries from one address locks it for 15 minutes. Sessions last 12 hours (HttpOnly, SameSite=Strict, Secure cookie).
 - Pages and photos are revalidated on each visit (fast 304 responses), so changes appear immediately. Text is gzipped.
 - Short links: `/feedback`, `/tables`, `/admin`. Unknown addresses show the "empty cup" 404 page.

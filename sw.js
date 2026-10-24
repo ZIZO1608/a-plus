@@ -1,6 +1,6 @@
 /* Offline support. Bump VERSION after editing the menu so phones pick up the new files. */
-const VERSION = 'aplus-v2';
-const SHELL = ['./', 'index.html', 'complaints.html', 'logo.svg', 'manifest.webmanifest'];
+const VERSION = 'aplus-v3';
+const SHELL = ['./', 'index.html', 'menu.json', 'complaints.html', 'logo.svg', 'manifest.webmanifest'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -27,6 +27,11 @@ self.addEventListener('fetch', e => {
     }
     return res;
   };
+  /* prices and sold-out change during the day: always ask the network first, saved copy only when offline */
+  if (url.origin === location.origin && url.pathname.endsWith('/menu.json')) {
+    e.respondWith(fetch(req).then(keep).catch(() => caches.match(req, {ignoreSearch: true})));
+    return;
+  }
   if (req.mode === 'navigate') {
     e.respondWith(fetch(req).then(keep).catch(() =>
       caches.match(req, {ignoreSearch: true}).then(r => r || caches.match('index.html'))));

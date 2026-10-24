@@ -33,18 +33,22 @@ python -m http.server 5500
 then open http://localhost:5500. The live site is https://aplus-sy.com, deployed with Coolify: see [DEPLOY.md](DEPLOY.md).
 
 Share a single drink with `https://aplus-sy.com/?item=<id>` (the id is the first value in its `I(...)` line), or use the Share button in the drink's detail sheet.
-After changing prices, bump `VERSION` in `sw.js` so phones that saved the menu offline get the new one.
+The menu itself is `menu.json`; the page loads it on every visit, so changes show up right away.
 
-## Adding photos (admin)
+## Menu studio (admin)
 
-**Live:** open https://aplus-sy.com/admin on any phone or computer and log in with the studio password (`ADMIN_PASSWORD` in Coolify, see [DEPLOY.md](DEPLOY.md)). Saved photos show on the menu right away.
+**Live:** open https://aplus-sy.com/admin on any phone or computer and log in with the studio password (`ADMIN_PASSWORD` in Coolify, see [DEPLOY.md](DEPLOY.md)). Every change is live on the menu immediately.
 
-**On this computer:** `ADMIN_PASSWORD=pick-one DATA_DIR=./data node server.js` gives the same login screen at http://localhost/admin. Or, with `python -m http.server`, open admin.html in Chrome or Edge and press "Choose folder" to write straight into `images/`.
+- **Edit an item:** tap it. Names and descriptions in English and Arabic, price, size, section, how it's served, caffeine, sweetness and the photo, with a live preview of the menu card (switch it between عربي and EN).
+- **New item:** the gold "+ New item" button or the dashed card. Its photo is saved as `<id>.jpg`.
+- **Sold out today:** the switch on each card. The menu greys the item out with "خلص اليوم" and it can't be ordered. Switch it back when it's in stock.
+- **New / A+ signature / Coming soon:** switches in the editor. New shows a gold "جديد" badge.
+- **Sections:** the "Sections" chip. Rename, reorder, change the icon, add, or delete empty ones.
+- **History:** every save keeps the previous menu (the last 60). Restore any of them; the restore itself can be undone.
+- **Photos:** drop one on a card, or many at once on the dashed box (matched by file name). The ring counts how many items have one.
+- If two people edit at the same time, the second save is refused with a message instead of overwriting the first.
 
-- Click or drop a photo on any item, drag and zoom it inside the arch, and press Save. It's stored with the exact name the menu expects.
-- Drop or pick many photos at once: files are matched to items by name, so `iced latte.JPG` goes to Iced Latte.
-- The ring shows how many items have a photo, and "Missing" lists the ones still to do.
-- Photos are saved as 900×1080 JPEGs, small enough to load fast on phones.
+**On this computer:** `ADMIN_PASSWORD=pick-one DATA_DIR=./data node server.js` gives the same studio at http://localhost/admin. Or, with `python -m http.server`, open admin.html in Chrome or Edge and press "Choose folder" to edit `menu.json` and `images/` in this folder directly (no history in that mode).
 
 ## Table QR cards
 
@@ -76,27 +80,15 @@ Until the files are there, Arabic falls back to Tajawal.
 
 ## Editing the menu
 
-Everything is in the `ITEMS` list inside the `<script>`. Each line is one item:
+Use the studio. Under the hood the menu is `menu.json`:
 
-```
-I('id', 'category', 'English name', 'Arabic name',
-  'English description', 'Arabic description',
-  price, caffeine 0-3, sweetness 0-3, 'h' hot | 'i' iced | 'c' chilled | 'r' ready,
-  'photo-file.jpg', {sig:1 for A+ signature, soon:1 for coming soon, sz:'500 ml'})
-```
+- `cats`: sections in order (`id`, `en`, `ar`, `icon`: one of coffee, warm, iced, mocktails, cold, energy, snacks, food).
+- `items`: `id`, `c` (section id), `en`, `ar`, `de`/`da` (descriptions), `p` (price, `null` = coming soon), `caf` and `sug` (0 to 3), `t` (`h` hot, `i` iced, `c` chilled, `r` ready), `img` (file in `images/`), optional `sz`, and flags `sig`, `nw`, `soon`, `out`.
+- `combos`: the study combos. `pair`: "goes well with" suggestions per section.
 
-- Change a price: edit the number.
-- Coming soon: set the price to `null` and add `{soon:1}`.
-- Caffeine and sweetness levels are estimates. Check them with the café.
-- Iced Espresso is set to 130 (the old site said 13000).
+The `menu.json` in this repo is only the starting point. Once anyone saves in the live studio, the live copy lives in the server's data volume and editing the repo file no longer changes the site.
 
-Other things you may want to change:
-
-- `COMBOS`: the three study combos.
-- `PAIR`: "goes well with" suggestions per category.
-- `CATS`: section names and order.
-- WhatsApp number: search for `963969717279`.
-
+Caffeine and sweetness levels are estimates; check them with the café. WhatsApp number: search for `963969717279`.
 ## What's inside
 
 - Loading screen with the logo.

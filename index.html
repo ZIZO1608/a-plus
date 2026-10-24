@@ -253,6 +253,16 @@ main{padding-block:8px 20px}
 .card:hover{border-color:color-mix(in srgb,var(--sage) 55%,transparent);transform:translateY(-2px)}
 .card:active{transform:scale(.985);transition-delay:0ms}
 .card.soon{opacity:.62}
+.card.out .frame img,.card.out .frame > svg{filter:grayscale(1);opacity:.55}
+.card.out .c-name,.card.out .price{opacity:.6}
+.card.out .price{text-decoration:line-through;text-decoration-thickness:2px}
+.out-tag{position:absolute;inset:auto 0 0;padding:4px 0 5px;text-align:center;font-size:10.5px;font-weight:800;letter-spacing:.04em;color:#fff;background:rgba(38,45,30,.82);z-index:1}
+.ribbon{position:absolute;top:8px;inset-inline-end:-26px;rotate:45deg;width:92px;text-align:center;padding:2px 0;font-size:9.5px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#2B230F;background:linear-gradient(100deg,var(--gold-a),var(--gold-b));z-index:2;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+:root[dir="rtl"] .ribbon{rotate:-45deg}
+/* the big arch in the detail sheet would hide a corner ribbon behind its curve, so there it is a pill */
+:root .s-frame .ribbon{rotate:0deg;top:auto;bottom:12px;inset-inline-end:12px;width:auto;padding:4px 12px;border-radius:999px;font-size:12px}
+.s-frame .out-tag{font-size:13px;padding:7px 0}
+.out-band{background:color-mix(in srgb,var(--muted) 16%,transparent)}
 .frame{position:relative;width:86px;aspect-ratio:86/104;border-radius:43px 43px 12px 12px;overflow:hidden;background:linear-gradient(170deg,var(--brand-soft),color-mix(in srgb,var(--brand-soft) 60%,var(--surface)));display:grid;place-items:center;color:var(--sage);max-width:100%}
 .frame > svg{width:38%;height:auto;opacity:.85}
 .frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s}
@@ -362,7 +372,7 @@ body.sheet-open .fab{opacity:0;pointer-events:none;transform:translateY(10px)}
 .sig-band{margin-top:14px;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--gold-b) 22%,transparent);font-size:13.5px}
 .sig-band b{font-family:var(--f-display)}
 /* "A+" on its own in Arabic text would flip to "+A" */
-.stamp,.sig-band b,.r-cup b{direction:ltr;unicode-bidi:isolate}
+.stamp,.sig-band b,.r-cup b{unicode-bidi:plaintext}
 
 main.swap{animation:swap .45s var(--ease)}
 @keyframes swap{from{opacity:.2;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -643,7 +653,8 @@ const T = {
     add:'Add to tray', added:'Added', tray:'Your tray', view:'View tray', send:'Send on WhatsApp', clearTray:'Clear tray',
     trayEmpty:'Your tray is empty. Tap + on any item to add it.', total:'Total', top:'Back to top',
     waMsg:'Hi A PLUS, I would like to order:', trayNote:'Show this to the waiter or send it on WhatsApp.', table:n=>`Table ${n}`,
-    share:'Share', linkCopied:'Link copied', shareTxt:n=>`${n} at A PLUS Study Zone`, jump:'Jump to a section', sections:'All sections'},
+    share:'Share', linkCopied:'Link copied', shareTxt:n=>`${n} at A PLUS Study Zone`, jump:'Jump to a section', sections:'All sections',
+    nw:'New', out:'Sold out today', outNote:'Sold out for today. Back tomorrow.', loadErr:'The menu did not load. Check your connection.', retry:'Try again'},
   ar:{eyebrow:'ستادي زون · حلب', title:'<span class="ln"><span>ادرس بتركيز.</span></span><span class="ln"><em>واشرب بذكاء.</em></span>', sub:'قهوة ومشروبات باردة وسناكس لجلسات الدراسة الطويلة. اضغط على أي صنف لتشوف نسبة الكافيين والحلاوة وشو بيمشي معه.', cta:'تصفّح المنيو', search:'ابحث عن مشروب أو سناك', all:'الكل', hot:'ساخن', iced:'مثلّج', nocaf:'بدون كافيين', sig:'توقيع <bdi dir="ltr">A+</bdi>', caffeine:'الكافيين', sweet:'الحلاوة', served:'التقديم', size:'الحجم', pairs:'بيمشي معه', combos:'كومبو الدراسة', combosSub:'تركيبات منقترحها حسب نوع جلسة الدراسة.', together:'المجموع', soon:'قريباً', empty:'ما في نتائج. جرّب كلمة تانية أو امسح الفلاتر.', clear:'امسح الفلاتر', contact:'تابعنا وراسلنا', call:'الهاتف', copy:'نسخ', copied:'تم النسخ', wa:'واتساب', complaints:'الشكاوى والدعم', powered:'مدعوم من', where:'قهوة ومشروبات وسندويش للطلاب في حلب.', cafL:['بدون','خفيف','متوسط','قوي'], sugL:['بدون','قليل','متوسط','حلو'], temp:{h:'ساخن',i:'مثلّج',c:'بارد',r:'جاهز'}, cur:'ل.س', items:n=>`${n} صنف`, sigNote:'توقيع المكان. موجود بس عند A PLUS.', scroll:'مرّر لتحت', langBtn:'EN',
     find:'شو بشرب؟', step:i=>`${i} من 3`,
     q1:'شو نوع جلسة الدراسة؟', q2:'ساخن ولا مثلّج؟', q3:'قديش بدك ياه حلو؟',
@@ -653,111 +664,23 @@ const T = {
     add:'أضف للطلب', added:'انضاف', tray:'طلبك', view:'شوف الطلب', send:'ابعت عالواتساب', clearTray:'امسح الطلب',
     trayEmpty:'الطلب فاضي. اضغط + على أي صنف لتضيفه.', total:'المجموع', top:'لفوق',
     waMsg:'مرحبا A PLUS، بدي اطلب:', trayNote:'فرجيه للجرسون أو ابعته عالواتساب.', table:n=>`طاولة ${n}`,
-    share:'شارك', linkCopied:'تم نسخ الرابط', shareTxt:n=>`${n} من A PLUS ستادي زون`, jump:'روح عالقسم', sections:'كل الأقسام'}
+    share:'شارك', linkCopied:'تم نسخ الرابط', shareTxt:n=>`${n} من A PLUS ستادي زون`, jump:'روح عالقسم', sections:'كل الأقسام',
+    nw:'جديد', out:'خلص اليوم', outNote:'خلص لليوم. راجع بكرا.', loadErr:'ما انفتح المنيو. تأكد من الإنترنت.', retry:'جرّب مرة تانية'}
 };
 
 /* ---------- DATA ----------
-   caf: caffeine 0-3 · sug: sweetness 0-3 · t: h hot / i iced / c chilled / r ready
-   Images load from images/ in the project; a drawn placeholder shows until they do. */
-const CATS = [
-  {id:'coffee',en:'Hot Coffee',ar:'قهوة ساخنة'},
-  {id:'warm',en:'Tea & Warm',ar:'شاي ومشروبات دافئة'},
-  {id:'iced',en:'Iced Bar',ar:'المثلّجات'},
-  {id:'mocktails',en:'Mojitos & Mocktails',ar:'موهيتو وموكتيل'},
-  {id:'cold',en:'Cold Drinks',ar:'مشروبات باردة'},
-  {id:'energy',en:'Energy',ar:'مشروبات الطاقة'},
-  {id:'snacks',en:'Snacks',ar:'سناكس وشوكولا'},
-  {id:'food',en:'Food',ar:'سندويش'}
-];
-const I = (id,c,en,ar,de,da,p,caf,sug,t,img,x={}) => ({id,c,en,ar,de,da,p,caf,sug,t,img:'images/'+img,...x});
-const ITEMS = [
- I('espresso','coffee','Espresso','إسبريسو','Strong Italian espresso with a rich aroma.','إسبريسو إيطالي قوي برائحة غنية.',75,2,0,'h','espresso.jpg'),
- I('double-espresso','coffee','Double Espresso','دبل إسبريسو','A double shot with a deep, intense flavor.','شوت مضاعف بطعم عميق وقوي.',150,3,0,'h','Double Espresso.jpg'),
- I('espresso-mate','coffee','Espresso with Café Mate','إسبريسو مع كافي ميت','Espresso softened with creamy Café Mate.','إسبريسو مع كافي ميت لقوام كريمي ناعم.',130,2,1,'h','Espresso with Cafe Mate.jpg'),
- I('cappuccino','coffee','Original Cappuccino','كابتشينو أوريجينال','Espresso, steamed milk and a thick layer of foam.','إسبريسو وحليب مبخّر مع طبقة رغوة كثيفة.',200,2,1,'h','Cappuccino Original.jpg'),
- I('three-in-one','coffee','3 in 1 Coffee','قهوة 3 في 1','Instant coffee, creamer and sugar in one sweet cup.','قهوة سريعة مع كريمة وسكر بكوب واحد حلو.',100,1,3,'h','3 in 1 Coffee.jpg'),
- I('two-in-one','coffee','2 in 1 Coffee','قهوة 2 في 1','Instant coffee with creamer for a smooth cup.','قهوة سريعة مع كريمة لطعم ناعم.',100,1,1,'h','2 in 1 Coffee.jpg'),
- I('latte','coffee','Latte','لاتيه','Espresso with plenty of steamed milk. Smooth and light.','إسبريسو مع كمية وفيرة من الحليب المبخّر. ناعم وخفيف.',200,2,1,'h','Latte.jpg'),
- I('mocha','coffee','Mocha Latte','موكا لاتيه','Espresso, chocolate and steamed milk.','إسبريسو وشوكولا وحليب مبخّر.',250,2,2,'h','Mocha Latte.jpg'),
- I('caramel-latte','coffee','Caramel Latte','كراميل لاتيه','Espresso and velvety milk with rich caramel.','إسبريسو وحليب مخملي مع كراميل غني.',250,2,2,'h','Caramel Latte.jpg'),
- I('spanish-latte','coffee','Spanish Latte','سبانش لاتيه','Espresso with milk and sweet condensed milk.','إسبريسو مع حليب وحليب مكثّف محلّى.',250,2,3,'h','Spanish Latte.jpg'),
- I('vanilla-latte','coffee','Vanilla Latte','فانيلا لاتيه','Espresso and creamy milk with a touch of vanilla.','إسبريسو وحليب كريمي مع لمسة فانيلا.',250,2,2,'h','Vanilla Latte.jpg'),
- I('americano','coffee','Americano','أمريكانو','Espresso topped with hot water. Clean and bold.','إسبريسو مع ماء ساخن. طعم صافٍ وقوي.',150,2,0,'h','Americano.jpg'),
- I('triestino','coffee','Triestino','تريستينو','Creamy Italian-style coffee with a smooth finish.','قهوة كريمية على الطريقة الإيطالية بنهاية ناعمة.',150,2,1,'h','Triestino.jpg'),
- I('turkish','coffee','Turkish Coffee','قهوة تركية','Traditional Turkish coffee with an oriental aroma.','قهوة تركية تقليدية برائحة شرقية أصيلة.',100,2,1,'h','Turkish Coffee.jpg'),
- I('nescafe-black','coffee','Nescafe Black','نسكافيه بلاك','Strong black instant coffee.','نسكافيه سادة قوية.',100,2,0,'h','Nescafe Black.jpg'),
-
- I('tea','warm','Tea','شاي','Classic hot tea with a rich aroma.','شاي ساخن كلاسيكي برائحة غنية.',100,1,1,'h','Tea.jpg'),
- I('herbal','warm','Herbal Tea','شاي أعشاب','A calming infusion of herbs and flowers.','منقوع مهدّئ من الأعشاب والأزهار.',100,0,0,'h','Herbal Tea.jpg'),
- I('cumin-lemon','warm','Cumin & Lemon','كمون وليمون','Warm cumin with fresh lemon. Soothing and light.','كمون دافئ مع ليمون طازج. مريح وخفيف.',100,0,0,'h','cumin and lemon.jpg'),
- I('ahmad-tea','warm','Ahmad Tea, Flavored','شاي أحمد بالنكهات','Ahmad tea in your choice of flavor.','شاي أحمد بالنكهة التي تختارها.',150,1,1,'h','a7mad tea.jpg'),
- I('matcha','warm','Matcha','ماتشا','Creamy Japanese matcha with a rich green tea taste.','ماتشا يابانية كريمية بطعم الشاي الأخضر الغني.',300,1,1,'h','Matcha.jpg'),
- I('chai','warm','Golden Chai Latte','جولدن تشاي لاتيه','Spiced chai with creamy milk.','تشاي متبّل مع حليب كريمي.',300,1,2,'h','Golden Chai Latte.jpg'),
- I('hot-chocolate','warm','Hot Chocolate','هوت شوكليت','Rich, creamy hot chocolate.','شوكولا ساخنة غنية وكريمية.',200,0,3,'h','Hot Chocolate.jpg'),
- I('milo','warm','Milo Milk','ميلو بالحليب','Warm milk with Milo chocolate malt.','حليب دافئ مع ميلو بالشوكولا.',200,0,2,'h','Milo Milk.PNG'),
-
- I('iced-espresso','iced','Iced Espresso','آيس إسبريسو','Bold espresso over ice.','إسبريسو قوي على الثلج.',130,2,0,'i','Iced Espresso.jpg'),
- I('iced-latte','iced','Iced Latte','آيس لاتيه','Espresso and cold milk over ice.','إسبريسو وحليب بارد على الثلج.',200,2,1,'i','Iced Latte.jpg'),
- I('iced-mocha','iced','Iced Mocha Latte','آيس موكا لاتيه','Espresso, chocolate and chilled milk over ice.','إسبريسو وشوكولا وحليب بارد على الثلج.',250,2,2,'i','Iced Mocha Latte.jpg'),
- I('iced-rose','iced','Iced Rose Latte','آيس روز لاتيه','Espresso, rose essence and cold milk.','إسبريسو وماء الورد مع حليب بارد.',250,2,2,'i','Iced Rose Latte.jpg'),
- I('iced-caramel','iced','Iced Caramel Latte','آيس كراميل لاتيه','Espresso, milk and caramel over ice.','إسبريسو وحليب وكراميل على الثلج.',250,2,2,'i','Iced Caramel Latte.jpg'),
- I('iced-spanish','iced','Iced Spanish Latte','آيس سبانش لاتيه','Espresso, chilled milk and condensed milk.','إسبريسو وحليب بارد وحليب مكثّف.',250,2,3,'i','Iced Spanish Latte.jpg'),
- I('iced-vanilla','iced','Iced Vanilla Latte','آيس فانيلا لاتيه','Espresso, creamy milk and vanilla over ice.','إسبريسو وحليب كريمي وفانيلا على الثلج.',250,2,2,'i','Iced Vanilla Latte.jpg'),
- I('iced-oreo','iced','Iced Oreo Latte','آيس أوريو لاتيه','Espresso, cold milk, crushed Oreo and vanilla syrup.','إسبريسو وحليب بارد مع أوريو مطحون وشراب الفانيلا.',300,2,3,'i','Iced Oreo Latte.jpg'),
- I('iced-biscoff','iced','Iced Biscoff Latte','آيس بيسكوف لاتيه','Espresso, cold milk and creamy Biscoff spread.','إسبريسو وحليب بارد مع كريمة بيسكوف.',300,2,3,'i','Iced Biscoff Latte.jpg'),
- I('iced-americano','iced','Iced Americano','آيس أمريكانو','Espresso and cold water over ice.','إسبريسو وماء بارد على الثلج.',130,2,0,'i','Iced Americano.jpg'),
- I('orangeno','iced','Orangeno Café','أورانجينو كافيه','Espresso with fresh orange notes.','إسبريسو مع نكهة البرتقال المنعشة.',250,2,2,'i','Orangeno Cafe.jpg'),
- I('iced-matcha','iced','Iced Matcha','آيس ماتشا','Premium matcha over ice.','ماتشا فاخرة على الثلج.',350,1,1,'i','Iced Matcha.jpg'),
- I('matcha-strawberry','iced','Matcha Strawberry','ماتشا فراولة','Matcha layered with sweet strawberry.','ماتشا مع طبقة فراولة حلوة.',400,1,2,'i','Matcha Strawberry.jpg'),
- I('iced-milo','iced','Iced Milo','آيس ميلو','Chilled Milo with a creamy chocolate taste.','ميلو بارد بطعم شوكولا كريمي.',180,0,2,'i','Iced Milo.JPG'),
- I('iced-tea','iced','Iced Tea','آيس تي','Chilled tea with a balanced flavor.','شاي مثلّج بطعم متوازن.',200,1,2,'i','Iced Tea.jpg'),
-
- I('classic-mojito','mocktails','Classic Mojito','موهيتو كلاسيك','Mint, lime and sparkling soda.','نعنع وليمون مع صودا فوّارة.',250,0,2,'i','Classic Mojito.jpg'),
- I('blue-mojito','mocktails','Blue Mojito','بلو موهيتو','Mint, lime and blue flavors with soda.','نعنع وليمون مع نكهة زرقاء وصودا.',300,0,2,'i','Blue Mojito.jpg'),
- I('strawberry-mojito','mocktails','Strawberry Mojito','موهيتو فراولة','Strawberry, mint, lime and soda over ice.','فراولة ونعنع وليمون مع صودا على الثلج.',300,0,2,'i','Strawberry Mojito.jpg'),
- I('energy-mojito','mocktails','Energy Mojito','إنرجي موهيتو','Mojito with energy drink, lemon and mint.','موهيتو مع مشروب طاقة وليمون ونعنع.',250,2,3,'i','Energy Mojito.jpg'),
- I('blue-energy-mojito','mocktails','Blue Energy Mojito','بلو إنرجي موهيتو','Blue mojito with energy drink, lemon and fresh mint.','موهيتو أزرق مع مشروب طاقة وليمون ونعنع طازج.',300,2,3,'i','Blue Energy Mojito.jpg'),
- I('rose-mojito','mocktails','Rose Mojito','روز موهيتو','Mint, lime and red fruit flavors.','نعنع وليمون مع نكهات الفواكه الحمراء.',300,0,2,'i','Rose Mojito.jpg'),
- I('pink-panther','mocktails','Pink Panther','بينك بانثر','Tropical fruits with a pink twist.','فواكه استوائية بلمسة وردية.',300,0,3,'i','Pink Panther.jpg'),
- I('blue-lady','mocktails','Blue Lady','بلو ليدي','Tropical fruits and blue flavors, ice cold.','فواكه استوائية ونكهات زرقاء، مثلّج.',300,0,3,'i','Blue Lady.jpg'),
- I('red-devil','mocktails','Red Devil','ريد ديفل','A bold red mocktail with fruity flavors.','موكتيل أحمر جريء بنكهات الفواكه.',300,0,3,'i','Red Devil.jpg'),
- I('passion-fruit','mocktails','Passion Fruit','باشن فروت','A tropical passion fruit mocktail.','موكتيل باشن فروت استوائي.',300,0,2,'i','Passion Fruit.jpg'),
- I('aplus-mocktail','mocktails','A Plus Mocktail','موكتيل A Plus','Pineapple and coconut. Smooth and tropical.','أناناس وجوز هند. ناعم واستوائي.',400,0,2,'i','Pina Colada.jpg',{sig:1}),
- I('aplus-energy','mocktails','A Plus Energy Mocktail','موكتيل A Plus إنرجي','Sparkling soda, passion fruit and fresh lemon with an energy kick.','صودا فوّارة وباشن فروت وليمون طازج مع دفعة طاقة.',400,2,2,'i','Energy Soda Passion Fruit Lemon.jpg',{sig:1}),
-
- I('water','cold','Water (Small)','مياه (صغيرة)','Bottled drinking water.','مياه شرب معبّأة.',40,0,0,'c','Small Water.jpg'),
- I('soft-drinks','cold','Soft Drinks','مشروبات غازية','Pepsi, 7Up, Mirinda or Ice Tea. Ask for your pick.','بيبسي أو سفن أب أو ميرندا أو آيس تي. اختار يلي بدك ياه.',110,1,3,'c','Pepsi.jpg'),
- I('rani','cold','Rani','راني','Fruity Rani drink with a tropical taste.','مشروب راني بطعم الفواكه الاستوائية.',110,0,3,'c','Rani.jpg'),
- I('seles','cold','Seles','سيليس','Cold juice with a refreshing natural taste.','عصير بارد بطعم طبيعي منعش.',100,0,2,'c','seles.jpg'),
- I('barbican','cold','Barbican','باربيكان','Non-alcoholic malt drink.','مشروب شعير خالٍ من الكحول.',160,0,2,'c','Barbican Beer.jpg'),
-
- I('red-bull','energy','Red Bull','ريد بُل','Premium energy drink.','مشروب طاقة فاخر.',null,3,3,'c','redbull.jpg',{soon:1}),
- I('xxl-500','energy','XXL Energy','إكس إكس إل إنرجي','Cold energy drink with an intense flavor.','مشروب طاقة بارد بطعم قوي.',150,3,3,'c','XXL-Energy-Drink.jpg',{sz:'500 ml'}),
- I('xxl-250','energy','XXL Energy','إكس إكس إل إنرجي','Cold energy drink with an intense flavor.','مشروب طاقة بارد بطعم قوي.',120,3,3,'c','XXL-Energy-Drink-small.jpg',{sz:'250 ml'}),
- I('bison-500','energy','Bison Energy','بايسون إنرجي','Cold energy drink for a strong boost.','مشروب طاقة بارد لدفعة قوية.',130,3,3,'c','Bison Energy Drink Big.jpg',{sz:'500 ml'}),
- I('bison-250','energy','Bison Energy','بايسون إنرجي','Cold energy drink for a strong boost.','مشروب طاقة بارد لدفعة قوية.',110,3,3,'c','Bison Energy Drink Small.jpg',{sz:'250 ml'}),
- I('jack-500','energy','Jack Energy','جاك إنرجي','Cold energy drink for a strong boost.','مشروب طاقة بارد لدفعة قوية.',110,3,3,'c','Jack.jpg',{sz:'500 ml'}),
- I('jack-250','energy','Jack Energy','جاك إنرجي','Cold energy drink for a strong boost.','مشروب طاقة بارد لدفعة قوية.',100,3,3,'c','Jack small.jpg',{sz:'250 ml'}),
- I('dark-blue','energy','Dark Blue','دارك بلو','Cold energy drink for a strong boost.','مشروب طاقة بارد لدفعة قوية.',110,3,3,'c','Dark Blue.jpg'),
-
- I('bounty','snacks','Bounty','باونتي','Milk chocolate filled with coconut.','شوكولا بالحليب محشوة بجوز الهند.',120,0,3,'r','Bounty.jpg'),
- I('snickers','snacks','Snickers','سنيكرز','Peanuts, caramel and nougat in chocolate.','فول سوداني وكراميل ونوجا مغطاة بالشوكولا.',120,0,3,'r','Snickers.jpg'),
- I('twix','snacks','Twix','تويكس','Crunchy biscuit with caramel and milk chocolate.','بسكويت مقرمش مع كراميل وشوكولا بالحليب.',120,0,3,'r','Twix.jpg'),
- I('mars','snacks','Mars','مارس','Caramel and nougat covered in chocolate.','كراميل ونوجا مغطاة بالشوكولا.',120,0,3,'r','Mars.jpg'),
- I('kitkat','snacks','KitKat','كيت كات','Crispy wafer fingers in milk chocolate.','أصابع ويفر مقرمشة بالشوكولا.',120,0,3,'r','KitKat.jpg'),
- I('galaxy','snacks','Galaxy','جالاكسي','Smooth, creamy milk chocolate.','شوكولا بالحليب ناعمة وكريمية.',180,0,3,'r','Galaxy.jpg'),
- I('jannaty','snacks','Jannaty','جنّاتي','A small chocolate bar for a quick sweet break.','لوح شوكولا صغير لاستراحة حلوة سريعة.',30,0,3,'r','Jannaty.jpg'),
- I('cookies','snacks','Cookies','كوكيز','Sweet, buttery cookies.','كوكيز حلوة بالزبدة.',100,0,3,'r','cookies.jpg'),
-
- I('turkey-sandwich','food','Turkey Sandwich','سندويشة حبش','Turkey slices with fresh vegetables.','شرائح حبش مع خضار طازجة.',200,0,0,'r','Turkey Sandwish.jpg')
-];
-const BY = Object.fromEntries(ITEMS.map(i=>[i.id,i]));
-const COMBOS = [
-  {en:'Exam Night',ar:'ليلة الامتحان',ne:'Maximum focus for the last chapter.',na:'أقصى تركيز للفصل الأخير.',ids:['double-espresso','snickers']},
-  {en:'Chill Revision',ar:'مراجعة على رواق',ne:'Light caffeine for a long, calm session.',na:'كافيين خفيف لجلسة طويلة وهادية.',ids:['iced-matcha','cookies']},
-  {en:'Before the Lecture',ar:'قبل المحاضرة',ne:'Breakfast and coffee in one order.',na:'فطور وقهوة بطلب واحد.',ids:['cappuccino','turkey-sandwich']}
-];
-const PAIR = {coffee:['twix','cookies'],warm:['cookies','galaxy'],iced:['kitkat','turkey-sandwich'],mocktails:['bounty','cookies'],cold:['turkey-sandwich','mars'],energy:['snickers','water'],snacks:['cappuccino','iced-latte'],food:['iced-americano','soft-drinks']};
+   The menu lives in menu.json (edited in the studio at /admin; the server keeps its copy in the data volume).
+   item: caf caffeine 0-3 · sug sweetness 0-3 · t h hot / i iced / c chilled / r ready
+         p price (null = coming soon) · sig A+ signature · nw new · out sold out today · img file in images/ */
+let CATS = [], ITEMS = [], BY = {}, COMBOS = [], PAIR = {};
+const ICON_OF = {};
+function setMenu(m){
+  CATS = m.cats || []; COMBOS = m.combos || []; PAIR = m.pair || {};
+  CATS.forEach(c=>{ ICON_OF[c.id] = IC[c.icon] ? c.icon : 'coffee'; });
+  ITEMS = (m.items || []).filter(it=>ICON_OF[it.c]).map(it=>({...it, img:'images/'+it.img}));
+  BY = Object.fromEntries(ITEMS.map(i=>[i.id,i]));
+}
+const menuReady = fetch('menu.json', {cache:'no-cache'}).then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); }).then(setMenu);
 
 /* ---------- STATE ---------- */
 let lang = 'ar', filter = 'all', query = '', firstRender = true;
@@ -770,7 +693,8 @@ const L = () => T[lang];
 const nm = it => it[lang] + (it.sz ? ` · ${it.sz}` : '');
 const price = p => p==null ? `<span class="price" style="font-size:14px">${L().soon}</span>` : `<span class="price">${p.toLocaleString('en-US')}<span>${L().cur}</span></span>`;
 const caf = n => `<span class="caf ${n?'':'none'}" title="${L().caffeine}: ${L().cafL[n]}">${[1,2,3].map(i=>BOLT(i<=n)).join('')}</span>`;
-const frame = (it, cls='') => `<div class="frame ${cls}">${svg(it.c,1.6)}<img src="${encodeURI(it.img)}" alt="" loading="lazy" onload="this.dataset.ok=1" onerror="this.remove()">${it.sig?'<span class="stamp">A+</span>':''}</div>`;
+const frame = (it, cls='') => `<div class="frame ${cls}">${svg(ICON_OF[it.c],1.6)}<img src="${encodeURI(it.img)}" alt="" loading="lazy" onload="this.dataset.ok=1" onerror="this.remove()">${it.sig?'<span class="stamp">A+</span>':''}${it.nw?`<span class="ribbon">${L().nw}</span>`:''}${it.out?`<span class="out-tag">${L().out}</span>`:''}</div>`;
+const orderable = it => it && it.p!=null && !it.out;
 
 function match(it){
   if(filter==='hot' && it.t!=='h') return false;
@@ -782,13 +706,13 @@ function match(it){
 }
 
 function card(it,i){
-  return `<button class="card ${it.soon?'soon':''}" type="button" data-id="${it.id}" style="--d:${(i%4)*70}ms">
+  return `<button class="card ${it.soon?'soon':''} ${it.out?'out':''}" type="button" data-id="${it.id}" style="--d:${(i%4)*70}ms">
     ${frame(it)}
     <div class="c-body">
       <h3 class="c-name">${nm(it)}</h3>
       <p class="c-desc">${lang==='en'?it.de:it.da}</p>
       <div class="c-meta">${caf(it.caf)}<span class="tag">${L().temp[it.t]}</span></div>
-      <div class="c-foot">${price(it.p)}<span class="plus">${PLUS}</span></div>
+      <div class="c-foot">${price(it.p)}${orderable(it)?`<span class="plus">${PLUS}</span>`:''}</div>
     </div></button>`;
 }
 
@@ -806,10 +730,10 @@ function renderStatic(){
 
 function renderMenu(){
   const visible = CATS.map(c=>({c, items:ITEMS.filter(it=>it.c===c.id && match(it))})).filter(g=>g.items.length);
-  $('#rail').innerHTML = visible.map(({c,items},i)=>`<button class="chip ${i===0?'on':''}" type="button" data-sec="${c.id}">${svg(c.id,2)}${c[lang]}<small>${items.length}</small></button>`).join('');
-  $('#secList').innerHTML = visible.map(({c,items},i)=>`<button class="dd-item ${i===0?'on':''}" type="button" role="menuitem" data-sec="${c.id}" style="--i:${i}"><span class="di">${svg(c.id,1.9)}</span>${c[lang]}<small>${items.length}</small></button>`).join('');
+  $('#rail').innerHTML = visible.map(({c,items},i)=>`<button class="chip ${i===0?'on':''}" type="button" data-sec="${c.id}">${svg(ICON_OF[c.id],2)}${c[lang]}<small>${items.length}</small></button>`).join('');
+  $('#secList').innerHTML = visible.map(({c,items},i)=>`<button class="dd-item ${i===0?'on':''}" type="button" role="menuitem" data-sec="${c.id}" style="--i:${i}"><span class="di">${svg(ICON_OF[c.id],1.9)}</span>${c[lang]}<small>${items.length}</small></button>`).join('');
   $('#menu').innerHTML = visible.map(({c,items})=>`<section class="sec" id="sec-${c.id}">
-      <div class="sec-head"><div class="sec-ic">${svg(c.id,1.8)}</div><div><h2>${c[lang]}</h2><p>${L().items(items.length)}</p></div></div>
+      <div class="sec-head"><div class="sec-ic">${svg(ICON_OF[c.id],1.8)}</div><div><h2>${c[lang]}</h2><p>${L().items(items.length)}</p></div></div>
       <div class="grid">${items.map(card).join('')}</div></section>`).join('');
   $('#empty').classList.toggle('show', !visible.length);
   $('#combos').hidden = !!(query || filter!=='all');
@@ -818,7 +742,7 @@ function renderMenu(){
 
 function renderCombos(){
   $('#combos').innerHTML = `<h2>${L().combos}</h2><p>${L().combosSub}</p><div class="combo-row">${COMBOS.map((cb,i)=>{
-    const its = cb.ids.map(id=>BY[id]); const total = its.reduce((a,b)=>a+(b.p||0),0);
+    const its = cb.ids.map(id=>BY[id]).filter(Boolean); if(its.length<2) return ''; const total = its.reduce((a,b)=>a+(b.p||0),0);
     return `<div class="combo" style="--d:${i*90}ms"><h3>${cb[lang]}</h3><p class="note">${lang==='en'?cb.ne:cb.na}</p>
       <div class="combo-items">${its.map(it=>`<button type="button" data-id="${it.id}">${it[lang]}</button>`).join('<b>+</b>')}</div>
       <div class="combo-total"><span>${L().together}</span><strong>${total} ${L().cur}</strong></div></div>`;}).join('')}</div>`;
@@ -868,7 +792,7 @@ function setChip(id){
 let openId = null, lastFocus;
 function fillSheet(it){
   const cat = CATS.find(c=>c.id===it.c), other = lang==='en'?'ar':'en';
-  const pairs = (PAIR[it.c]||[]).map(id=>BY[id]).filter(p=>p.id!==it.id);
+  const pairs = (PAIR[it.c]||[]).map(id=>BY[id]).filter(p=>p && p.id!==it.id && !p.out);
   $('#sheetBody').innerHTML = `${frame(it,'s-frame')}
     <div class="s-cat">${cat[lang]}</div>
     <div class="s-title"><h3 id="sTitle">${nm(it)}<span class="alt" lang="${other}" dir="auto">${it[other]}</span></h3>${price(it.p)}</div>
@@ -879,9 +803,9 @@ function fillSheet(it){
       <div class="stat"><div class="k">${L().served}</div><div class="v">${L().temp[it.t]}</div></div>
       <div class="stat"><div class="k">${it.sz?L().size:'<bdi dir="ltr">A+</bdi>'}</div><div class="v">${it.sz||cat[lang]}</div></div>
     </div>
-    ${it.sig?`<div class="sig-band"><b>A+</b>${L().sigNote}</div>`:''}
+    ${it.sig?`<div class="sig-band"><b>A+</b>${L().sigNote}</div>`:''}${it.out?`<div class="sig-band out-band"><b>×</b>${L().outNote}</div>`:''}
     ${pairs.length?`<div class="pairs"><div class="k">${L().pairs}</div><div>${pairs.map(p=>`<button type="button" data-id="${p.id}">${p[lang]}<span>${p.p??''}</span></button>`).join('')}</div></div>`:''}
-    <div class="s-acts">${it.soon?'':`<button class="add-btn" type="button" data-add="${it.id}">${PLUS}<span>${L().add}</span></button>`}
+    <div class="s-acts">${!orderable(it)?'':`<button class="add-btn" type="button" data-add="${it.id}">${PLUS}<span>${L().add}</span></button>`}
       <button class="share-btn" type="button" data-share="${it.id}" aria-label="${L().share}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4"/></svg><span>${L().share}</span></button></div>`;
   $('#closeBtn').setAttribute('aria-label', lang==='en'?'Close':'إغلاق');
 }
@@ -932,13 +856,13 @@ $('#copyBtn').addEventListener('click',async()=>{
 /* ---------- TRAY ---------- */
 let tray = {};
 try{ tray = JSON.parse(localStorage.getItem('aplus-tray')||'{}') || {}; }catch(e){ tray = {}; }
-Object.keys(tray).forEach(id=>{ if(!BY[id] || BY[id].p==null) delete tray[id]; });
+const trayInit = () => Object.keys(tray).forEach(id=>{ if(!orderable(BY[id])) delete tray[id]; });
 const traySave = () => { try{ localStorage.setItem('aplus-tray', JSON.stringify(tray)); }catch(e){} };
 const trayCount = () => Object.values(tray).reduce((a,b)=>a+b,0);
 const trayTotal = () => Object.entries(tray).reduce((a,[id,q])=>a+BY[id].p*q,0);
 const buzz = () => { try{ navigator.vibrate && navigator.vibrate(12); }catch(e){} };
 function trayAdd(id, d=1){
-  const it = BY[id]; if(!it || it.p==null) return;
+  const it = BY[id]; if(!orderable(it)) return;
   tray[id] = (tray[id]||0) + d; if(tray[id] <= 0) delete tray[id];
   traySave(); trayRender(); buzz();
   if(d>0){ const b=$('#trayBar'); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
@@ -970,7 +894,7 @@ document.addEventListener('click', e=>{
   const q = e.target.closest('[data-tq]');
   if(e.target.closest('#trayClear')){ tray={}; traySave(); trayRender(); e.stopPropagation(); return; }
   if(q){ trayAdd(q.dataset.tq, +q.dataset.d); e.stopPropagation(); return; }
-  if(plus){ const id = plus.closest('.card').dataset.id; if(BY[id].p!=null){ trayAdd(id); plus.classList.remove('pop'); void plus.offsetWidth; plus.classList.add('pop'); } e.stopPropagation(); return; }
+  if(plus){ const id = plus.closest('.card').dataset.id; if(orderable(BY[id])){ trayAdd(id); plus.classList.remove('pop'); void plus.offsetWidth; plus.classList.add('pop'); } e.stopPropagation(); return; }
   const sh = e.target.closest('[data-share]');
   if(sh){ e.stopPropagation(); shareItem(BY[sh.dataset.share], sh); return; }
   if(add){ trayAdd(add.dataset.add); const s = add.querySelector('span'); s.textContent = L().added; setTimeout(()=>{ s.textContent = L().add; }, 1200); e.stopPropagation(); }
@@ -992,7 +916,7 @@ const TINT_ID = {'matcha':'#86A957','iced-matcha':'#86A957','matcha-strawberry':
   'rose-mojito':'#D9466A','strawberry-mojito':'#D9466A','pink-panther':'#E77BA0','red-devil':'#C2283C','passion-fruit':'#F2A93B','aplus-mocktail':'#F2C14E','aplus-energy':'#F2B13B',
   'classic-mojito':'#A8D46F','energy-mojito':'#C6D94A','hot-chocolate':'#5A3424','milo':'#7A4A2E','iced-milo':'#7A4A2E','herbal':'#C9A94E','cumin-lemon':'#D8B94A','tea':'#9A4A22','chai':'#C08A4A','iced-tea':'#B5652B','orangeno':'#D9822B','iced-rose':'#E3B3B8'};
 function fdPick(){
-  const target = SESS[fd.s].caf, pool0 = ITEMS.filter(it=>['coffee','warm','iced','mocktails'].includes(it.c) && it.p!=null);
+  const target = SESS[fd.s].caf, pool0 = ITEMS.filter(it=>['coffee','warm','iced','mocktails'].includes(it.c) && orderable(it));
   let pool = fd.t==='any' ? pool0 : pool0.filter(it=>it.t===fd.t); if(!pool.length) pool = pool0;
   let r = fd.seed; const rnd = () => (r = (r*9301+49297)%233280)/233280;
   return pool.map(it=>({it, sc:-Math.abs(it.caf-target)*2 - Math.abs(it.sug-fd.sw)*1.3 + (it.sig?.4:0) + rnd()*.9})).sort((a,b)=>b.sc-a.sc).slice(0,3).map(x=>x.it);
@@ -1091,7 +1015,10 @@ $('#secMenu').addEventListener('keydown', e=>{
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const minTime = reduced ? 300 : 1700, t0 = performance.now();
   let loaded = document.readyState === 'complete', shown = 0, done = false;
-  addEventListener('load', ()=>{ loaded = true; });
+  /* hold the bar until both the page and menu.json have arrived */
+  let winLoaded = loaded, menuDone = false; loaded = false;
+  addEventListener('load', ()=>{ winLoaded = true; loaded = menuDone; });
+  menuReady.finally(()=>{ menuDone = true; loaded = winLoaded; });
   setTimeout(()=>{ loaded = true; }, 3500); /* never hold the page longer than this */
   const step = () => {
     const tp = Math.min(1, (performance.now() - t0) / minTime);
@@ -1116,7 +1043,10 @@ $('#secMenu').addEventListener('keydown', e=>{
   requestAnimationFrame(step);
 })();
 $('#miniMark').innerHTML = logo(false);
-renderAll(false);
+renderStatic();
+menuReady.then(()=>{ trayInit(); renderAll(false); }).catch(()=>{
+  $('#menu').innerHTML = `<div class="empty show"><p>${L().loadErr}</p><button type="button" onclick="location.reload()">${L().retry}</button></div>`;
+});
 /* offline + "add to home screen"; service workers need http(s) or localhost, not file:// */
 if('serviceWorker' in navigator && location.protocol.startsWith('http')) addEventListener('load', ()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>

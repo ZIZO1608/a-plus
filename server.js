@@ -1,6 +1,6 @@
-/* A PLUS server: serves the site and the live photo studio (admin.html). No dependencies.
-   Photos uploaded through the studio are stored in DATA_DIR/images (a Coolify volume), so they
-   survive redeploys, and they take priority over photos bundled in the repo's images/ folder.
+/* A PLUS server: serves the site and the live menu studio (admin.html). No dependencies.
+   The menu (menu.json) and the photos edited in the studio live in DATA_DIR (a Coolify volume), so they
+   survive redeploys, and they take priority over menu.json and images/ bundled in the repo.
 
    Env: ADMIN_PASSWORD (studio is disabled without it) · PORT (80) · DATA_DIR (/data) · SITE_DIR (this folder) */
 const http = require('node:http');
@@ -28,14 +28,6 @@ const HIDDEN = new Set(['/server.js', '/Dockerfile']);
 const SECURITY = {'X-Content-Type-Options':'nosniff', 'Referrer-Policy':'strict-origin-when-cross-origin', 'X-Frame-Options':'SAMEORIGIN',
   'Permissions-Policy':'camera=(), microphone=(), geolocation=(), payment=()'};
 
-/* the studio may only write the file names the menu actually uses */
-const PHOTOS = (() => {
-  const html = fs.readFileSync(path.join(SITE, 'index.html'), 'utf8');
-  const a = html.indexOf('const CATS'), b = html.indexOf('const BY');
-  const {ITEMS} = new Function(html.slice(a, b) + ';return {ITEMS};')();
-  return new Set(ITEMS.map(it => it.img.replace(/^images\//, '')));
-})();
-
 /* ---------- static files ---------- */
 async function statFile(file){
   try{ const s = await fsp.stat(file); return s.isFile() ? {file, size:s.size, mtimeMs:s.mtimeMs} : null; }catch(e){ return null; }
@@ -46,14 +38,125 @@ async function resolve(urlPath){
   urlPath = SHORT[urlPath.replace(/\/$/, '')] || urlPath;
   if(urlPath.endsWith('/')) urlPath += 'index.html';
   if(HIDDEN.has(urlPath) || /\.md$/i.test(urlPath) || urlPath.split('/').some(s => s.startsWith('.'))) return null;
+  if(urlPath === '/menu.json'){ const live = await statFile(MENU_FILE); if(live) return live; }
   if(urlPath.startsWith('/images/')){
     const name = urlPath.slice(8);
-    if(PHOTOS.has(name)){ const up = await statFile(path.join(UPLOADS, name)); if(up) return up; }
+    if((await photoNames()).has(name)){ const up = await statFile(path.join(UPLOADS, name)); if(up) return up; }
   }
   const file = path.join(SITE, urlPath);
   if(!file.startsWith(SITE + path.sep)) return null;
   return await statFile(file) || (!path.extname(file) && await statFile(file + '.html')) || null;
 }
+/* ---------- menu data ----------
+   menu.json from the repo is the starting point; once edited in the studio the live copy is DATA_DIR/menu.json.
+   Every save first copies the previous menu into DATA_DIR/history, so the studio can restore it. */
+const DATA = path.resolve(process.env.DATA_DIR || '/data');
+const MENU_FILE = path.join(DATA, 'menu.json');
+const HISTORY = path.join(DATA, 'history');
+const KEEP_HISTORY = 60;
+const MAX_MENU = 512 * 1024;
+const ICONS = ['coffee', 'warm', 'iced', 'mocktails', 'cold', 'energy', 'snacks', 'food'];
+
+let menuCache = null;
+async function readMenu(){
+  const f = await statFile(MENU_FILE) || await statFile(path.join(SITE, 'menu.json'));
+  if(menuCache && menuCache.file === f.file && menuCache.mtimeMs === f.mtimeMs) return menuCache.menu;
+  const menu = JSON.parse(await fsp.readFile(f.file, 'utf8'));
+  menuCache = {file: f.file, mtimeMs: f.mtimeMs, menu};
+  return menu;
+}
+/* the studio may only write photo file names that an item in the current menu uses */
+const photoNames = async () => new Set((await readMenu()).items.map(it => it.img));
+
+class Invalid extends Error {}
+function cleanMenu(m){
+  const bad = msg => { throw new Invalid(msg); };
+  const text = (v, max, what, required = true) => {
+    if(v == null || v === ''){ if(required) bad(`${what} is empty.`); return ''; }
+    if(typeof v !== 'string') bad(`${what} must be text.`);
+    v = v.trim();
+    if(required && !v) bad(`${what} is empty.`);
+    if(v.length > max) bad(`${what} is longer than ${max} characters.`);
+    /* the menu page builds its HTML from these strings, so no tags */
+    if(/[<>]/.test(v)) bad(`${what} can't contain < or >.`);
+    return v;
+  };
+  const level = (v, what) => Number.isInteger(v) && v >= 0 && v <= 3 ? v : bad(`${what} must be 0 to 3.`);
+  const ID = /^[a-z0-9][a-z0-9-]{0,39}$/;
+  const IMG = /^[A-Za-z0-9][A-Za-z0-9 ._()&'-]{0,79}\.(jpe?g|png)$/i;
+  if(!m || typeof m !== 'object' || !Array.isArray(m.cats) || !Array.isArray(m.items)) bad('Menu is malformed.');
+  if(!m.cats.length || m.cats.length > 30) bad('A menu needs 1 to 30 sections.');
+  if(m.items.length > 400) bad('Too many items (400 max).');
+
+  const catIds = new Set();
+  const cats = m.cats.map((c, i) => {
+    const id = typeof c.id === 'string' && ID.test(c.id) ? c.id : bad(`Section ${i + 1} has an invalid id.`);
+    if(catIds.has(id)) bad(`Two sections use the id "${id}".`);
+    catIds.add(id);
+    return {id, en: text(c.en, 40, 'Section name (EN)'), ar: text(c.ar, 40, 'Section name (AR)'), icon: ICONS.includes(c.icon) ? c.icon : 'coffee'};
+  });
+
+  const itemIds = new Set();
+  const items = m.items.map((it, i) => {
+    const label = `Item ${i + 1}${typeof it.en === 'string' ? ` (${it.en})` : ''}`;
+    const id = typeof it.id === 'string' && ID.test(it.id) ? it.id : bad(`${label} has an invalid id.`);
+    if(itemIds.has(id)) bad(`Two items use the id "${id}".`);
+    itemIds.add(id);
+    if(!catIds.has(it.c)) bad(`${label} is in a section that doesn't exist.`);
+    const p = it.p == null ? null : Number.isInteger(it.p) && it.p >= 0 && it.p <= 100000000 ? it.p : bad(`${label}: price must be a whole number.`);
+    const img = typeof it.img === 'string' && IMG.test(it.img) && !it.img.includes('..') ? it.img : bad(`${label} has an invalid photo name.`);
+    const out = {id, c: it.c, en: text(it.en, 60, `${label} name (EN)`), ar: text(it.ar, 60, `${label} name (AR)`),
+      de: text(it.de, 240, `${label} description (EN)`, false), da: text(it.da, 240, `${label} description (AR)`, false),
+      p, caf: level(it.caf, `${label} caffeine`), sug: level(it.sug, `${label} sweetness`),
+      t: ['h', 'i', 'c', 'r'].includes(it.t) ? it.t : bad(`${label}: choose how it's served.`), img};
+    const sz = text(it.sz, 20, `${label} size`, false);
+    if(sz) out.sz = sz;
+    for(const flag of ['sig', 'soon', 'nw', 'out']) if(it[flag]) out[flag] = 1;
+    return out;
+  });
+
+  /* combos and pairings quietly drop items that were deleted */
+  const combos = (Array.isArray(m.combos) ? m.combos : []).slice(0, 12).map((cb, i) => ({
+    en: text(cb.en, 40, `Combo ${i + 1} name (EN)`), ar: text(cb.ar, 40, `Combo ${i + 1} name (AR)`),
+    ne: text(cb.ne, 120, `Combo ${i + 1} note (EN)`, false), na: text(cb.na, 120, `Combo ${i + 1} note (AR)`, false),
+    ids: (Array.isArray(cb.ids) ? cb.ids : []).filter(id => itemIds.has(id)).slice(0, 4)
+  })).filter(cb => cb.ids.length >= 2);
+  const pair = {};
+  for(const [cid, ids] of Object.entries(m.pair && typeof m.pair === 'object' ? m.pair : {}))
+    if(catIds.has(cid) && Array.isArray(ids)) pair[cid] = ids.filter(id => itemIds.has(id)).slice(0, 4);
+
+  return {updated: new Date().toISOString(), cats, items, combos, pair};
+}
+
+let saving = Promise.resolve();
+/* one save at a time; a stale rev means someone else saved since this editor loaded */
+function saveMenu(next, rev, note){
+  const run = saving.then(async () => {
+    const current = await readMenu();
+    if(rev !== undefined && rev !== current.updated) throw Object.assign(new Error('Someone else changed the menu. Reload to get their changes.'), {status: 409});
+    const clean = cleanMenu(next);
+    await fsp.mkdir(HISTORY, {recursive: true});
+    await fsp.writeFile(path.join(HISTORY, `menu-${Date.now()}.json`), JSON.stringify({...current, note}));
+    const tmp = `${MENU_FILE}.${crypto.randomBytes(4).toString('hex')}.tmp`;
+    await fsp.writeFile(tmp, JSON.stringify(clean, null, 1));
+    await fsp.rename(tmp, MENU_FILE);
+    const old = (await fsp.readdir(HISTORY)).filter(f => /^menu-\d+\.json$/.test(f)).sort().slice(0, -KEEP_HISTORY);
+    await Promise.all(old.map(f => fsp.rm(path.join(HISTORY, f), {force: true})));
+    return clean;
+  });
+  saving = run.catch(() => {});
+  return run;
+}
+async function listHistory(){
+  let files = [];
+  try{ files = (await fsp.readdir(HISTORY)).filter(f => /^menu-\d+\.json$/.test(f)).sort().reverse(); }catch(e){}
+  const list = await Promise.all(files.map(async f => {
+    try{ const m = JSON.parse(await fsp.readFile(path.join(HISTORY, f), 'utf8')); return {id: f.slice(5, -5), at: m.updated, items: m.items.length, note: m.note || ''}; }
+    catch(e){ return null; }
+  }));
+  return list.filter(Boolean);
+}
+
 /* pages and photos revalidate every time (cheap 304s), so price and photo changes show up at once; fonts never change */
 const cacheFor = ext => /^\.(woff2?|ttf)$/.test(ext) ? 'public, max-age=2592000, immutable' : 'no-cache';
 
@@ -138,9 +241,36 @@ async function api(req, res, url){
 
   if(!authed(req)) return json(req, res, 401, {error: 'Log in first.'});
 
+  if(route === 'menu' && method === 'GET'){ const menu = await readMenu(); return json(req, res, 200, {menu, rev: menu.updated}); }
+  if(route === 'menu' && method === 'PUT'){
+    let body;
+    try{ body = JSON.parse(await readBody(req, MAX_MENU)); }catch(e){ return json(req, res, e.status || 400, {error: e.status === 413 ? 'Menu is too large.' : 'Bad request'}); }
+    try{
+      const note = typeof body.note === 'string' ? body.note.slice(0, 80) : '';
+      const menu = await saveMenu(body.menu, body.rev, note);
+      console.log(`[studio] menu saved: ${note || 'edit'} (${menu.items.length} items)`);
+      return json(req, res, 200, {menu, rev: menu.updated});
+    }catch(e){
+      if(e instanceof Invalid) return json(req, res, 422, {error: e.message});
+      if(e.status === 409) return json(req, res, 409, {error: e.message});
+      throw e;
+    }
+  }
+  if(route === 'history' && method === 'GET') return json(req, res, 200, {history: await listHistory()});
+  const h = route.match(/^history\/(\d{10,16})\/restore$/);
+  if(h && method === 'POST'){
+    let old;
+    try{ old = JSON.parse(await fsp.readFile(path.join(HISTORY, `menu-${h[1]}.json`), 'utf8')); }catch(e){ return json(req, res, 404, {error: 'That version is gone.'}); }
+    try{
+      const menu = await saveMenu(old, undefined, `restored ${old.updated}`);
+      console.log(`[studio] menu restored to ${old.updated}`);
+      return json(req, res, 200, {menu, rev: menu.updated});
+    }catch(e){ if(e instanceof Invalid) return json(req, res, 422, {error: e.message}); throw e; }
+  }
+
   if(route === 'photos' && method === 'GET'){
     const photos = {};
-    for(const name of PHOTOS){
+    for(const name of await photoNames()){
       const f = await statFile(path.join(UPLOADS, name)) || await statFile(path.join(SITE, 'images', name));
       if(f) photos[name] = {v: Math.floor(f.mtimeMs), bundled: !f.file.startsWith(UPLOADS)};
     }
@@ -150,7 +280,7 @@ async function api(req, res, url){
   const m = route.match(/^photos\/(.+)$/);
   if(m){
     let name; try{ name = decodeURIComponent(m[1]); }catch(e){ return json(req, res, 400, {error: 'Bad name'}); }
-    if(!PHOTOS.has(name)) return json(req, res, 404, {error: 'No menu item uses that photo name.'});
+    if(!(await photoNames()).has(name)) return json(req, res, 404, {error: 'No menu item uses that photo name. Save the item first.'});
     const dest = path.join(UPLOADS, name);
     if(method === 'PUT'){
       if(!/^image\/jpeg\b/.test(req.headers['content-type'] || '')) return json(req, res, 415, {error: 'Send a JPEG.'});
@@ -200,4 +330,4 @@ setInterval(() => {
 fs.mkdirSync(UPLOADS, {recursive: true});
 fs.access(UPLOADS, fs.constants.W_OK, e => e && console.error(`[studio] cannot write to ${UPLOADS}. Mount a volume at ${path.dirname(UPLOADS)} (see DEPLOY.md).`));
 if(!PASSWORD) console.warn('[studio] ADMIN_PASSWORD is not set, so /admin is locked. Set it in Coolify > Environment Variables.');
-server.listen(PORT, () => console.log(`A PLUS on :${PORT} · site ${SITE} · photos ${UPLOADS} · ${PHOTOS.size} menu photos`));
+readMenu().then(m => server.listen(PORT, () => console.log(`A PLUS on :${PORT} · site ${SITE} · data ${DATA} · ${m.items.length} menu items`)));
