@@ -75,8 +75,8 @@ MontserratArabic-ExtraBold.woff2
 MontserratArabic-Black.woff2
 ```
 
-If yours are `.ttf`, change `format("woff2")` to `format("truetype")` and the extensions in the `@font-face` lines at the top of the `<style>`.
-Until the files are there, Arabic falls back to Tajawal.
+`.woff2`, `.ttf` or `.otf` all work, and any subset of the weights is fine. Push them to GitHub: when the server starts it writes `fonts.css` for exactly the files it finds, so pages never ask for a font that isn't there.
+Until the files are there, Arabic uses Tajawal.
 
 ## Editing the menu
 

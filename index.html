@@ -27,15 +27,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap">
+<link rel="stylesheet" href="fonts.css">
 <style>
-/* Montserrat Arabic is self-hosted: put the .woff2 files in fonts/ next to index.html.
-   Until they exist (e.g. in the preview), Arabic falls back to Tajawal. */
-@font-face{font-family:"Montserrat Arabic";src:url("fonts/MontserratArabic-Regular.woff2") format("woff2");font-weight:400;font-display:swap}
-@font-face{font-family:"Montserrat Arabic";src:url("fonts/MontserratArabic-Medium.woff2") format("woff2");font-weight:500;font-display:swap}
-@font-face{font-family:"Montserrat Arabic";src:url("fonts/MontserratArabic-SemiBold.woff2") format("woff2");font-weight:600;font-display:swap}
-@font-face{font-family:"Montserrat Arabic";src:url("fonts/MontserratArabic-Bold.woff2") format("woff2");font-weight:700;font-display:swap}
-@font-face{font-family:"Montserrat Arabic";src:url("fonts/MontserratArabic-ExtraBold.woff2") format("woff2");font-weight:800;font-display:swap}
-@font-face{font-family:"Montserrat Arabic";src:url("fonts/MontserratArabic-Black.woff2") format("woff2");font-weight:900;font-display:swap}
 /* Layout: olive hero band with the animated A+ mark, sticky arch-chip category rail, arch-framed item rows, bottom sheet for details. */
 :root{
   --bg:#F2F6E6; --surface:#FBFDF4; --ink:#262D1E; --muted:#5C6650; --line:rgba(70,82,58,.15);
@@ -479,6 +472,17 @@ body.sheet-open .traybar{transform:translateY(140%)}
 /* back to top */
 .totop{width:42px;height:42px;align-self:center;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow);
   opacity:0;transform:translateY(10px) scale(.8);pointer-events:none;transition:opacity .3s,transform .3s var(--ease)}
+/* LIVE: a pill that drops in when the studio changes the menu while it's open */
+.live{position:fixed;z-index:35;top:calc(10px + env(safe-area-inset-top,0px));left:50%;translate:-50% 0;display:flex;align-items:center;gap:8px;
+  padding:8px 14px 8px 10px;border-radius:999px;font-weight:700;font-size:13px;white-space:nowrap;color:#2B230F;
+  background:linear-gradient(100deg,var(--gold-a),var(--gold-b) 55%,var(--gold-a));box-shadow:0 10px 26px rgba(0,0,0,.25);
+  transform:translateY(-160%);transition:transform .55s cubic-bezier(.3,1.4,.5,1);pointer-events:none}
+.live.on{transform:none}
+.live b{font-size:10px;font-weight:900;letter-spacing:.14em;padding:2px 7px;border-radius:999px;background:#2B230F;color:var(--gold-b);display:flex;align-items:center;gap:5px}
+.live b::before{content:"";width:6px;height:6px;border-radius:50%;background:#7CE07C;box-shadow:0 0 0 0 rgba(124,224,124,.7);animation:livePulse 1.4s infinite}
+@keyframes livePulse{70%{box-shadow:0 0 0 7px rgba(124,224,124,0)}100%{box-shadow:0 0 0 0 rgba(124,224,124,0)}}
+.card.just{animation:justIn 1.6s var(--ease)}
+@keyframes justIn{0%{box-shadow:0 0 0 0 rgba(244,213,141,.9)}100%{box-shadow:0 0 0 16px rgba(244,213,141,0)}}
 .totop{position:relative}
 .totop svg{width:18px;height:18px}
 .totop .tt-ring{position:absolute;inset:-4px;width:calc(100% + 8px);height:calc(100% + 8px);transform:rotate(-90deg);pointer-events:none}
@@ -654,7 +658,7 @@ const T = {
     trayEmpty:'Your tray is empty. Tap + on any item to add it.', total:'Total', top:'Back to top',
     waMsg:'Hi A PLUS, I would like to order:', trayNote:'Show this to the waiter or send it on WhatsApp.', table:n=>`Table ${n}`,
     share:'Share', linkCopied:'Link copied', shareTxt:n=>`${n} at A PLUS Study Zone`, jump:'Jump to a section', sections:'All sections',
-    nw:'New', out:'Sold out today', outNote:'Sold out for today. Back tomorrow.', loadErr:'The menu did not load. Check your connection.', retry:'Try again'},
+    nw:'New', live:'Menu just updated', out:'Sold out today', outNote:'Sold out for today. Back tomorrow.', loadErr:'The menu did not load. Check your connection.', retry:'Try again'},
   ar:{eyebrow:'ستادي زون · حلب', title:'<span class="ln"><span>ادرس بتركيز.</span></span><span class="ln"><em>واشرب بذكاء.</em></span>', sub:'قهوة ومشروبات باردة وسناكس لجلسات الدراسة الطويلة. اضغط على أي صنف لتشوف نسبة الكافيين والحلاوة وشو بيمشي معه.', cta:'تصفّح المنيو', search:'ابحث عن مشروب أو سناك', all:'الكل', hot:'ساخن', iced:'مثلّج', nocaf:'بدون كافيين', sig:'توقيع <bdi dir="ltr">A+</bdi>', caffeine:'الكافيين', sweet:'الحلاوة', served:'التقديم', size:'الحجم', pairs:'بيمشي معه', combos:'كومبو الدراسة', combosSub:'تركيبات منقترحها حسب نوع جلسة الدراسة.', together:'المجموع', soon:'قريباً', empty:'ما في نتائج. جرّب كلمة تانية أو امسح الفلاتر.', clear:'امسح الفلاتر', contact:'تابعنا وراسلنا', call:'الهاتف', copy:'نسخ', copied:'تم النسخ', wa:'واتساب', complaints:'الشكاوى والدعم', powered:'مدعوم من', where:'قهوة ومشروبات وسندويش للطلاب في حلب.', cafL:['بدون','خفيف','متوسط','قوي'], sugL:['بدون','قليل','متوسط','حلو'], temp:{h:'ساخن',i:'مثلّج',c:'بارد',r:'جاهز'}, cur:'ل.س', items:n=>`${n} صنف`, sigNote:'توقيع المكان. موجود بس عند A PLUS.', scroll:'مرّر لتحت', langBtn:'EN',
     find:'شو بشرب؟', step:i=>`${i} من 3`,
     q1:'شو نوع جلسة الدراسة؟', q2:'ساخن ولا مثلّج؟', q3:'قديش بدك ياه حلو؟',
@@ -665,20 +669,21 @@ const T = {
     trayEmpty:'الطلب فاضي. اضغط + على أي صنف لتضيفه.', total:'المجموع', top:'لفوق',
     waMsg:'مرحبا A PLUS، بدي اطلب:', trayNote:'فرجيه للجرسون أو ابعته عالواتساب.', table:n=>`طاولة ${n}`,
     share:'شارك', linkCopied:'تم نسخ الرابط', shareTxt:n=>`${n} من A PLUS ستادي زون`, jump:'روح عالقسم', sections:'كل الأقسام',
-    nw:'جديد', out:'خلص اليوم', outNote:'خلص لليوم. راجع بكرا.', loadErr:'ما انفتح المنيو. تأكد من الإنترنت.', retry:'جرّب مرة تانية'}
+    nw:'جديد', live:'المنيو تحدّث هلق', out:'خلص اليوم', outNote:'خلص لليوم. راجع بكرا.', loadErr:'ما انفتح المنيو. تأكد من الإنترنت.', retry:'جرّب مرة تانية'}
 };
 
 /* ---------- DATA ----------
    The menu lives in menu.json (edited in the studio at /admin; the server keeps its copy in the data volume).
    item: caf caffeine 0-3 · sug sweetness 0-3 · t h hot / i iced / c chilled / r ready
          p price (null = coming soon) · sig A+ signature · nw new · out sold out today · img file in images/ */
-let CATS = [], ITEMS = [], BY = {}, COMBOS = [], PAIR = {};
+let CATS = [], ITEMS = [], BY = {}, COMBOS = [], PAIR = {}, MENU_REV = '';
 const ICON_OF = {};
 function setMenu(m){
   CATS = m.cats || []; COMBOS = m.combos || []; PAIR = m.pair || {};
   CATS.forEach(c=>{ ICON_OF[c.id] = IC[c.icon] ? c.icon : 'coffee'; });
   ITEMS = (m.items || []).filter(it=>ICON_OF[it.c]).map(it=>({...it, img:'images/'+it.img}));
   BY = Object.fromEntries(ITEMS.map(i=>[i.id,i]));
+  MENU_REV = m.updated || '';
 }
 const menuReady = fetch('menu.json', {cache:'no-cache'}).then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); }).then(setMenu);
 
@@ -751,7 +756,7 @@ function renderCombos(){
 function renderAll(swap){
   renderStatic(); renderMenu(); renderCombos();
   if(swap){ const m=$('#menu'); m.classList.remove('swap'); void m.offsetWidth; m.classList.add('swap'); }
-  if(openId) fillSheet(BY[openId]);
+  if(openId){ if(BY[openId]) fillSheet(BY[openId]); else closeSheet(); }
   trayRender();
   if($('#finder').classList.contains('on')) fdRender();
 }
@@ -897,8 +902,36 @@ document.addEventListener('click', e=>{
   if(plus){ const id = plus.closest('.card').dataset.id; if(orderable(BY[id])){ trayAdd(id); plus.classList.remove('pop'); void plus.offsetWidth; plus.classList.add('pop'); } e.stopPropagation(); return; }
   const sh = e.target.closest('[data-share]');
   if(sh){ e.stopPropagation(); shareItem(BY[sh.dataset.share], sh); return; }
-  if(add){ trayAdd(add.dataset.add); const s = add.querySelector('span'); s.textContent = L().added; setTimeout(()=>{ s.textContent = L().add; }, 1200); e.stopPropagation(); }
+  /* the sheet's button has a label span; the quiz result's button is just text */
+  if(add){ trayAdd(add.dataset.add); const s = add.querySelector('span') || add, was = s.textContent; s.textContent = L().added; setTimeout(()=>{ s.textContent = was; }, 1200); e.stopPropagation(); }
 }, true);
+
+/* ---------- LIVE: sold-out switches and price changes from the studio reach open menus ----------
+   Checks menu.json every 45 s while the page is visible (a 304 when nothing changed) and right after the phone wakes. */
+(()=>{
+  let busy = false, tid;
+  const pill = document.createElement('div');
+  pill.className = 'live'; pill.setAttribute('role', 'status'); pill.innerHTML = '<b>LIVE</b><span></span>';
+  document.body.appendChild(pill);
+  const check = async () => {
+    if(busy || document.hidden || !MENU_REV) return;
+    busy = true;
+    try{
+      const r = await fetch('menu.json', {cache:'no-cache'});
+      if(!r.ok) return;
+      const m = await r.json();
+      if(!m.updated || m.updated === MENU_REV) return;
+      const before = Object.fromEntries(ITEMS.map(i=>[i.id, JSON.stringify(i)]));
+      setMenu(m); trayInit(); renderAll(false);
+      /* glow the cards that changed */
+      ITEMS.filter(i=>before[i.id] !== JSON.stringify(i)).forEach(i=>document.querySelector(`.card[data-id="${i.id}"]`)?.classList.add('just'));
+      pill.querySelector('span').textContent = L().live; pill.classList.add('on'); buzz();
+      clearTimeout(tid); tid = setTimeout(()=>pill.classList.remove('on'), 3200);
+    }catch(e){}finally{ busy = false; }
+  };
+  setInterval(check, 45000);
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) check(); });
+})();
 
 /* ---------- SHARE: native share sheet on phones, copy link elsewhere ---------- */
 async function shareItem(it, btn){
