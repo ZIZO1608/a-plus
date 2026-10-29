@@ -181,9 +181,9 @@ button{font:inherit;color:inherit}
 ::-webkit-scrollbar-thumb:hover{background:var(--brand);border-width:2px}
 .sheet::-webkit-scrollbar-track,.sec-menu::-webkit-scrollbar-track{background:var(--surface)}
 .sheet::-webkit-scrollbar-thumb,.sec-menu::-webkit-scrollbar-thumb{border-color:var(--surface)}
-.finder::-webkit-scrollbar-track{background:var(--hero-bg)}
-.finder::-webkit-scrollbar-thumb{border-color:var(--hero-bg)}
-@supports (-moz-appearance:none){html,.sheet,.finder,.sec-menu{scrollbar-width:thin;scrollbar-color:var(--gold-a) transparent}}
+.cx-log::-webkit-scrollbar-track{background:var(--hero-bg)}
+.cx-log::-webkit-scrollbar-thumb{border-color:var(--hero-bg)}
+@supports (-moz-appearance:none){html,.sheet,.cx-log,.sec-menu{scrollbar-width:thin;scrollbar-color:var(--gold-a) transparent}}
 .rail-prog{position:absolute;inset-inline:0;bottom:-1px;height:2px;pointer-events:none;background:linear-gradient(90deg,var(--gold-a),var(--gold-b));
   transform:scaleX(var(--sp,0));transform-origin:left;box-shadow:0 0 8px rgba(244,213,141,.6)}
 :root[dir="rtl"] .rail-prog{transform-origin:right;background:linear-gradient(270deg,var(--gold-a),var(--gold-b))}
@@ -374,7 +374,7 @@ body.sheet-open .fab{opacity:0;pointer-events:none;transform:translateY(10px)}
 .sig-band{margin-top:14px;display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--gold-b) 22%,transparent);font-size:13.5px}
 .sig-band b{font-family:var(--f-display)}
 /* "A+" on its own in Arabic text would flip to "+A" */
-.stamp,.sig-band b,.r-cup b{unicode-bidi:plaintext}
+.stamp,.sig-band b{unicode-bidi:plaintext}
 
 main.swap{animation:swap .45s var(--ease)}
 @keyframes swap{from{opacity:.2;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -387,55 +387,57 @@ main.swap{animation:swap .45s var(--ease)}
 .frame:has(img:not([data-ok])){background-image:linear-gradient(100deg,var(--brand-soft) 30%,color-mix(in srgb,var(--brand-soft) 50%,var(--surface)) 50%,var(--brand-soft) 70%);background-size:220% 100%;animation:shim 1.3s linear infinite}
 @keyframes shim{to{background-position:-220% 0}}
 
-/* FINDER: the "what should I drink?" quiz */
-.finder{position:fixed;inset:0;z-index:60;background:var(--hero-bg);color:var(--hero-ink);overflow-y:auto;overscroll-behavior:contain;
+/* FINDER: the chat that asks what the customer feels like and picks from the menu */
+.finder{position:fixed;inset:0;z-index:60;background:var(--hero-bg);color:var(--hero-ink);
   opacity:0;visibility:hidden;transform:scale(1.04);transition:opacity .35s,transform .45s var(--ease),visibility 0s .45s}
 .finder.on{opacity:1;visibility:visible;transform:none;transition:opacity .35s,transform .45s var(--ease),visibility 0s}
-.fd-in{max-width:560px;margin-inline:auto;min-height:100%;display:flex;flex-direction:column;
-  padding:calc(16px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px))}
-.fd-top{display:flex;align-items:center;gap:14px}
-.fd-prog{flex:1;display:flex;gap:6px}
-.fd-prog i{flex:1;height:4px;border-radius:4px;background:rgba(238,245,218,.15);overflow:hidden;position:relative}
-.fd-prog i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--gold-a),var(--gold-b));transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
-:root[dir="rtl"] .fd-prog i::after{transform-origin:right}
-.fd-prog i.on::after{transform:none}
-.fd-x{width:40px;height:40px;border-radius:50%;border:1px solid rgba(238,245,218,.25);background:transparent;color:inherit;display:grid;place-items:center;cursor:pointer}
+.fd-in{max-width:560px;margin-inline:auto;height:100%;display:flex;flex-direction:column;
+  padding:calc(12px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.cx-head{display:flex;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid rgba(238,245,218,.12)}
+.cx-av{width:42px;height:42px;flex:none}
+.cx-av svg{width:100%;height:100%;display:block}
+.cx-who{flex:1;min-width:0;line-height:1.3}
+.cx-who b{display:block;font-family:var(--f-display);font-weight:800;font-size:16px}
+.cx-who small{display:inline-flex;align-items:center;gap:6px;color:var(--hero-muted);font-size:12.5px}
+.cx-who small::before{content:"";width:7px;height:7px;border-radius:50%;background:#8FD16A}
+.fd-x{width:40px;height:40px;flex:none;border-radius:50%;border:1px solid rgba(238,245,218,.25);background:transparent;color:inherit;display:grid;place-items:center;cursor:pointer}
 .fd-x svg{width:16px;height:16px}
-.fd-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding-block:28px}
-.fd-step{animation:stepIn .5s var(--ease) both}
-@keyframes stepIn{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
-:root[dir="rtl"] .fd-step{animation-name:stepInR}
-@keyframes stepInR{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
-.fd-k{font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-b)}
-:root[lang="ar"] .fd-k{letter-spacing:0;font-size:13px}
-.fd-q{font-family:var(--f-display);font-weight:900;font-size:clamp(28px,7vw,40px);line-height:1.15;margin:8px 0 22px;text-wrap:balance}
-.fd-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.fd-opt{display:flex;flex-direction:column;align-items:flex-start;gap:14px;text-align:start;padding:16px;border-radius:26px 26px 14px 14px;cursor:pointer;
-  border:1px solid rgba(238,245,218,.18);background:rgba(238,245,218,.05);color:inherit;font-weight:700;font-size:15px;
-  transition:background .2s,border-color .2s,transform .15s;animation:stepIn .5s var(--ease) both;animation-delay:calc(var(--i)*55ms)}
-.fd-opt:hover{border-color:var(--gold-b);background:rgba(244,213,141,.1)}
-.fd-opt:active{transform:scale(.97)}
-.fd-opt svg{width:26px;height:26px;color:var(--gold-b)}
-.fd-opt.wide{grid-column:1/-1;flex-direction:row;align-items:center}
-.fd-res{text-align:center;display:flex;flex-direction:column;align-items:center}
-.r-cup{position:relative;width:132px;aspect-ratio:132/164;border-radius:66px 66px 18px 18px;border:2px solid rgba(238,245,218,.45);overflow:hidden;margin:6px auto 18px;background:rgba(238,245,218,.05)}
-.r-cup i{position:absolute;inset:auto 0 0 0;height:0;background:var(--c);transition:height 1.2s cubic-bezier(.45,.05,.3,1) .25s;
-  background-image:linear-gradient(90deg,rgba(0,0,0,.18),transparent 35%,rgba(255,255,255,.16) 65%,rgba(0,0,0,.1))}
-.r-cup i::before{content:"";position:absolute;top:-7px;left:0;width:200%;height:8px;background:radial-gradient(ellipse 11px 7px at 11px 8px,var(--c) 98%,transparent 100%) 0 0/22px 8px repeat-x;animation:wave 1.6s linear infinite}
-.r-cup.full i{height:74%}
-.r-cup b{position:absolute;inset:0;display:grid;place-items:center;font-family:"Montserrat",sans-serif;font-weight:900;font-size:30px;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.3);opacity:0;transition:opacity .5s 1.3s}
-.r-cup.full b{opacity:1}
-.r-name{font-family:var(--f-display);font-weight:900;font-size:clamp(28px,7vw,40px);line-height:1.15;margin:4px 0 6px}
-.r-why{color:var(--hero-muted);font-size:14px}
-.r-price{font-weight:800;font-size:20px;color:var(--gold-b);margin-top:6px;font-variant-numeric:tabular-nums}
-.r-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
-.r-actions button{border-radius:999px;padding:11px 18px;font-weight:700;font-size:14px;cursor:pointer;border:1px solid rgba(238,245,218,.28);background:transparent;color:inherit}
-.r-actions .gold{border:0;background:linear-gradient(100deg,var(--gold-a),var(--gold-b) 55%,var(--gold-a));color:#2B230F}
-.r-also{margin-top:22px;width:100%}
-.r-also .fd-k{margin-bottom:8px}
-.r-also div{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-.r-also button{border:1px solid rgba(238,245,218,.2);background:rgba(238,245,218,.05);color:inherit;border-radius:14px;padding:8px 14px;font-weight:600;cursor:pointer}
-.r-again{margin-top:16px;background:none;border:0;color:var(--hero-muted);text-decoration:underline;text-underline-offset:4px;cursor:pointer;font-weight:600}
+.cx-log{flex:1;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:8px;padding:16px 2px}
+.cx-m{max-width:86%;padding:10px 14px;border-radius:20px;font-size:15px;line-height:1.5;overflow-wrap:anywhere}
+.cx-m.bot{align-self:flex-start;background:rgba(238,245,218,.08);border:1px solid rgba(238,245,218,.12);border-end-start-radius:6px}
+.cx-m.me{align-self:flex-end;background:linear-gradient(100deg,var(--gold-a),var(--gold-b));color:#2B230F;font-weight:600;border-end-end-radius:6px}
+.cx-m.wide{max-width:min(94%,420px)}
+.cx-m.new{animation:msgIn .35s var(--ease) both}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px)}}
+.cx-typing{display:flex;gap:4px;padding:15px 16px}
+.cx-typing i{width:7px;height:7px;border-radius:50%;background:var(--hero-ink);animation:dot 1s infinite}
+.cx-typing i:nth-child(2){animation-delay:.15s}
+.cx-typing i:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,60%,100%{opacity:.3;transform:none}30%{opacity:1;transform:translateY(-3px)}}
+.cx-pick{display:flex;gap:12px;align-items:center;margin-top:10px}
+.cx-pick .frame{width:72px;flex:none}
+.cx-pi{min-width:0;display:flex;flex-direction:column;gap:2px}
+.cx-pi b{font-family:var(--f-display);font-weight:800;font-size:17px;line-height:1.25}
+.cx-pi small{color:var(--hero-muted);font-size:12.5px}
+.cx-pr{font-weight:800;color:var(--gold-b);font-variant-numeric:tabular-nums}
+.cx-pa,.cx-alts{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px}
+.cx-pa button,.cx-alts button{border-radius:999px;padding:8px 14px;font:inherit;font-weight:700;font-size:13.5px;cursor:pointer;border:1px solid rgba(238,245,218,.28);background:transparent;color:inherit}
+.cx-pa .gold{border:0;background:linear-gradient(100deg,var(--gold-a),var(--gold-b) 55%,var(--gold-a));color:#2B230F}
+.cx-alts{font-size:13px;color:var(--hero-muted)}
+.cx-alts button{font-weight:600;padding:6px 12px;color:var(--hero-ink)}
+.cx-chips{display:flex;flex-wrap:wrap;gap:8px;padding-bottom:10px}
+.cx-chips:empty{display:none}
+.cx-chips button{border:1px solid rgba(244,213,141,.45);background:rgba(244,213,141,.08);color:inherit;border-radius:999px;padding:9px 15px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;
+  animation:msgIn .35s var(--ease) both;animation-delay:calc(var(--i)*50ms);transition:background .2s}
+.cx-chips button:hover{background:rgba(244,213,141,.18)}
+.cx-chips button:active{transform:scale(.97)}
+.cx-form{display:flex;gap:8px}
+.cx-form input{flex:1;min-width:0;font:inherit;font-size:16px;color:inherit;background:rgba(238,245,218,.08);border:1px solid rgba(238,245,218,.18);border-radius:999px;padding:12px 18px}
+.cx-form input::placeholder{color:var(--hero-muted)}
+.cx-form input:focus{outline:none;border-color:var(--gold-b)}
+.cx-form button{width:48px;height:48px;flex:none;border:0;border-radius:50%;cursor:pointer;display:grid;place-items:center;color:#2B230F;background:linear-gradient(100deg,var(--gold-a),var(--gold-b))}
+.cx-form button svg{width:20px;height:20px}
+:root[dir="rtl"] .cx-form button svg{transform:scaleX(-1)}
 
 /* ADD BUTTON in the detail sheet */
 .s-acts{display:flex;gap:8px;margin-top:18px}
@@ -616,11 +618,14 @@ body.sheet-open .traybar{transform:translateY(140%)}
   </div>
 </footer>
 
-<div class="finder" id="finder" role="dialog" aria-modal="true" aria-label="Find my drink">
+<div class="finder" id="finder" role="dialog" aria-modal="true" aria-labelledby="cxTitle">
   <div class="fd-in">
-    <div class="fd-top"><div class="fd-prog" id="fdProg"><i></i><i></i><i></i></div>
+    <div class="cx-head"><div class="cx-av" id="cxAv"></div><div class="cx-who"><b id="cxTitle"></b><small id="cxStatus"></small></div>
       <button class="fd-x" id="fdClose" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-    <div class="fd-body" id="fdBody"></div>
+    <div class="cx-log" id="cxLog" role="log" aria-live="polite"></div>
+    <div class="cx-chips" id="cxChips"></div>
+    <form class="cx-form" id="cxForm" autocomplete="off"><input id="cxIn" type="text" maxlength="200" enterkeyhint="send">
+      <button type="submit" id="cxSend"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></form>
   </div>
 </div>
 
@@ -674,22 +679,46 @@ const logo = (anim) => `<svg viewBox="0 0 100 100" ${anim?'':'aria-hidden="true"
 /* ---------- STRINGS ---------- */
 const T = {
   en:{eyebrow:'Study Zone · Aleppo', title:'<span class="ln"><span>Study hard.</span></span><span class="ln"><em>Sip smart.</em></span>', sub:'Coffee, cold drinks and snacks for long study sessions. Tap any item to see caffeine, sweetness and what it goes well with.', cta:'Browse the menu', search:'Search drinks and snacks', all:'All', hot:'Hot', iced:'Iced', nocaf:'No caffeine', sig:'A+ signature', caffeine:'Caffeine', sweet:'Sweetness', served:'Served', size:'Size', pairs:'Goes well with', combos:'Study combos', combosSub:'Pairings we suggest for different kinds of study sessions.', together:'Together', soon:'Coming soon', empty:'Nothing matches that. Try another word or clear the filters.', clear:'Clear filters', contact:'Follow and message us', call:'Phone', copy:'Copy', copied:'Copied', wa:'WhatsApp', complaints:'Complaints & support', powered:'Powered by', where:'Coffee, drinks and sandwiches for students in Aleppo.', cafL:['None','Light','Medium','Strong'], sugL:['None','Low','Medium','Sweet'], temp:{h:'Hot',i:'Iced',c:'Chilled',r:'Ready to eat'}, cur:'SP', items:n=>`${n} items`, sigNote:'House signature. Only at A PLUS.', scroll:'Scroll', langBtn:'عربي',
-    find:'Find my drink', step:i=>`Step ${i} of 3`,
-    q1:'What kind of session is it?', q2:'Hot or iced?', q3:'How sweet?',
-    o1:{exam:'Exam tomorrow',reading:'Long reading',group:'Group study',late:'Late night',chill:'Just chilling'},
-    o2:{h:'Hot',i:'Iced',any:'Surprise me'}, o3:{0:'Not sweet',1.5:'A little',3:'Sweet tooth'},
-    resTitle:'Your drink for this session', also:'Also good', again:'Try again', details:'See details',
+    find:'Help me choose', details:'See details',
+    cx:{title:'A PLUS helper', status:'Online', place:'Type a message…', send:'Send',
+      hello:()=>{ const h = new Date().getHours(); return `${h<12?'Good morning!':h<17?'Hi there!':'Good evening!'} I'm the A PLUS helper. Tell me what you feel like and I'll pick something from the menu for you.`; },
+      hint:'Tap an answer below, or just type it, like “iced, no caffeine, not too sweet”.',
+      again:'Sure, let’s start again.', hi:'Hi! Good to see you.', thanks:'Enjoy, and good luck with the studying!',
+      huh:'Sorry, I didn’t get that.', hint2:'Tell me what to change, or tap one of the options below.',
+      none:'That’s everything that fits what you asked for. Want to start over with different answers?',
+      soldOut:m=>`${BY[m.id]?.en||''} is sold out today, sorry.`,
+      q:{want:'What are you in the mood for?', caf:'Do you want caffeine with it?', temp:'Hot or cold?', sw:'How sweet do you like it?', bite:'Something filling, or something sweet?'},
+      o:{want:{drink:'Something to drink', eat:'Something to eat', both:'Both'},
+        caf:{strong:'Yes, strong', some:'A little', none:'No caffeine', any:'Doesn’t matter'},
+        temp:{h:'Hot', cold:'Cold / iced', any:'Either'},
+        sw:{0:'Not sweet', 1.5:'A little sweet', 3:'Sweet tooth'},
+        bite:{meal:'A sandwich', sweet:'Something sweet', any:'Either'}},
+      lead:{pick:'Here’s my pick for you:', exam:'For a heavy study session, this will keep you going:', calm:'Something easy, with no caffeine:',
+        closest:'We don’t have exactly that, but this is the closest:', named:'Good choice:', more:'How about this one instead:', food:'And to eat with it:'},
+      alts:'Or try', act:{more:'Something else', sweeter:'Sweeter', less:'Less sweet', eat:'Something to eat with it', restart:'Start over'}},
     add:'Add to tray', added:'Added', tray:'Your tray', view:'View tray', send:'Send on WhatsApp', clearTray:'Clear tray',
     trayEmpty:'Your tray is empty. Tap + on any item to add it.', total:'Total', top:'Back to top',
     waMsg:'Hi A PLUS, I would like to order:', trayNote:'Show this to the waiter or send it on WhatsApp.', table:n=>`Table ${n}`,
     share:'Share', linkCopied:'Link copied', shareTxt:n=>`${n} at A PLUS Study Zone`, jump:'Jump to a section', sections:'All sections',
     nw:'New', live:'Menu just updated', out:'Sold out today', outNote:'Sold out for today. Back tomorrow.', loadErr:'The menu did not load. Check your connection.', retry:'Try again'},
   ar:{eyebrow:'ستادي زون · حلب', title:'<span class="ln"><span>ادرس بتركيز.</span></span><span class="ln"><em>واشرب بذكاء.</em></span>', sub:'قهوة ومشروبات باردة وسناكس لجلسات الدراسة الطويلة. اضغط على أي صنف لتشوف نسبة الكافيين والحلاوة وشو بيمشي معه.', cta:'تصفّح المنيو', search:'ابحث عن مشروب أو سناك', all:'الكل', hot:'ساخن', iced:'مثلّج', nocaf:'بدون كافيين', sig:'توقيع <bdi dir="ltr">A+</bdi>', caffeine:'الكافيين', sweet:'الحلاوة', served:'التقديم', size:'الحجم', pairs:'بيمشي معه', combos:'كومبو الدراسة', combosSub:'تركيبات منقترحها حسب نوع جلسة الدراسة.', together:'المجموع', soon:'قريباً', empty:'ما في نتائج. جرّب كلمة تانية أو امسح الفلاتر.', clear:'امسح الفلاتر', contact:'تابعنا وراسلنا', call:'الهاتف', copy:'نسخ', copied:'تم النسخ', wa:'واتساب', complaints:'الشكاوى والدعم', powered:'مدعوم من', where:'قهوة ومشروبات وسندويش للطلاب في حلب.', cafL:['بدون','خفيف','متوسط','قوي'], sugL:['بدون','قليل','متوسط','حلو'], temp:{h:'ساخن',i:'مثلّج',c:'بارد',r:'جاهز'}, cur:'ل.س', items:n=>`${n} صنف`, sigNote:'توقيع المكان. موجود بس عند A PLUS.', scroll:'مرّر لتحت', langBtn:'EN',
-    find:'شو بشرب؟', step:i=>`${i} من 3`,
-    q1:'شو نوع جلسة الدراسة؟', q2:'ساخن ولا مثلّج؟', q3:'قديش بدك ياه حلو؟',
-    o1:{exam:'عندي امتحان بكرا',reading:'قراية طويلة',group:'دراسة مع الشلّة',late:'سهرة دراسة',chill:'بس عم ارتاح'},
-    o2:{h:'ساخن',i:'مثلّج',any:'فاجئني'}, o3:{0:'بدون حلاوة',1.5:'شوي',3:'حلو كتير'},
-    resTitle:'مشروبك لهالجلسة', also:'كمان بيزبط', again:'جرّب من جديد', details:'التفاصيل',
+    find:'ساعدني اختار', details:'التفاصيل',
+    cx:{title:'مساعد A PLUS', status:'متصل', place:'اكتب رسالة…', send:'إرسال',
+      hello:()=>`${new Date().getHours()<12?'صباح الخير!':'مسا الخير!'} أنا مساعد A PLUS. احكيلي شو حابب، وأنا بختارلك شي من المنيو.`,
+      hint:'اختار جواب من تحت، أو اكتبلي متل: "شي مثلّج بدون كافيين ومو كتير حلو".',
+      again:'تمام، منبلّش من جديد.', hi:'أهلين! نوّرت.', thanks:'صحتين، وبالتوفيق بالدراسة!',
+      huh:'عذراً، ما فهمت عليك.', hint2:'قلّي شو بدك غيّر، أو اختار شي من تحت.',
+      none:'هيك خلصت الخيارات اللي بتناسب طلبك. بدك نبلّش من جديد بأجوبة تانية؟',
+      soldOut:m=>`${BY[m.id]?.ar||''} خلص اليوم، آسفين.`,
+      q:{want:'شو جاي عبالك؟', caf:'بدك ياه مع كافيين؟', temp:'ساخن ولا بارد؟', sw:'قديش بتحبه حلو؟', bite:'شي بيشبّع ولا شي حلو؟'},
+      o:{want:{drink:'شي اشربه', eat:'شي آكله', both:'الاتنين'},
+        caf:{strong:'اي، قوي', some:'شوي', none:'بدون كافيين', any:'ما بتفرق'},
+        temp:{h:'ساخن', cold:'بارد / مثلّج', any:'ما بتفرق'},
+        sw:{0:'بدون حلاوة', 1.5:'حلو شوي', 3:'حلو كتير'},
+        bite:{meal:'سندويشة', sweet:'شي حلو', any:'ما بتفرق'}},
+      lead:{pick:'هاد اختياري إلك:', exam:'لجلسة دراسة تقيلة، هاد بيضلّك صاحي:', calm:'شي رايق وبدون كافيين:',
+        closest:'ما عنا متل ما طلبت بالضبط، بس هاد أقرب شي:', named:'اختيار حلو:', more:'شو رأيك بهاد بدالو:', food:'ومعه لتاكل:'},
+      alts:'أو جرّب', act:{more:'شي تاني', sweeter:'أحلى', less:'أقل حلاوة', eat:'شي آكله معه', restart:'من الأول'}},
     add:'أضف للطلب', added:'انضاف', tray:'طلبك', view:'شوف الطلب', send:'ابعت عالواتساب', clearTray:'امسح الطلب',
     trayEmpty:'الطلب فاضي. اضغط + على أي صنف لتضيفه.', total:'المجموع', top:'لفوق',
     waMsg:'مرحبا A PLUS، بدي اطلب:', trayNote:'فرجيه للجرسون أو ابعته عالواتساب.', table:n=>`طاولة ${n}`,
@@ -783,7 +812,7 @@ function renderAll(swap){
   if(swap){ const m=$('#menu'); m.classList.remove('swap'); void m.offsetWidth; m.classList.add('swap'); }
   if(openId){ if(BY[openId]) fillSheet(BY[openId]); else closeSheet(); }
   trayRender();
-  if($('#finder').classList.contains('on')) fdRender();
+  if($('#finder').classList.contains('on')) cxRender();
 }
 
 /* ---------- SCROLL REVEAL (only for things below the fold, so the first frame is complete) ---------- */
@@ -927,7 +956,7 @@ document.addEventListener('click', e=>{
   if(plus){ const id = plus.closest('.card').dataset.id; if(orderable(BY[id])){ trayAdd(id); plus.classList.remove('pop'); void plus.offsetWidth; plus.classList.add('pop'); } e.stopPropagation(); return; }
   const sh = e.target.closest('[data-share]');
   if(sh){ e.stopPropagation(); shareItem(BY[sh.dataset.share], sh); return; }
-  /* the sheet's button has a label span; the quiz result's button is just text */
+  /* the sheet's button has a label span; the chat's button is just text */
   if(add){ trayAdd(add.dataset.add); const s = add.querySelector('span') || add, was = s.textContent; s.textContent = L().added; setTimeout(()=>{ s.textContent = was; }, 1200); e.stopPropagation(); }
 }, true);
 
@@ -966,53 +995,237 @@ async function shareItem(it, btn){
   const s = btn.querySelector('span'); s.textContent = L().linkCopied; setTimeout(()=>{ s.textContent = L().share; }, 1600);
 }
 
-/* ---------- FINDER: what should I drink? ---------- */
-let fd = {step:1, s:null, t:null, sw:null, pick:null, seed:0};
-const SESS = {exam:{caf:3,ic:'energy'},reading:{caf:2,ic:'warm'},group:{caf:1,ic:'mocktails'},late:{caf:2.5,ic:'coffee'},chill:{caf:0,ic:'iced'}};
-const TINT = {coffee:'#6B4026',warm:'#A0723A',iced:'#C9A27A',mocktails:'#4FB3E0'};
-const TINT_ID = {'matcha':'#86A957','iced-matcha':'#86A957','matcha-strawberry':'#D7465B','blue-mojito':'#3BA0D8','blue-energy-mojito':'#3BA0D8','blue-lady':'#3BA0D8',
-  'rose-mojito':'#D9466A','strawberry-mojito':'#D9466A','pink-panther':'#E77BA0','red-devil':'#C2283C','passion-fruit':'#F2A93B','aplus-mocktail':'#F2C14E','aplus-energy':'#F2B13B',
-  'classic-mojito':'#A8D46F','energy-mojito':'#C6D94A','hot-chocolate':'#5A3424','milo':'#7A4A2E','iced-milo':'#7A4A2E','herbal':'#C9A94E','cumin-lemon':'#D8B94A','tea':'#9A4A22','chai':'#C08A4A','iced-tea':'#B5652B','orangeno':'#D9822B','iced-rose':'#E3B3B8'};
-function fdPick(){
-  const target = SESS[fd.s].caf, pool0 = ITEMS.filter(it=>['coffee','warm','iced','mocktails'].includes(it.c) && orderable(it));
-  let pool = fd.t==='any' ? pool0 : pool0.filter(it=>it.t===fd.t); if(!pool.length) pool = pool0;
-  let r = fd.seed; const rnd = () => (r = (r*9301+49297)%233280)/233280;
-  return pool.map(it=>({it, sc:-Math.abs(it.caf-target)*2 - Math.abs(it.sug-fd.sw)*1.3 + (it.sig?.4:0) + rnd()*.9})).sort((a,b)=>b.sc-a.sc).slice(0,3).map(x=>x.it);
+/* ---------- FINDER: a chat that asks what the customer feels like, then picks from the menu ----------
+   Answers come from the chips or from typed text (Arabic or English): typed words fill the same answers,
+   so "iced, no caffeine, not too sweet" skips three questions. The log keeps keys, not text, so it follows the language. */
+const CX_KIND = {coffee:'drink',warm:'drink',iced:'drink',mocktails:'drink',cold:'drink',energy:'drink',snacks:'eat',food:'eat'};
+const CX_DRINK = ['caf','temp','sw'];
+const CXQ = [
+  {k:'want', o:['drink','eat','both']},
+  {k:'caf', o:['strong','some','none','any'], when:s=>s.want!=='eat'},
+  {k:'temp', o:['h','cold','any'], when:s=>s.want!=='eat'},
+  {k:'sw', o:[0,1.5,3], when:s=>s.want!=='eat'},
+  {k:'bite', o:['meal','sweet','any'], when:s=>s.want!=='drink'}
+];
+const cxNorm = s => s.toLowerCase().replace(/[ً-ْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/\s+/g,' ').trim();
+/* patterns are written as people type; nre() folds them the same way as the message */
+const nre = re => new RegExp(cxNorm(re.source));
+const NO = '(?:بدون|بلا|بلاش|ما بدي|مابدي|مو|مش|no|not|without|zero)\\s*(?:ال)?';
+/* [answer, value, pattern]: the first match wins for each answer, so the specific patterns come first */
+const CXW = [
+  ['caf','none', new RegExp(NO+'(?:كافيين|كافين|قهوه|منبه|caff|coffee)|decaf|caffeine.?free')],
+  ['caf','some', /(?:شوي|شويه|خفيف|قليل)\s*(?:ال)?(?:كافيين|كافين|قهوة)|(?:light|little|bit of|mild)\s*(?:caff|coffee)/],
+  ['caf','strong', /قوي|تقيل|امتحان|فحص|سهر|نعسان|نعس|صحصح|طاقة|انرجي|\b(?:strong|exams?|tests?|awake|sleepy|tired|energy|boost|late)\b|all.?night/],
+  ['caf','none', /(?:^|\s)(?:نام|نوم|رايق|ارتاح)|\b(?:sleep|relax|calm)/],
+  ['caf','yes', /كافيين|كافين|قهوة|اسبريسو|لاتيه|coffee|caff|espresso|latte/],
+  ['temp','cold', /بارد|مثلج|(?:^|\s)ايس|ثلج|منعش|شوب|(?:^|\s)حر(?:$|\s)|\b(?:cold|iced?|chilled|refreshing)\b|hot (?:day|weather|outside)/],
+  ['temp','h', /ساخن|سخن|دافي|دافئ|بردان|سقعان|\b(?:hot|warm|freezing)\b/],
+  ['sw',1.5, /(?:شوي|شويه|خفيف|قليل|وسط|نص|مو كتير|مش كتير)\s*(?:ال)?(?:سكر|حلو|حلاوة)|سكر خفيف|(?:little|bit|lightly|slightly|medium|not too|not so|not very|less) sweet/],
+  ['sw',0, new RegExp(NO+'(?:سكر|حلو|حلاوه)|ساده|(?:^|\\s)مر(?:$|\\s)|no sugar|sugar.?free|not sweet|unsweet|bitter')],
+  ['sw',3, /حلو|سكر|حلاوة|كراميل|شوكولا|sweet|sugar|caramel|chocolate/],
+  ['bite','meal', /جوعان|جوع|سندويش|ساندويش|وجبة|مالح|يشبع|hungry|sandwich|meal|starving|filling|salty|savou?ry/],
+  ['bite','sweet', /شوكولا|كوكيز|بسكوت|تحلاية|chocolate|cookie|dessert|candy/]
+].map(([k,v,re])=>[k,v,nre(re)]);
+const CXF = Object.fromEntries(Object.entries({
+  eat:/جوعان|جوع|(?:^|\s)[وب]?(?:اكل|اكلة|آكل)(?:$|\s)|سندويش|ساندويش|سناك|وجبة|\b(?:hungry|eat|food|sandwich|snacks?|bite|meal|starving)\b/,
+  drink:/(?:^|\s)[وب]?(?:اشرب|شرب|مشروب)|عطشان|عطش|\b(?:drinks?|sip|thirsty)\b/,
+  both:/الاتنين|الاثنين|التنين|كومبو|\b(?:both|combo)\b/,
+  any:/ما بتفرق|مابتفرق|مش فارقة|عادي|\b(?:either|no preference)\b|doesn'?t matter/,
+  surprise:/فاجئني|فاجئ|فاجاني|اي شي|ايشي|ما بعرف|مابعرف|مش عارف|اختارلي|اختار انت|انت اختار|اقترح|\b(?:surprise|anything|whatever|idk|dunno|recommend|suggest)\b|don'?t know|you (?:choose|pick|decide)/,
+  more:/(?:^|\s)غير|تاني|ما عجبني|ما حبيت|\b(?:another|else|different|other|next)\b|don'?t like|not this/,
+  sweeter:/احلى|سكر زيادة|زيد السكر|\bsweeter\b|more sweet|more sugar/,
+  less:/اقل حلاوة|اقل سكر|خفف السكر|less sweet|less sugar/,
+  stronger:/اقوى|\bstronger\b|more caff/,
+  cheaper:/ارخص|رخيص|اقتصادي|ميزانية|\b(?:cheap(?:er)?|budget|afford)/,
+  restart:/من الاول|من جديد|\b(?:restart|start over|reset)\b/,
+  hi:/^(?:مرحبا|مرحبتين|هاي|هلا|اهلين|اهلا|سلام|السلام|hi|hello|hey|yo)(?:$|[\s.!,،])/,
+  thanks:/شكرا|يسلمو|تسلم|مشكور|\b(?:thanks|thank you|thx|ty)\b/,
+  yes:/^(?:اي|ايه|ايوه|اكيد|نعم|طبعا|yes|yeah|yep|yup|sure|ok|okay)(?:$|[\s.!,،])/,
+  no:/^(?:لا|لاء|no|nope|nah)(?:$|[\s.!,،])/
+}).map(([k,re])=>[k,nre(re)]));
+const esc = s => s.replace(/[&<>"']/g, c=>`&#${c.charCodeAt(0)};`);
+const cxKind = id => CX_KIND[ICON_OF[BY[id]?.c]] || 'drink';
+const cxReduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+let cx = {log:[], s:{}, q:null, done:false, last:null, rank:{}, at:{}, pend:null, shown:0, typing:false, seed:Date.now()%233280};
+
+function cxRank(kind){
+  const s = cx.s, pairs = kind==='eat' ? PAIR[BY[cx.last]?.c] || [] : [];
+  let pool = ITEMS.filter(it=>orderable(it) && CX_KIND[ICON_OF[it.c]]===kind), closest = false;
+  const prices = pool.map(i=>i.p).sort((a,b)=>a-b), cheap = prices[Math.floor(prices.length*.4)];
+  const rules = kind==='drink'
+    ? [s.caf==='none' && (it=>it.caf===0), s.caf==='strong' && (it=>it.caf>=2), s.caf==='some' && (it=>it.caf>=1 && it.caf<=2), s.caf==='yes' && (it=>it.caf>=1),
+       s.temp==='h' && (it=>it.t==='h'), s.temp==='cold' && (it=>it.t!=='h')]
+    : [s.bite==='meal' && (it=>it.sug<=1), s.bite==='sweet' && (it=>it.sug>=2)];
+  rules.push(s.max && s.max.k===kind && (it=>it.p<=s.max.p), s.cheap && (it=>it.p<=cheap));
+  /* a rule that would leave nothing is skipped, and the answer says it's the closest match */
+  for(const f of rules.filter(Boolean)){ const next = pool.filter(f); if(next.length) pool = next; else closest = true; }
+  const caf = kind==='drink' ? {none:0,some:1,yes:2,strong:3}[s.caf] : undefined;
+  const sw = kind==='drink' ? (typeof s.sw==='number' ? s.sw : undefined) : s.bite==='sweet' ? 3 : undefined;
+  let r = cx.seed; const rnd = () => (r = (r*9301+49297)%233280)/233280;
+  const ids = pool.map(it=>({id:it.id, sc:(caf==null?0:-Math.abs(it.caf-caf)*2) - (sw==null?0:Math.abs(it.sug-sw)*1.3) + (it.sig?.4:0) + (pairs.includes(it.id)?.8:0) + rnd()*.9}))
+    .sort((a,b)=>b.sc-a.sc).map(x=>x.id);
+  return {ids, closest};
 }
-function fdRender(){
-  const b = $('#fdBody'), Lx = L();
-  $('#fdProg').querySelectorAll('i').forEach((el,i)=>el.classList.toggle('on', i < fd.step || fd.step===4));
-  if(fd.step===1){
-    b.innerHTML = `<div class="fd-step"><div class="fd-k">${Lx.step(1)}</div><h2 class="fd-q">${Lx.q1}</h2><div class="fd-opts">${Object.keys(SESS).map((k,i)=>`<button class="fd-opt ${i===4?'wide':''}" type="button" data-s="${k}" style="--i:${i}">${svg(SESS[k].ic,1.8)}${Lx.o1[k]}</button>`).join('')}</div></div>`;
-  } else if(fd.step===2){
-    b.innerHTML = `<div class="fd-step"><div class="fd-k">${Lx.step(2)}</div><h2 class="fd-q">${Lx.q2}</h2><div class="fd-opts">${[['h','coffee'],['i','iced'],['any','mocktails']].map(([k,ic],i)=>`<button class="fd-opt ${i===2?'wide':''}" type="button" data-t2="${k}" style="--i:${i}">${svg(ic,1.8)}${Lx.o2[k]}</button>`).join('')}</div></div>`;
-  } else if(fd.step===3){
-    b.innerHTML = `<div class="fd-step"><div class="fd-k">${Lx.step(3)}</div><h2 class="fd-q">${Lx.q3}</h2><div class="fd-opts">${[0,1.5,3].map((k,i)=>`<button class="fd-opt ${i===2?'wide':''}" type="button" data-sw="${k}" style="--i:${i}"><span class="dots">${[1,2,3].map(n=>`<i style="width:10px;height:10px;background:${n<=Math.ceil(k)?'var(--gold-b)':'rgba(238,245,218,.2)'}"></i>`).join('')}</span>${Lx.o3[k]}</button>`).join('')}</div></div>`;
-  } else {
-    const [top, ...rest] = fd.pick, c = TINT_ID[top.id] || TINT[top.c];
-    b.innerHTML = `<div class="fd-step fd-res"><div class="fd-k">${Lx.resTitle}</div>
-      <div class="r-cup" id="rCup" style="--c:${c}"><i></i><b>A+</b></div>
-      <div class="r-name">${top[lang]}</div>
-      <div class="r-why">${Lx.caffeine}: ${Lx.cafL[top.caf]} · ${Lx.sweet}: ${Lx.sugL[top.sug]} · ${Lx.temp[top.t]}</div>
-      <div class="r-price">${top.p} ${Lx.cur}</div>
-      <div class="r-actions"><button class="gold" type="button" data-add="${top.id}">${Lx.add}</button><button type="button" data-fdopen="${top.id}">${Lx.details}</button></div>
-      <div class="r-also"><div class="fd-k">${Lx.also}</div><div>${rest.map(it=>`<button type="button" data-fdopen="${it.id}">${it[lang]} · ${it.p}</button>`).join('')}</div></div>
-      <button class="r-again" type="button" id="fdAgain">${Lx.again}</button></div>`;
-    requestAnimationFrame(()=>requestAnimationFrame(()=>$('#rCup') && $('#rCup').classList.add('full')));
+function cxSimilar(it){
+  return ITEMS.filter(o=>o.id!==it.id && orderable(o) && CX_KIND[ICON_OF[o.c]]===CX_KIND[ICON_OF[it.c]])
+    .map(o=>({id:o.id, d:Math.abs(o.caf-it.caf)*2 + Math.abs(o.sug-it.sug) + (o.t===it.t?0:1.5) + (o.c===it.c?0:1)})).sort((a,b)=>a.d-b.d).map(x=>x.id);
+}
+function cxNamed(t){
+  let best = null;
+  for(const it of ITEMS) for(const n of [it.ar, it.en]){
+    const k = cxNorm(n.replace(/\(.*?\)/g,''));
+    if(k.length>=3 && t.includes(k) && t.length-k.length<=12 && (!best || k.length>best.k.length)) best = {it, k};
   }
+  return best && best.it;
 }
-function openFinder(){ fd = {step:1, s:null, t:null, sw:null, pick:null, seed:Date.now()%233280}; fdRender(); $('#finder').classList.add('on'); document.body.style.overflow='hidden'; document.body.classList.add('sheet-open'); setTimeout(()=>$('#fdClose').focus({preventScroll:true}),100); }
+
+function cxBot(msgs){
+  cx.typing = true; cxRender();
+  setTimeout(()=>{ cx.typing = false; cx.log.push(...msgs); cxRender(); }, cxReduced() ? 0 : 450 + Math.min(msgs.length,3)*170);
+}
+function cxStart(again){
+  Object.assign(cx, {s:{}, q:'want', done:false, last:null, rank:{}, at:{}, pend:null, seed:(cx.seed+7919)%233280});
+  cxBot(again ? [{t:'again'},{ask:'want'}] : [{t:'hello'},{t:'hint'},{ask:'want'}]);
+}
+function cxNext(only){
+  const q = CXQ.find(q=>(!q.when || q.when(cx.s)) && cx.s[q.k]==null);
+  cx.q = q ? q.k : null;
+  if(q){ if(only) cx.pend = only; cxBot([{ask:q.k}]); }
+  else cxBot(cxResult(only || cx.pend));
+}
+function cxResult(only){
+  const refining = cx.done, out = [];
+  cx.done = true; cx.pend = null;
+  ['drink','eat'].forEach(kind=>{
+    if((only && only!==kind) || (cx.s.want!=='both' && cx.s.want!==kind)) return;
+    const {ids, closest} = cxRank(kind);
+    if(refining && ids[0]===cx.last && ids.length>1) ids.push(ids.shift());
+    cx.rank[kind] = ids; cx.at[kind] = 0;
+    if(!ids.length) return;
+    const lead = closest ? 'closest' : kind==='eat' ? (cx.s.want==='both' ? 'food' : 'pick') : cx.s.caf==='strong' ? 'exam' : cx.s.caf==='none' ? 'calm' : 'pick';
+    out.push({pick:ids[0], alts:ids.slice(1,3), lead});
+    if(out.length===1) cx.last = ids[0];
+  });
+  return out.length ? out : [{t:'none'}];
+}
+function cxMore(){
+  const kind = cxKind(cx.last);
+  if(!cx.rank[kind]){ cx.rank[kind] = cxRank(kind).ids.filter(id=>id!==cx.last); cx.at[kind] = -3; }
+  const ids = cx.rank[kind], at = cx.at[kind] += 3;
+  if(at >= ids.length) return cxBot([{t:'none'}]);
+  cx.last = ids[at];
+  cxBot([{pick:ids[at], alts:ids.slice(at+1, at+3), lead:'more'}]);
+}
+function cxShow(id){
+  const it = BY[id]; if(!it) return;
+  cx.q = null; cx.done = true; cx.rank[cxKind(id)] = null;
+  if(!orderable(it)){
+    const sim = cxSimilar(it); cx.last = sim[0] || null;
+    return cxBot([{t:'soldOut', id}, ...(sim.length ? [{pick:sim[0], alts:sim.slice(1,3), lead:'closest'}] : [])]);
+  }
+  cx.last = id;
+  cxBot([{pick:id, alts:(PAIR[it.c]||[]).filter(p=>p!==id && orderable(BY[p])), ak:'pairs', lead:'named'}]);
+}
+function cxAct(a){
+  cx.log.push({act:a});
+  const cur = BY[cx.last];
+  if(a==='restart') cxStart(true);
+  else if(a==='more') cxMore();
+  else if(a==='eat'){ cx.s.want = 'both'; cxNext('eat'); }
+  else { cx.s.sw = Math.max(0, Math.min(3, cur.sug + (a==='sweeter'?1:-1))); cxNext('drink'); }
+}
+/* typed text: read every answer it holds, then ask whatever is still missing */
+function cxHear(raw){
+  const text = raw.trim().slice(0,200), t = cxNorm(text); if(!t) return;
+  cx.log.push({me:text});
+  const f = k => CXF[k].test(t), s = cx.s, got = {}, cur = BY[cx.last];
+  if(f('restart')) return cxStart(true);
+  const named = cxNamed(t);
+  if(named) return cxShow(named.id);
+  CXW.forEach(([k,v,re])=>{ if(!(k in got) && re.test(t)) got[k] = v; });
+  if(cx.done && cur){
+    if(f('sweeter')) got.sw = Math.min(3, cur.sug+1); else if(f('less')) got.sw = Math.max(0, cur.sug-1);
+    if(f('stronger')) got.caf = 'strong';
+    if(f('cheaper')) got.max = {k:cxKind(cur.id), p:cur.p-1};
+  } else if(f('cheaper')) got.cheap = true;
+  /* "something sweet" while choosing food is about the food, not the drink's sugar */
+  if((s.want==='eat' || cx.q==='bite') && got.sw!=null && got.bite==null && got.caf==null && got.temp==null && !f('drink')){ got.bite = got.sw>=1.5 ? 'sweet' : 'meal'; delete got.sw; }
+  const eat = f('eat') || 'bite' in got, drink = f('drink') || CX_DRINK.some(k=>k in got);
+  if(f('both') || (eat && drink)) got.want = 'both';
+  else if(eat && s.want!=='eat' && s.want!=='both') got.want = s.want ? 'both' : 'eat';
+  else if(drink && !s.want) got.want = 'drink';
+  else if(drink && s.want==='eat') got.want = 'both';
+  if(f('surprise')){
+    const want = got.want || s.want || (got.want = 'drink');
+    CXQ.forEach(q=>{ if(q.k!=='want' && !(q.k in got) && s[q.k]==null && (!q.when || q.when({want}))) got[q.k] = 'any'; });
+  } else if(cx.q && !(cx.q in got)){
+    if(f('any') && cx.q!=='want') got[cx.q] = 'any';
+    else if(f('yes') && cx.q==='caf') got.caf = 'yes';
+    else if(f('no') && cx.q==='caf') got.caf = 'none';
+    else if(f('no') && cx.q==='sw') got.sw = 0;
+  }
+  if(!Object.keys(got).length){
+    if(cx.done && (f('more') || f('no'))) return cxMore();
+    if(cx.done && f('yes') && s.want==='drink') return cxAct('eat');
+    if(f('thanks')) return cxBot([{t:'thanks'}]);
+    const again = cx.q ? [{ask:cx.q}] : cx.done ? [{t:'hint2'}] : [];
+    return cxBot([{t:f('hi') ? 'hi' : 'huh'}, ...again]);
+  }
+  let only;
+  if(cx.done){
+    const d = CX_DRINK.some(k=>k in got), e = 'bite' in got || (got.want==='both' && s.want==='drink');
+    only = d && !e ? 'drink' : e && !d ? 'eat' : !d && !e && (got.max || got.cheap) ? cxKind(cx.last) : undefined;
+  }
+  Object.assign(s, got);
+  cxNext(only);
+}
+
+function cxMsg(m, Lx, nw){
+  const C = Lx.cx, n = nw ? ' new' : '';
+  if(m.me!=null) return `<div class="cx-m me${n}">${Array.isArray(m.me) ? C.o[m.me[0]][m.me[1]] : esc(m.me)}</div>`;
+  if(m.act) return `<div class="cx-m me${n}">${C.act[m.act]}</div>`;
+  if(m.item) return BY[m.item] ? `<div class="cx-m me${n}">${BY[m.item][lang]}</div>` : '';
+  if(m.ask) return `<div class="cx-m bot${n}">${C.q[m.ask]}</div>`;
+  if(m.t){ const v = C[m.t]; return `<div class="cx-m bot${n}">${typeof v==='function' ? v(m) : v}</div>`; }
+  const it = BY[m.pick]; if(!it) return '';
+  const why = (CX_KIND[ICON_OF[it.c]]==='drink' ? `${Lx.caffeine}: ${Lx.cafL[it.caf]} · ` : '') + `${Lx.sweet}: ${Lx.sugL[it.sug]} · ${Lx.temp[it.t]}`;
+  const alts = (m.alts||[]).map(id=>BY[id]).filter(orderable);
+  return `<div class="cx-m bot wide${n}">${C.lead[m.lead]}
+    <div class="cx-pick">${frame(it)}<div class="cx-pi"><b>${nm(it)}</b><small>${why}</small>${it.p!=null?`<span class="cx-pr">${it.p.toLocaleString('en-US')} ${Lx.cur}</span>`:''}</div></div>
+    ${orderable(it) ? `<div class="cx-pa"><button class="gold" type="button" data-add="${it.id}">${Lx.add}</button><button type="button" data-fdopen="${it.id}">${Lx.details}</button></div>` : ''}
+    ${alts.length ? `<div class="cx-alts"><span>${m.ak==='pairs' ? Lx.pairs : C.alts}</span>${alts.map(a=>`<button type="button" data-cxpick="${a.id}">${a[lang]} · ${a.p}</button>`).join('')}</div>` : ''}</div>`;
+}
+function cxChips(C){
+  if(cx.typing) return '';
+  if(cx.q) return CXQ.find(q=>q.k===cx.q).o.map((v,i)=>`<button type="button" data-cx="${cx.q}|${v}" style="--i:${i}">${C.o[cx.q][v]}</button>`).join('');
+  if(!cx.done) return '';
+  const cur = BY[cx.last], drink = cur && cxKind(cur.id)==='drink';
+  return [cur && 'more', drink && cur.sug<3 && 'sweeter', drink && cur.sug>0 && 'less', drink && cx.s.want==='drink' && 'eat', 'restart']
+    .filter(Boolean).map((a,i)=>`<button type="button" data-cxa="${a}" style="--i:${i}">${C.act[a]}</button>`).join('');
+}
+function cxRender(){
+  const Lx = L(), C = Lx.cx, log = $('#cxLog');
+  $('#cxTitle').textContent = C.title; $('#cxStatus').textContent = C.status;
+  $('#cxIn').placeholder = C.place; $('#cxIn').setAttribute('aria-label', C.place); $('#cxSend').setAttribute('aria-label', C.send);
+  log.innerHTML = cx.log.map((m,i)=>cxMsg(m, Lx, i>=cx.shown)).join('') + (cx.typing ? '<div class="cx-m bot cx-typing new" aria-hidden="true"><i></i><i></i><i></i></div>' : '');
+  cx.shown = cx.log.length;
+  $('#cxChips').innerHTML = cxChips(C);
+  log.scrollTop = log.scrollHeight;
+}
+$('#cxAv').innerHTML = logo(false);
+function openFinder(){ if(!cx.log.length && !cx.typing) cxStart(); else cxRender(); $('#finder').classList.add('on'); document.body.style.overflow='hidden'; document.body.classList.add('sheet-open'); setTimeout(()=>$('#fdClose').focus({preventScroll:true}),100); }
 function closeFinder(){ $('#finder').classList.remove('on'); document.body.style.overflow=''; document.body.classList.remove('sheet-open'); }
 $('#findBtn').addEventListener('click', openFinder);
 $('#fdClose').addEventListener('click', closeFinder);
 $('#finder').addEventListener('click', e=>{
-  const s=e.target.closest('[data-s]'), t=e.target.closest('[data-t2]'), w=e.target.closest('[data-sw]'), o=e.target.closest('[data-fdopen]');
-  if(s){ fd.s=s.dataset.s; fd.step=2; fdRender(); buzz(); }
-  else if(t){ fd.t=t.dataset.t2; fd.step=3; fdRender(); buzz(); }
-  else if(w){ fd.sw=+w.dataset.sw; fd.pick=fdPick(); fd.step=4; fdRender(); buzz(); }
+  const a=e.target.closest('[data-cx]'), act=e.target.closest('[data-cxa]'), p=e.target.closest('[data-cxpick]'), o=e.target.closest('[data-fdopen]');
+  if(cx.typing && (a||act||p)) return;
+  if(a){ const [k,v] = a.dataset.cx.split('|'); cx.log.push({me:[k,v]}); cx.s[k] = k==='sw' ? +v : v; cxNext(); buzz(); }
+  else if(act){ cxAct(act.dataset.cxa); buzz(); }
+  else if(p){ cx.log.push({item:p.dataset.cxpick}); cxShow(p.dataset.cxpick); buzz(); }
   else if(o){ closeFinder(); setTimeout(()=>openSheet(o.dataset.fdopen), 250); }
-  else if(e.target.closest('#fdAgain')){ fd.seed=(fd.seed+7919)%233280; fd.step=1; fdRender(); }
 });
+$('#cxForm').addEventListener('submit', e=>{ e.preventDefault(); const i = $('#cxIn'); if(cx.typing || !i.value.trim()) return; cxHear(i.value); i.value = ''; });
 addEventListener('keydown', e=>{ if(e.key!=='Escape') return; if($('#finder').classList.contains('on')) closeFinder(); else if($('#trayPanel').classList.contains('on')) closeTray(); });
 
 /* ---------- SECTIONS DROPDOWN ---------- */
