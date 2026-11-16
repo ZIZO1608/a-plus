@@ -1062,5 +1062,178 @@
    "iced-americano",
    "soft-drinks"
   ]
- }
+ },
+ "extras": [
+  {
+   "id": "sugar",
+   "en": "Sugar",
+   "ar": "السكر",
+   "one": 1,
+   "opts": [
+    {
+     "id": "none",
+     "en": "No sugar",
+     "ar": "بدون سكر",
+     "p": 0
+    },
+    {
+     "id": "medium",
+     "en": "Medium",
+     "ar": "وسط",
+     "p": 0
+    },
+    {
+     "id": "extra",
+     "en": "Extra sweet",
+     "ar": "زيادة",
+     "p": 0
+    }
+   ],
+   "cats": [
+    "coffee",
+    "warm"
+   ],
+   "items": [],
+   "skip": [
+    "three-in-one",
+    "two-in-one",
+    "espresso-mate",
+    "milo",
+    "hot-chocolate"
+   ]
+  },
+  {
+   "id": "shot",
+   "en": "Extra shot",
+   "ar": "شوت زيادة",
+   "opts": [
+    {
+     "id": "espresso",
+     "en": "Espresso shot",
+     "ar": "شوت إسبريسو",
+     "p": 75
+    }
+   ],
+   "cats": [
+    "coffee",
+    "iced"
+   ],
+   "items": [],
+   "skip": [
+    "turkish",
+    "nescafe-black",
+    "three-in-one",
+    "two-in-one",
+    "orangeno",
+    "iced-tea",
+    "iced-milo",
+    "iced-matcha",
+    "matcha-strawberry"
+   ]
+  },
+  {
+   "id": "syrup",
+   "en": "Syrup",
+   "ar": "سيروب",
+   "max": 2,
+   "opts": [
+    {
+     "id": "vanilla",
+     "en": "Vanilla",
+     "ar": "فانيلا",
+     "p": 50
+    },
+    {
+     "id": "caramel",
+     "en": "Caramel",
+     "ar": "كراميل",
+     "p": 50
+    },
+    {
+     "id": "hazelnut",
+     "en": "Hazelnut",
+     "ar": "بندق",
+     "p": 50
+    }
+   ],
+   "cats": [
+    "coffee",
+    "iced"
+   ],
+   "items": [],
+   "skip": [
+    "espresso",
+    "double-espresso",
+    "turkish",
+    "nescafe-black",
+    "three-in-one",
+    "two-in-one",
+    "orangeno",
+    "iced-tea"
+   ]
+  },
+  {
+   "id": "topping",
+   "en": "Toppings",
+   "ar": "الإضافات",
+   "opts": [
+    {
+     "id": "cream",
+     "en": "Whipped cream",
+     "ar": "كريمة مخفوقة",
+     "p": 50
+    },
+    {
+     "id": "oreo",
+     "en": "Oreo crumbs",
+     "ar": "فتات أوريو",
+     "p": 50
+    },
+    {
+     "id": "choc",
+     "en": "Chocolate drizzle",
+     "ar": "صوص شوكولا",
+     "p": 40
+    }
+   ],
+   "cats": [
+    "iced"
+   ],
+   "items": [
+    "hot-chocolate",
+    "milo",
+    "mocha"
+   ],
+   "skip": [
+    "iced-americano",
+    "iced-espresso",
+    "orangeno",
+    "iced-tea"
+   ]
+  },
+  {
+   "id": "sandwich",
+   "en": "Make it better",
+   "ar": "زيدها",
+   "opts": [
+    {
+     "id": "cheese",
+     "en": "Extra cheese",
+     "ar": "جبنة زيادة",
+     "p": 50
+    },
+    {
+     "id": "spicy",
+     "en": "Spicy",
+     "ar": "حار",
+     "p": 0
+    }
+   ],
+   "cats": [
+    "food"
+   ],
+   "items": [],
+   "skip": []
+  }
+ ]
 }

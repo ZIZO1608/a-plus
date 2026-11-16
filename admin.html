@@ -252,6 +252,77 @@ input:focus,textarea:focus{outline:none;border-color:var(--sage)!important;box-s
 .icon-pick svg{width:18px;height:18px}
 @media (max-width:520px){.sec-row{grid-template-columns:auto minmax(0,1fr) auto}.sec-row .ar-in{grid-column:2/3;grid-row:2}}
 
+/* EXTRAS: add-on groups, each a colour-coded "flavour token" */
+.cats .edit-ex{border-style:solid;border-color:transparent;color:#2B230F;background:linear-gradient(100deg,var(--gold-a),var(--gold-b) 55%,var(--gold-a));display:inline-flex;align-items:center;gap:6px;font-weight:800}
+.cats .edit-ex svg{width:14px;height:14px}
+.cats .edit-ex small{background:rgba(43,35,15,.16);border-radius:999px;padding:0 6px;font-size:11px}
+.xt{display:inline-flex;align-items:center;gap:3px;margin-top:4px;font-size:11px;font-weight:800;color:var(--gold-a)}
+.xt i{width:8px;height:8px;border-radius:50%;background:hsl(var(--h) 55% 55%);margin-inline-end:-4px;border:1.5px solid var(--surface)}
+.xt span{margin-inline-start:6px}
+.ex-intro{margin:0 0 14px;color:var(--muted);font-size:13.5px}
+.ex-ideas{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 14px;font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.ex-ideas button{letter-spacing:0;text-transform:none;border:1px dashed color-mix(in srgb,var(--gold-a) 60%,transparent);background:color-mix(in srgb,var(--gold-b) 10%,transparent);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:700;color:var(--ink);transition:transform .15s,background .2s}
+.ex-ideas button:hover{transform:translateY(-2px);background:color-mix(in srgb,var(--gold-b) 24%,transparent)}
+.xg{--c:hsl(var(--h) 52% 50%);--cs:hsl(var(--h) 55% 50% / .12);border:1px solid var(--line);border-radius:22px;margin-bottom:10px;background:var(--bg);overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.xg.open{border-color:color-mix(in srgb,var(--c) 45%,transparent);box-shadow:0 10px 28px var(--cs)}
+.xg.paused .tok{filter:grayscale(1);opacity:.5}
+.xg.fresh{animation:xgIn .5s var(--ease)}
+@keyframes xgIn{from{opacity:0;transform:translateY(12px) scale(.98)}}
+.xg-head{display:flex;align-items:center;gap:10px;padding:10px 10px 10px 12px}
+.xg-tog{flex:1;min-width:0;display:flex;align-items:center;gap:12px;border:0;background:none;padding:0;text-align:start}
+.tok{width:42px;height:48px;flex:none;border-radius:21px 21px 10px 10px;display:grid;place-items:center;font-weight:900;font-size:17px;color:#fff;background:linear-gradient(160deg,hsl(var(--h) 60% 62%),hsl(var(--h) 50% 40%));box-shadow:inset 0 -6px 0 rgba(0,0,0,.12),0 6px 14px var(--cs);font-family:var(--f-ar)}
+.xg-tog b{display:block;font-size:15.5px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.xg-tog small{display:block;color:var(--muted);font-size:12px;font-weight:600}
+.xg-tog .chev{width:18px;height:18px;flex:none;margin-inline-start:auto;color:var(--muted);transition:rotate .3s var(--ease)}
+.xg.open .chev{rotate:180deg}
+.xg-body{padding:4px 14px 16px;display:flex;flex-direction:column;gap:14px;border-top:1px dashed var(--line)}
+.xg-body .fl input{background:var(--surface)}
+.xk{font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--c);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.xk small{letter-spacing:0;text-transform:none;font-weight:600;color:var(--muted);font-size:12px}
+.xrules{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.xrules .pills button.on{background:var(--c);border-color:var(--c);color:#fff}
+.xrules .sw{border:1px solid var(--line);border-radius:999px;padding:5px 10px 5px 12px;background:var(--surface);color:var(--ink)}
+.xmax{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:700;color:var(--muted)}
+.xmax button{width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:var(--surface);font-weight:800;font-size:12px}
+.xmax button.on{background:var(--c);color:#fff;border-color:var(--c)}
+.xo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 92px auto auto;gap:6px;align-items:center;margin-bottom:6px}
+.xo input{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:8px 10px;font-size:14px;font-weight:600}
+.xo .pin{position:relative}
+.xo .pin input{padding-inline-end:30px;font-variant-numeric:tabular-nums}
+.xo .pin span{position:absolute;inset-inline-end:9px;top:50%;translate:0 -50%;font-size:10.5px;font-weight:800;color:var(--muted);pointer-events:none}
+.xo .rm{width:32px;height:32px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--danger);font-weight:800}
+.xo.out input{text-decoration:line-through;opacity:.6}
+.xo-add{border:1px dashed var(--line);background:none;border-radius:11px;padding:8px;font-weight:700;font-size:13px;color:var(--muted);width:100%}
+@media (max-width:560px){.xo{grid-template-columns:minmax(0,1fr) 84px auto auto}.xo .ar-in{grid-column:1/-1;grid-row:2}}
+.xlink .pills button.on{background:var(--c);border-color:var(--c);color:#fff}
+.xreach{margin-top:8px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.xreach summary{cursor:pointer;padding:10px 12px;font-size:13px;font-weight:700;list-style:none;display:flex;align-items:center;gap:8px}
+.xreach summary::-webkit-details-marker{display:none}
+.xreach summary b{color:var(--c)}
+.xreach summary::after{content:"Fine-tune ▾";margin-inline-start:auto;font-size:12px;color:var(--muted)}
+.xreach[open] summary::after{content:"Done ▴"}
+.xreach .grp{padding:2px 12px 10px}
+.xreach .grp > div{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:6px 0 5px}
+.xreach .chips{display:flex;flex-wrap:wrap;gap:5px}
+.xreach .chips button{border:1px dashed var(--line);background:none;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600;color:var(--muted);transition:all .2s}
+.xreach .chips button.on{border:1px solid var(--c);background:var(--cs);color:var(--ink)}
+.xreach .chips button.on::before{content:"✓ ";color:var(--c);font-weight:900}
+.xprev{border-radius:16px;padding:12px;background:var(--surface);border:1px solid var(--line)}
+.xprev .xpv{display:flex;flex-wrap:wrap;gap:6px}
+.xprev .xpv span{border:1.5px solid var(--line);border-radius:14px;padding:6px 11px;font-size:13px;font-weight:700;font-family:var(--f-ar);display:inline-flex;gap:6px}
+.xprev .xpv span:first-child{border-color:var(--c);background:var(--cs)}
+.xprev .xpv span i{font-style:normal;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
+.xprev .xpv span.out{opacity:.45;text-decoration:line-through}
+.xprev h4{margin:0 0 8px;font-family:var(--f-ar);font-size:14px;display:flex;gap:8px;align-items:baseline}
+.xprev h4 small{font-weight:600;color:var(--muted);font-size:12px}
+/* item editor: which extras this item gets */
+#edEx button{gap:7px}
+#edEx button i{width:10px;height:10px;border-radius:50%;background:hsl(var(--h) 55% 55%)}
+#edEx button.on{background:hsl(var(--h) 45% 42%);border-color:hsl(var(--h) 45% 42%);color:#fff}
+#edEx button.on i{background:#fff}
+#edEx .none-yet{font-size:12.5px;font-weight:600;color:var(--muted)}
+#edEx .go{border-style:dashed;color:var(--gold-a)}
+
 /* HISTORY: a time machine */
 .tl{position:relative;padding-inline-start:26px}
 .tl::before{content:"";position:absolute;top:8px;bottom:8px;inset-inline-start:8px;width:2px;background:linear-gradient(var(--gold-a),var(--line))}
@@ -388,6 +459,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--sage)!important;box-s
             <label class="sw gold-sw"><span>A+ signature<small>House special stamp</small></span><input type="checkbox" name="sig"><i></i></label>
             <label class="sw brand-sw"><span>Coming soon<small>Shown without a price</small></span><input type="checkbox" name="soon"><i></i></label>
           </div>
+          <div class="fl">Extras customers can add<div class="pills" id="edEx"></div></div>
           <div class="err-line" id="edErr" hidden></div>
         </div>
       </div>
@@ -402,6 +474,20 @@ input:focus,textarea:focus{outline:none;border-color:var(--sage)!important;box-s
     <div class="m-head"><h2 id="secTitle">Menu sections</h2><button class="x" type="button" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
     <div class="m-body"><div id="secList"></div><button class="ghost" type="button" id="secAdd" style="width:100%;padding:12px;border-style:dashed">+ Add a section</button></div>
     <div class="m-foot"><span class="grow"></span><button class="ghost" type="button" data-close style="padding:12px 16px">Cancel</button><button class="gold" type="button" id="secSave">Save sections</button></div>
+  </div>
+</div>
+
+<!-- extras: add-on groups customers pick in the item sheet -->
+<div class="modal" id="exModal" role="dialog" aria-modal="true" aria-labelledby="exTitle" style="--w:780px">
+  <div class="modal-box">
+    <div class="m-head"><h2 id="exTitle">Extras bar</h2><button class="x" type="button" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="m-body">
+      <p class="ex-intro">Add-ons customers can pick when they order: syrups, an extra shot, sugar level, cheese… Connect each group to whole sections, then fine-tune single items. Prices add to the order and show on WhatsApp.</p>
+      <div class="ex-ideas" id="exIdeas"></div>
+      <div id="exList"></div>
+      <button class="ghost" type="button" id="exAdd" style="width:100%;padding:12px;border-style:dashed">+ New extras group</button>
+    </div>
+    <div class="m-foot"><span class="grow"></span><button class="ghost" type="button" data-close style="padding:12px 16px">Cancel</button><button class="gold" type="button" id="exSave">Save extras</button></div>
   </div>
 </div>
 
@@ -460,6 +546,17 @@ let root, imgDir, MENU = null, REV = null, have = new Map(), view = 'all', cat =
 const CATS = () => MENU.cats, ITEMS = () => MENU.items;
 const catOf = id => MENU.cats.find(c => c.id === id);
 const photoUrl = it => have.get(it.img);
+/* extras: a group shows on an item when the item's section is linked (and the item isn't skipped) or the item is linked on its own */
+const EXTRAS = () => MENU.extras || [];
+const HUES = [28, 200, 330, 140, 265, 48, 175, 5, 300, 95];
+const hueOf = i => HUES[i % HUES.length];
+const applies = (g, it) => !(g.skip || []).includes(it.id) && ((g.cats || []).includes(it.c) || (g.items || []).includes(it.id));
+function setApplies(g, it, on){
+  g.cats ||= []; g.items = (g.items || []).filter(x=>x!==it.id); g.skip = (g.skip || []).filter(x=>x!==it.id);
+  if(on && !g.cats.includes(it.c)) g.items.push(it.id);
+  if(!on && g.cats.includes(it.c)) g.skip.push(it.id);
+}
+const extrasOn = it => EXTRAS().map((g, i)=>({g, i})).filter(({g})=>!g.off && applies(g, it));
 
 /* ---------- remember the local folder between visits (IndexedDB holds the handle) ---------- */
 const idb = (mode, fn) => new Promise((res, rej) => {
@@ -603,7 +700,8 @@ function render(){
   $('#seg').innerHTML = [['all','All'],['missing','No photo'],['out','Sold out']].map(([v,l])=>`<button type="button" data-v="${v}" class="${v===view?'on':''}">${l}<small>${counts[v]}</small></button>`).join('');
   if(cat !== 'all' && !catOf(cat)) cat = 'all';
   $('#cats').innerHTML = [{id:'all', en:'All sections'}, ...CATS()].map(c=>`<button type="button" data-c="${c.id}" class="${c.id===cat?'on':''}">${esc(c.en)}</button>`).join('')
-    + `<button type="button" class="edit-secs" id="editSecs">${ic('pen')}Sections</button>`;
+    + `<button type="button" class="edit-secs" id="editSecs">${ic('pen')}Sections</button>`
+    + `<button type="button" class="edit-ex" id="editEx">${ic('plus',2.6)}Extras<small>${EXTRAS().length}</small></button>`;
   const visible = ITEMS().filter(it=>{
     if(view==='missing' && photoUrl(it)) return false;
     if(view==='out' && !it.out) return false;
@@ -613,12 +711,13 @@ function render(){
   });
   const newCard = view === 'all' && !query ? `<button class="new-card" type="button" data-new><i>${ic('plus',2.6)}</i>New item<small>${cat==='all' ? 'Add to the menu' : 'in ' + esc(catOf(cat).en)}</small></button>` : '';
   $('#grid').innerHTML = newCard + (visible.length ? visible.map(it=>{
-    const url = photoUrl(it);
+    const url = photoUrl(it), xs = extrasOn(it);
     return `<div class="it ${it.out?'out':''}" data-id="${it.id}">
       <button class="frame" type="button" data-edit="${it.id}" aria-label="Edit ${esc(it.en)}">
         ${url ? `<img src="${url}" alt="" loading="lazy">` : `<span class="ph">${ic(catOf(it.c)?.icon,1.6)}No photo</span>`}
         ${badges(it)}<span class="hov">Edit</span></button>
-      <div><h3>${esc(it.en)}${it.sz?` · ${esc(it.sz)}`:''}</h3><div class="ar">${esc(it.ar)}</div></div>
+      <div><h3>${esc(it.en)}${it.sz?` · ${esc(it.sz)}`:''}</h3><div class="ar">${esc(it.ar)}</div>
+        ${xs.length ? `<div class="xt" title="${esc(xs.map(x=>x.g.en).join(', '))}">${xs.slice(0,4).map(x=>`<i style="--h:${hueOf(x.i)}"></i>`).join('')}<span>+${xs.length} extra${xs.length>1?'s':''}</span></div>` : ''}</div>
       <div class="it-row">${priceTxt(it)}<label class="sw" title="Sold out today"><input type="checkbox" data-out="${it.id}" ${it.out?'checked':''} aria-label="Sold out today"><i></i></label></div>
       <button class="edit-btn" type="button" data-edit="${it.id}">${ic('pen')}Edit</button>
     </div>`;
@@ -641,6 +740,7 @@ $('#q').addEventListener('input', e=>{ query = e.target.value.trim(); render(); 
 $('#seg').addEventListener('click', e=>{ const b = e.target.closest('[data-v]'); if(!b) return; view = b.dataset.v; render(); });
 $('#cats').addEventListener('click', e=>{
   if(e.target.closest('#editSecs')) return openSections();
+  if(e.target.closest('#editEx')) return openExtras();
   const b = e.target.closest('[data-c]'); if(!b) return; cat = b.dataset.c; render();
 });
 $('#grid').addEventListener('click', e=>{
@@ -726,7 +826,7 @@ const servedFor = c => SERVED[catOf(c)?.icon] || 'h';
 const BLANK = c => ({id:'', c, en:'', ar:'', de:'', da:'', p:null, caf:1, sug:1, t:servedFor(c), img:''});
 function openEditor(id){
   const src = id ? ITEMS().find(i=>i.id===id) : BLANK(cat !== 'all' ? cat : CATS()[0].id);
-  ed = {draft: clone(src), isNew: !id, blob: null, blobUrl: null, pvLang: ed?.pvLang || 'ar'};
+  ed = {draft: clone(src), orig: JSON.stringify(src), isNew: !id, blob: null, blobUrl: null, pvLang: ed?.pvLang || 'ar', exTouched: new Map()};
   const f = $('#edForm');
   $('#edTitle').textContent = id ? `Edit ${src.en}` : 'New item';
   for(const k of ['en','ar','de','da','sz']) f.elements[k].value = src[k] || '';
@@ -750,6 +850,12 @@ function syncEditor(){
   $('#edSug').querySelectorAll('[data-n]').forEach(b=>b.classList.toggle('on', +b.dataset.n===d.sug));
   f.elements.p.disabled = !!d.soon;
   $('#pvLang').querySelectorAll('[data-l]').forEach(b=>b.classList.toggle('on', b.dataset.l===ed.pvLang));
+  /* untouched groups follow the section (moving a latte to Iced Bar picks up Iced Bar's extras) */
+  $('#edEx').innerHTML = EXTRAS().length
+    ? EXTRAS().map((g, i)=>{ const on = ed.exTouched.has(g.id) ? ed.exTouched.get(g.id) : applies(g, d);
+        return `<button type="button" data-gx="${g.id}" class="${on?'on':''}" style="--h:${hueOf(i)}" aria-pressed="${on}"><i></i>${esc(g.en)}${g.off?' · paused':''}</button>`; }).join('')
+      + `<button type="button" class="go" data-gxm>Edit extras</button>`
+    : `<span class="none-yet">No extras yet.</span><button type="button" class="go" data-gxm>+ Create extras</button>`;
   const url = ed.blobUrl || (ed.isNew ? null : photoUrl(d)), icon = catOf(d.c)?.icon;
   $('#edFrame').innerHTML = (url ? `<img src="${url}" alt="">` : `<span class="ph">${ic(icon,1.5)}No photo yet</span>`) + badges(d);
   $('#edPhotoBtn span').textContent = url ? 'Change photo' : 'Add photo';
@@ -770,6 +876,13 @@ $('#edForm').addEventListener('input', e=>{
   syncEditor();
 });
 $('#edForm').addEventListener('click', e=>{
+  const gx = e.target.closest('button[data-gx]');
+  if(gx){ ed.exTouched.set(gx.dataset.gx, !gx.classList.contains('on')); return syncEditor(); }
+  if(e.target.closest('[data-gxm]')){
+    const dirty = ed.isNew || JSON.stringify(ed.draft) !== ed.orig || ed.exTouched.size || ed.blob;
+    if(dirty && !confirm('Leave this item without saving your changes?')) return;
+    cleanupEditor(); return openExtras();
+  }
   const b = e.target.closest('button[data-c],button[data-t],button[data-n],button[data-l]'); if(!b) return;
   const d = ed.draft;
   if(b.dataset.c){ d.c = b.dataset.c; if(ed.isNew) d.t = servedFor(d.c); }
@@ -798,6 +911,7 @@ $('#edForm').addEventListener('submit', async e=>{
     const lastInCat = next.items.map(i=>i.c).lastIndexOf(d.c);
     next.items.splice(lastInCat < 0 ? next.items.length : lastInCat + 1, 0, d);
   }else next.items[next.items.findIndex(i=>i.id===d.id)] = d;
+  for(const [gid, on] of ed.exTouched){ const g = (next.extras || []).find(x=>x.id===gid); if(g) setApplies(g, d, on); }
   $('#edSave').disabled = true;
   const ok = await commit(next, `${ed.isNew ? 'added' : 'edited'} ${d.en}`);
   $('#edSave').disabled = false;
@@ -857,6 +971,160 @@ $('#secSave').addEventListener('click', async ()=>{
   if(!secDraft.length) return toast('Keep at least one section.', true);
   const next = clone(MENU); next.cats = secDraft;
   if(await commit(next, 'edited sections')){ closeModal(); toast('Sections saved'); }
+});
+
+/* ---------- extras bar ---------- */
+let exDraft = null;
+const exOpen = new Set(), exReach = new Set();   /* which groups are expanded / have the item list open (by object) */
+/* one-tap starters; they link to the sections whose icon fits */
+const IDEAS = [
+  {en:'Sugar level', ar:'السكر', one:1, opts:[['No sugar','بدون سكر',0],['Medium','وسط',0],['Extra sweet','زيادة',0]], icons:['coffee','warm']},
+  {en:'Extra shot', ar:'شوت زيادة', opts:[['Espresso shot','شوت إسبريسو',75]], icons:['coffee','iced']},
+  {en:'Syrup', ar:'سيروب', max:2, opts:[['Vanilla','فانيلا',50],['Caramel','كراميل',50],['Hazelnut','بندق',50]], icons:['coffee','iced']},
+  {en:'Milk', ar:'الحليب', one:1, opts:[['Full cream','حليب كامل',0],['Skimmed','خالي الدسم',0],['Coconut milk','حليب جوز الهند',75]], icons:['coffee','iced']},
+  {en:'Ice', ar:'التلج', one:1, opts:[['Normal ice','تلج عادي',0],['Less ice','تلج قليل',0],['No ice','بدون تلج',0]], icons:['iced','mocktails','cold']},
+  {en:'Toppings', ar:'الإضافات', opts:[['Whipped cream','كريمة مخفوقة',50],['Oreo crumbs','فتات أوريو',50],['Chocolate drizzle','صوص شوكولا',40]], icons:['iced']},
+  {en:'Sandwich extras', ar:'إضافات السندويش', opts:[['Extra cheese','جبنة زيادة',50],['Spicy','حار',0]], icons:['food']}
+];
+const CHEV = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+const reachOf = g => ITEMS().filter(it=>applies(g, it)).length;
+const ruleTxt = g => g.one ? (g.req ? 'pick one, required' : 'pick one') : g.max ? `up to ${g.max}` : 'pick any';
+const exSummary = g => `${g.opts.length} option${g.opts.length===1?'':'s'} · ${ruleTxt(g)} · on ${reachOf(g)} item${reachOf(g)===1?'':'s'}${g.off?' · paused':''}`;
+const tokTxt = g => esc([...(g.ar || g.en || '+').trim()][0] || '+');
+
+function openExtras(){
+  exDraft = clone(EXTRAS()); exOpen.clear(); exReach.clear();
+  if(exDraft.length === 1) exOpen.add(exDraft[0]);
+  drawExtras(); showModal('#exModal');
+}
+function exPreview(g){
+  const rule = g.one ? (g.req ? 'اختار واحد' : 'اختياري، واحد بس') : g.max ? `لحد ${g.max}` : 'اختار اللي بدك';
+  return `<div class="xk">Customer sees</div><h4>${esc(g.ar) || '…'}<small>${rule}</small></h4>
+    <div class="xpv">${g.opts.map(o=>`<span class="${o.out?'out':''}">${esc(o.ar || o.en) || '…'}${o.p ? `<i>+${o.p}</i>` : ''}</span>`).join('')}</div>`;
+}
+function exGroup(g, i){
+  const open = exOpen.has(g);
+  const body = !open ? '' : `<div class="xg-body">
+    <div class="row2 stack" style="margin-top:10px">
+      <label class="fl">Group name (English)<input data-k="en" value="${esc(g.en)}" maxlength="40" placeholder="Syrup"></label>
+      <label class="fl">اسم المجموعة<input data-k="ar" class="ar-text" value="${esc(g.ar)}" maxlength="40" placeholder="سيروب"></label>
+    </div>
+    <div><div class="xk">How customers pick</div><div class="xrules">
+      <div class="pills"><button type="button" data-act="one" class="${g.one?'on':''}">Pick one</button><button type="button" data-act="many" class="${g.one?'':'on'}">Pick several</button></div>
+      ${g.one
+        ? `<label class="sw gold-sw"><input type="checkbox" data-k="req" ${g.req?'checked':''}><i></i>Must choose</label>`
+        : `<span class="xmax">Up to ${[0,1,2,3,4].filter(n=>n<g.opts.length).map(n=>`<button type="button" data-act="max" data-n="${n}" class="${(g.max||0)===n?'on':''}" ${n?'':'style="width:auto;padding-inline:9px"'}>${n||'Any'}</button>`).join('')}</span>`}
+      <label class="sw brand-sw" title="Hide from the menu for now"><input type="checkbox" data-k="off" ${g.off?'checked':''}><i></i>Pause</label>
+    </div></div>
+    <div><div class="xk">Options <small>price 0 = free · switch = sold out today</small></div>
+      ${g.opts.map((o, j)=>`<div class="xo ${o.out?'out':''}" data-o="${j}">
+        <input data-ok="en" value="${esc(o.en)}" maxlength="40" placeholder="Option (English)" aria-label="Option name in English">
+        <input data-ok="ar" class="ar-text ar-in" value="${esc(o.ar)}" maxlength="40" placeholder="الخيار بالعربي" aria-label="Option name in Arabic">
+        <label class="pin"><input data-ok="p" inputmode="numeric" value="${o.p ?? 0}" aria-label="Extra price"><span>SP</span></label>
+        <label class="sw" title="Sold out today"><input type="checkbox" data-ok="out" ${o.out?'checked':''} aria-label="Sold out today"><i></i></label>
+        <button type="button" class="rm" data-act="orm" aria-label="Remove option" ${g.opts.length===1?'disabled':''}>✕</button></div>`).join('')}
+      ${g.opts.length < 16 ? '<button type="button" class="xo-add" data-act="oadd">+ Add option</button>' : ''}</div>
+    <div class="xlink"><div class="xk">Connected to <small>whole sections</small></div>
+      <div class="pills">${CATS().map(c=>`<button type="button" data-act="cat" data-c="${c.id}" class="${g.cats.includes(c.id)?'on':''}">${ic(c.icon,1.9)}${esc(c.en)}</button>`).join('')}</div>
+      <details class="xreach" ${exReach.has(g)?'open':''}><summary>Shows on <b class="reach">${reachOf(g)}</b> items</summary>
+        ${CATS().map(c=>{ const its = ITEMS().filter(it=>it.c===c.id); return its.length ? `<div class="grp"><div>${esc(c.en)}</div><div class="chips">${its.map(it=>`<button type="button" data-act="it" data-id="${it.id}" class="${applies(g, it)?'on':''}">${esc(it.en)}</button>`).join('')}</div></div>` : ''; }).join('')}
+      </details></div>
+    <div class="xprev">${exPreview(g)}</div>
+  </div>`;
+  return `<div class="xg ${open?'open':''} ${g.off?'paused':''} ${g._fresh?'fresh':''}" data-g="${i}" style="--h:${hueOf(i)}">
+    <div class="xg-head"><button type="button" class="xg-tog" data-act="open" aria-expanded="${open}"><span class="tok">${tokTxt(g)}</span><span style="min-width:0"><b>${esc(g.en) || 'New group'}</b><small class="sum">${exSummary(g)}</small></span>${CHEV}</button>
+      <div class="sec-btns"><button type="button" data-act="mv" data-d="-1" ${i===0?'disabled':''} aria-label="Move up">↑</button><button type="button" data-act="mv" data-d="1" ${i===exDraft.length-1?'disabled':''} aria-label="Move down">↓</button><button type="button" class="rm" data-act="rm" aria-label="Delete group">✕</button></div></div>
+    ${body}</div>`;
+}
+function drawExtras(){
+  const have = new Set(exDraft.map(g=>(g.en || '').toLowerCase()));
+  const ideas = IDEAS.map((x, k)=>({x, k})).filter(({x})=>!have.has(x.en.toLowerCase()));
+  $('#exIdeas').innerHTML = ideas.length ? `Quick add ${ideas.map(({x, k})=>`<button type="button" data-idea="${k}">+ ${esc(x.en)}</button>`).join('')}` : '';
+  $('#exList').innerHTML = exDraft.length ? exDraft.map(exGroup).join('')
+    : '<p class="none" style="padding:24px 0">No extras yet. Tap a quick add above, or start a new group.</p>';
+  exDraft.forEach(g=>delete g._fresh);
+}
+/* typing only refreshes the bits that show it, so the cursor stays put */
+function exRefresh(row, g){
+  row.querySelector('.xg-tog b').textContent = g.en || 'New group';
+  row.querySelector('.tok').innerHTML = tokTxt(g);
+  row.querySelector('.sum').textContent = exSummary(g);
+  const pv = row.querySelector('.xprev'); if(pv) pv.innerHTML = exPreview(g);
+}
+function exAddGroup(g){ g._fresh = true; exDraft.push(g); exOpen.add(g); drawExtras(); $('#exList').lastElementChild.scrollIntoView({block:'nearest', behavior:'smooth'}); }
+$('#exAdd').addEventListener('click', ()=>{
+  exAddGroup({id:'', en:'', ar:'', opts:[{id:'', en:'', ar:'', p:0}], cats: cat !== 'all' ? [cat] : [], items:[], skip:[]});
+  $('#exList').lastElementChild.querySelector('input')?.focus();
+});
+$('#exIdeas').addEventListener('click', e=>{
+  const b = e.target.closest('[data-idea]'); if(!b) return;
+  const x = IDEAS[+b.dataset.idea];
+  exAddGroup({id:'', en:x.en, ar:x.ar, ...(x.one?{one:1}:{}), ...(x.max?{max:x.max}:{}),
+    opts: x.opts.map(([en, ar, p])=>({id:'', en, ar, p})),
+    cats: CATS().filter(c=>x.icons.includes(c.icon)).map(c=>c.id), items:[], skip:[]});
+  toast(`${x.en} added. Check the prices, then save.`);
+});
+$('#exList').addEventListener('toggle', e=>{
+  const row = e.target.closest?.('[data-g]'); if(!row || !e.target.matches('details')) return;
+  const g = exDraft[+row.dataset.g]; if(e.target.open) exReach.add(g); else exReach.delete(g);
+}, true);
+$('#exList').addEventListener('input', e=>{
+  const row = e.target.closest('[data-g]'); if(!row) return;
+  const g = exDraft[+row.dataset.g], el = e.target;
+  if(el.type !== 'checkbox') el.value = el.value.replace(/[<>]/g, '');
+  if(el.dataset.k){
+    if(el.type === 'checkbox'){ if(el.checked) g[el.dataset.k] = 1; else delete g[el.dataset.k]; row.classList.toggle('paused', !!g.off); }
+    else g[el.dataset.k] = el.value;
+  }else if(el.dataset.ok){
+    const o = g.opts[+el.closest('[data-o]').dataset.o], k = el.dataset.ok;
+    if(k === 'out'){ if(el.checked) o.out = 1; else delete o.out; el.closest('.xo').classList.toggle('out', el.checked); }
+    else if(k === 'p'){ el.value = el.value.replace(/[^\d]/g, '').slice(0, 7); o.p = el.value === '' ? 0 : +el.value; }
+    else o[k] = el.value;
+  }
+  exRefresh(row, g);
+});
+$('#exList').addEventListener('click', e=>{
+  const b = e.target.closest('[data-act]'), row = e.target.closest('[data-g]'); if(!b || !row) return;
+  const i = +row.dataset.g, g = exDraft[i], act = b.dataset.act;
+  if(act === 'open'){ if(exOpen.has(g)) exOpen.delete(g); else exOpen.add(g); }
+  else if(act === 'mv'){ const j = i + +b.dataset.d; [exDraft[i], exDraft[j]] = [exDraft[j], exDraft[i]]; }
+  else if(act === 'rm'){ if((g.en || g.opts.some(o=>o.en)) && !confirm(`Delete the “${g.en || 'new'}” extras group?`)) return; exDraft.splice(i, 1); }
+  else if(act === 'one'){ g.one = 1; delete g.max; }
+  else if(act === 'many'){ delete g.one; delete g.req; }
+  else if(act === 'max'){ if(+b.dataset.n) g.max = +b.dataset.n; else delete g.max; }
+  else if(act === 'oadd'){ g.opts.push({id:'', en:'', ar:'', p:0}); drawExtras(); return $(`[data-g="${i}"] .xo:last-of-type input`)?.focus(); }
+  else if(act === 'orm'){ g.opts.splice(+b.closest('[data-o]').dataset.o, 1); if(g.max >= g.opts.length) delete g.max; }
+  else if(act === 'cat'){
+    const c = b.dataset.c;
+    if(g.cats.includes(c)){ g.cats = g.cats.filter(x=>x!==c); g.skip = g.skip.filter(id=>ITEMS().find(it=>it.id===id)?.c !== c); }
+    else { g.cats.push(c); g.items = g.items.filter(id=>ITEMS().find(it=>it.id===id)?.c !== c); }
+  }
+  else if(act === 'it'){ const it = ITEMS().find(x=>x.id===b.dataset.id); setApplies(g, it, !applies(g, it)); }
+  else return;
+  drawExtras();
+});
+$('#exSave').addEventListener('click', async ()=>{
+  const fail = (g, msg) => { exOpen.add(g); drawExtras(); toast(msg, true); };
+  const taken = new Set(exDraft.map(g=>g.id).filter(Boolean));
+  const out = [];
+  for(const g of exDraft){
+    g.en = (g.en || '').trim(); g.ar = (g.ar || '').trim();
+    g.opts = g.opts.map(o=>({...o, en:(o.en || '').trim(), ar:(o.ar || '').trim()})).filter(o=>o.en || o.ar);
+    if(!g.en || !g.ar) return fail(g, 'Every extras group needs an English and an Arabic name.');
+    if(!g.opts.length) return fail(g, `“${g.en}” needs at least one option.`);
+    const bad = g.opts.find(o=>!o.en || !o.ar); if(bad) return fail(g, `“${bad.en || bad.ar}” in ${g.en} needs both names.`);
+    if(!g.id){ g.id = slug(g.en, taken); taken.add(g.id); }
+    const optTaken = new Set(g.opts.map(o=>o.id).filter(Boolean));
+    for(const o of g.opts) if(!o.id){ o.id = slug(o.en, optTaken); optTaken.add(o.id); }
+    if(!g.one) delete g.req;
+    if(g.one || g.max >= g.opts.length) delete g.max;
+    const {_fresh, ...clean} = g; out.push(clean);
+  }
+  const next = clone(MENU); next.extras = clone(out);
+  $('#exSave').disabled = true;
+  const ok = await commit(next, 'edited extras');
+  $('#exSave').disabled = false;
+  if(ok){ closeModal(); toast(out.length ? `Extras saved · live on ${new Set(ITEMS().filter(it=>extrasOn(it).length).map(it=>it.id)).size} items` : 'Extras saved'); }
 });
 
 /* ---------- history ---------- */

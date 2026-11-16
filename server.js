@@ -125,7 +125,38 @@ function cleanMenu(m){
   for(const [cid, ids] of Object.entries(m.pair && typeof m.pair === 'object' ? m.pair : {}))
     if(catIds.has(cid) && Array.isArray(ids)) pair[cid] = ids.filter(id => itemIds.has(id)).slice(0, 4);
 
-  return {updated: new Date().toISOString(), cats, items, combos, pair};
+  /* extras: add-on groups (syrups, extra shot, sugar...) linked to whole sections and/or single items.
+     one: pick at most one option · req: one must be picked · max: cap for multi-pick groups
+     cats / items: where the group shows · skip: items in those sections that don't get it */
+  const groupIds = new Set();
+  const extras = (Array.isArray(m.extras) ? m.extras : []).slice(0, 24).map((g, i) => {
+    const glabel = `Extras group ${i + 1}${typeof g.en === 'string' ? ` (${g.en})` : ''}`;
+    const id = typeof g.id === 'string' && ID.test(g.id) ? g.id : bad(`${glabel} has an invalid id.`);
+    if(groupIds.has(id)) bad(`Two extras groups use the id "${id}".`);
+    groupIds.add(id);
+    const optIds = new Set();
+    const opts = (Array.isArray(g.opts) ? g.opts : []).slice(0, 16).map((o, j) => {
+      const olabel = `${glabel}, option ${j + 1}`;
+      const oid = typeof o.id === 'string' && ID.test(o.id) ? o.id : bad(`${olabel} has an invalid id.`);
+      if(optIds.has(oid)) bad(`${glabel} has two options with the id "${oid}".`);
+      optIds.add(oid);
+      const p = Number.isInteger(o.p) && o.p >= 0 && o.p <= 1000000 ? o.p : bad(`${olabel}: price must be a whole number (0 is free).`);
+      const out = {id: oid, en: text(o.en, 40, `${olabel} name (EN)`), ar: text(o.ar, 40, `${olabel} name (AR)`), p};
+      if(o.out) out.out = 1;
+      return out;
+    });
+    if(!opts.length) bad(`${glabel} needs at least one option.`);
+    const ids = (v, ok) => [...new Set((Array.isArray(v) ? v : []).filter(x => ok.has(x)))];
+    const out = {id, en: text(g.en, 40, `${glabel} name (EN)`), ar: text(g.ar, 40, `${glabel} name (AR)`), opts,
+      cats: ids(g.cats, catIds), items: ids(g.items, itemIds), skip: ids(g.skip, itemIds)};
+    if(g.one) out.one = 1;
+    if(g.one && g.req) out.req = 1;
+    if(!g.one && Number.isInteger(g.max) && g.max > 0 && g.max < opts.length) out.max = g.max;
+    if(g.off) out.off = 1;
+    return out;
+  });
+
+  return {updated: new Date().toISOString(), cats, items, combos, pair, extras};
 }
 
 let saving = Promise.resolve();

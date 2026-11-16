@@ -449,7 +449,41 @@ main.swap{animation:swap .45s var(--ease)}
   background:linear-gradient(100deg,var(--gold-a),var(--gold-b) 55%,var(--gold-a));color:#2B230F;display:flex;justify-content:center;gap:8px;align-items:center;transition:transform .15s}
 .add-btn:active{transform:scale(.98)}
 .add-btn svg{width:14px;height:14px}
+.add-btn .mk-sum{font-variant-numeric:tabular-nums;font-weight:900}
 .plus.pop{animation:plusPop .45s cubic-bezier(.3,1.6,.5,1)}
+
+/* MAKE IT YOURS: extras picker in the detail sheet; each extra pours a layer into the little cup */
+.mk{margin-top:18px;border:1px solid var(--line);border-radius:24px;padding:14px 14px 16px;background:var(--bg)}
+.mk-h{display:flex;align-items:center;gap:12px}
+.mk-h > div:first-child{flex:1;min-width:0}
+.mk-h b{font-family:var(--f-display);font-weight:800;font-size:18px;display:block;line-height:1.2}
+.mk-h small{color:var(--muted);font-size:12.5px}
+.mk-cup{position:relative;width:44px;height:54px;flex:none}
+.mk-cup .glass{position:absolute;inset:6px 0 0;clip-path:polygon(0 0,100% 0,84% 100%,16% 100%);background:color-mix(in srgb,var(--line) 70%,transparent);display:flex;flex-direction:column-reverse;overflow:hidden}
+.mk-cup .glass i{display:block;flex:none;height:8px;background:hsl(var(--h) 58% 58%);animation:pour .5s var(--ease) both;border-top:1px solid rgba(255,255,255,.35)}
+.mk-cup .glass i.base{height:16px;background:linear-gradient(100deg,var(--gold-a),var(--gold-b));border:0}
+.mk-cup .lid{position:absolute;top:0;left:-3px;right:-3px;height:7px;border-radius:5px 5px 2px 2px;background:var(--brand)}
+.mk-cup b{position:absolute;top:-6px;inset-inline-end:-8px;min-width:20px;height:20px;padding-inline:5px;border-radius:10px;display:grid;place-items:center;font-size:11px;font-weight:900;color:#2B230F;background:linear-gradient(100deg,var(--gold-a),var(--gold-b));font-variant-numeric:tabular-nums;transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+.mk-cup b:empty{transform:scale(0)}
+.mk-cup.bump b{animation:plusPop .45s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pour{from{height:0;opacity:0}}
+.mk-g{padding-top:14px}
+.mk-gh{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}
+.mk-gh b{font-size:14.5px;font-weight:800}
+.mk-gh small{font-size:12px;color:var(--muted)}
+.mk-gh small.req{color:var(--gold-a);font-weight:800}
+.mk-o{display:flex;flex-wrap:wrap;gap:6px}
+.mk-o button{--c:hsl(var(--h) 50% 46%);border:1.5px solid var(--line);background:var(--surface);color:inherit;border-radius:14px;padding:8px 13px;font:inherit;font-weight:700;font-size:14px;cursor:pointer;display:inline-flex;gap:7px;align-items:center;transition:border-color .2s,background .2s,transform .15s}
+.mk-o button i{font-style:normal;font-weight:600;color:var(--muted);font-size:12.5px;font-variant-numeric:tabular-nums}
+.mk-o button::before{content:"";width:0;height:8px;border-radius:50%;background:var(--c);transition:width .25s var(--ease),margin .25s;margin-inline-end:-7px}
+.mk-o button.on{border-color:var(--c);background:hsl(var(--h) 55% 50% / .14)}
+.mk-o button.on::before{width:8px;margin-inline-end:0}
+.mk-o button:active{transform:scale(.95)}
+.mk-o button:disabled{opacity:.4;text-decoration:line-through;cursor:default}
+.mk-fly{position:fixed;z-index:70;pointer-events:none;font-weight:900;font-size:14px;color:var(--gold-a);translate:-50% 0;animation:fly .9s var(--ease) forwards;font-variant-numeric:tabular-nums}
+@keyframes fly{to{transform:translateY(-44px) scale(1.2);opacity:0}}
+.xtag{border-style:dashed!important;color:var(--gold-a)!important}
+.t-row .n small{display:block;font-weight:600;font-size:12.5px;color:var(--sage);margin-top:1px}
 @keyframes plusPop{40%{transform:scale(1.3) rotate(90deg)}100%{transform:none}}
 
 /* TRAY BAR + TRAY PANEL */
@@ -696,6 +730,7 @@ const T = {
       lead:{pick:'Here’s my pick for you:', exam:'For a heavy study session, this will keep you going:', calm:'Something easy, with no caffeine:',
         closest:'We don’t have exactly that, but this is the closest:', named:'Good choice:', more:'How about this one instead:', food:'And to eat with it:'},
       alts:'Or try', act:{more:'Something else', sweeter:'Sweeter', less:'Less sweet', eat:'Something to eat with it', restart:'Start over'}},
+    mk:'Make it yours', mkSub:'Tap to add extras. Your cup fills up as you go.', mkOne:'Pick one', mkReq:'Pick one · required', mkAny:'Pick any', mkUpTo:n=>`Up to ${n}`, extras:'+ extras',
     add:'Add to tray', added:'Added', tray:'Your tray', view:'View tray', send:'Send on WhatsApp', clearTray:'Clear tray',
     trayEmpty:'Your tray is empty. Tap + on any item to add it.', total:'Total', top:'Back to top',
     waMsg:'Hi A PLUS, I would like to order:', trayNote:'Show this to the waiter or send it on WhatsApp.', table:n=>`Table ${n}`,
@@ -719,6 +754,7 @@ const T = {
       lead:{pick:'هاد اختياري إلك:', exam:'لجلسة دراسة تقيلة، هاد بيضلّك صاحي:', calm:'شي رايق وبدون كافيين:',
         closest:'ما عنا متل ما طلبت بالضبط، بس هاد أقرب شي:', named:'اختيار حلو:', more:'شو رأيك بهاد بدالو:', food:'ومعه لتاكل:'},
       alts:'أو جرّب', act:{more:'شي تاني', sweeter:'أحلى', less:'أقل حلاوة', eat:'شي آكله معه', restart:'من الأول'}},
+    mk:'زبّطه على ذوقك', mkSub:'اضغط لتضيف إضافات، وكاسك بيتعبّى معك.', mkOne:'اختار واحد', mkReq:'اختار واحد · لازم', mkAny:'اختار اللي بدك', mkUpTo:n=>`لحد ${n}`, extras:'+ إضافات',
     add:'أضف للطلب', added:'انضاف', tray:'طلبك', view:'شوف الطلب', send:'ابعت عالواتساب', clearTray:'امسح الطلب',
     trayEmpty:'الطلب فاضي. اضغط + على أي صنف لتضيفه.', total:'المجموع', top:'لفوق',
     waMsg:'مرحبا A PLUS، بدي اطلب:', trayNote:'فرجيه للجرسون أو ابعته عالواتساب.', table:n=>`طاولة ${n}`,
@@ -730,10 +766,12 @@ const T = {
    The menu lives in menu.json (edited in the studio at /admin; the server keeps its copy in the data volume).
    item: caf caffeine 0-3 · sug sweetness 0-3 · t h hot / i iced / c chilled / r ready
          p price (null = coming soon) · sig A+ signature · nw new · out sold out today · img file in images/ */
-let CATS = [], ITEMS = [], BY = {}, COMBOS = [], PAIR = {}, MENU_REV = '';
+let CATS = [], ITEMS = [], BY = {}, COMBOS = [], PAIR = {}, EXTRAS = [], MENU_REV = '';
 const ICON_OF = {};
 function setMenu(m){
   CATS = m.cats || []; COMBOS = m.combos || []; PAIR = m.pair || {};
+  /* extras groups keep their studio colour (same order, same hue as in /admin) */
+  EXTRAS = (m.extras || []).map((g, i)=>({...g, h:[28, 200, 330, 140, 265, 48, 175, 5, 300, 95][i % 10]}));
   CATS.forEach(c=>{ ICON_OF[c.id] = IC[c.icon] ? c.icon : 'coffee'; });
   ITEMS = (m.items || []).filter(it=>ICON_OF[it.c]).map(it=>({...it, img:'images/'+it.img}));
   BY = Object.fromEntries(ITEMS.map(i=>[i.id,i]));
@@ -755,6 +793,25 @@ const caf = n => `<span class="caf ${n?'':'none'}" title="${L().caffeine}: ${L()
 const frame = (it, cls='') => `<div class="frame ${cls}">${svg(ICON_OF[it.c],1.6)}<img src="${encodeURI(it.img)}" alt="" loading="lazy" onload="this.dataset.ok=1" onerror="this.remove()">${it.sig?'<span class="stamp">A+</span>':''}${it.nw?`<span class="ribbon">${L().nw}</span>`:''}${it.out?`<span class="out-tag">${L().out}</span>`:''}</div>`;
 const orderable = it => it && it.p!=null && !it.out;
 
+/* ---------- EXTRAS ----------
+   A tray line is "id" or "id|group.option,group.option" so the same latte with and without vanilla are two lines. */
+const groupsFor = it => !it ? [] : EXTRAS.filter(g=>!g.off && !(g.skip||[]).includes(it.id) && ((g.cats||[]).includes(it.c) || (g.items||[]).includes(it.id)) && g.opts.some(o=>!o.out));
+const defaultSel = it => Object.fromEntries(groupsFor(it).filter(g=>g.req).map(g=>[g.id, [g.opts.find(o=>!o.out).id]]));
+const keyFor = (it, sel) => { const parts = groupsFor(it).flatMap(g=>g.opts.filter(o=>(sel[g.id]||[]).includes(o.id)).map(o=>`${g.id}.${o.id}`)); return parts.length ? `${it.id}|${parts.join(',')}` : it.id; };
+function parseLine(key){
+  const [id, rest] = String(key).split('|'), it = BY[id]; if(!orderable(it)) return null;
+  const gs = groupsFor(it), picks = {};
+  for(const part of rest ? rest.split(',') : []){
+    const [gid, oid] = part.split('.'), g = gs.find(x=>x.id===gid), o = g && g.opts.find(x=>x.id===oid && !x.out);
+    if(!o) return null; (picks[gid] ||= []).push(o);
+  }
+  for(const g of gs){ const n = (picks[g.id]||[]).length; if((g.one && n>1) || (g.req && !n) || (g.max && n>g.max)) return null; }
+  const opts = gs.flatMap(g=>picks[g.id]||[]);
+  return {it, opts, unit: it.p + opts.reduce((a,o)=>a+o.p, 0)};
+}
+const fmt = n => `${n.toLocaleString('en-US')} ${L().cur}`;
+const optList = opts => opts.map(o=>o[lang]).join(lang==='ar' ? '، ' : ', ');
+
 function match(it){
   if(filter==='hot' && it.t!=='h') return false;
   if(filter==='iced' && it.t!=='i') return false;
@@ -770,7 +827,7 @@ function card(it,i){
     <div class="c-body">
       <h3 class="c-name">${nm(it)}</h3>
       <p class="c-desc">${lang==='en'?it.de:it.da}</p>
-      <div class="c-meta">${caf(it.caf)}<span class="tag">${L().temp[it.t]}</span></div>
+      <div class="c-meta">${caf(it.caf)}<span class="tag">${L().temp[it.t]}</span>${orderable(it) && groupsFor(it).length ? `<span class="tag xtag">${L().extras}</span>` : ''}</div>
       <div class="c-foot">${price(it.p)}${orderable(it)?`<span class="plus">${PLUS}</span>`:''}</div>
     </div></button>`;
 }
@@ -863,15 +920,78 @@ function fillSheet(it){
       <div class="stat"><div class="k">${it.sz?L().size:'<bdi dir="ltr">A+</bdi>'}</div><div class="v">${it.sz||cat[lang]}</div></div>
     </div>
     ${it.sig?`<div class="sig-band"><b>A+</b>${L().sigNote}</div>`:''}${it.out?`<div class="sig-band out-band"><b>×</b>${L().outNote}</div>`:''}
+    ${mkHtml(it)}
     ${pairs.length?`<div class="pairs"><div class="k">${L().pairs}</div><div>${pairs.map(p=>`<button type="button" data-id="${p.id}">${p[lang]}<span>${p.p??''}</span></button>`).join('')}</div></div>`:''}
-    <div class="s-acts">${!orderable(it)?'':`<button class="add-btn" type="button" data-add="${it.id}">${PLUS}<span>${L().add}</span></button>`}
+    <div class="s-acts">${!orderable(it)?'':`<button class="add-btn" type="button" data-add="${it.id}">${PLUS}<span>${L().add}</span><b class="mk-sum"></b></button>`}
       <button class="share-btn" type="button" data-share="${it.id}" aria-label="${L().share}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4"/></svg><span>${L().share}</span></button></div>`;
   $('#closeBtn').setAttribute('aria-label', lang==='en'?'Close':'إغلاق');
+  mkSync(false);
+}
+
+/* the picks for the open item; kept through live updates and language switches, dropping anything that went away */
+let mk = {id:null, sel:{}};
+function mkHtml(it){
+  const gs = orderable(it) ? groupsFor(it) : [];
+  if(mk.id !== it.id) mk = {id: it.id, sel: defaultSel(it)};
+  else {
+    const sel = {};
+    for(const g of gs){ const ok = (mk.sel[g.id]||[]).filter(oid=>g.opts.some(o=>o.id===oid && !o.out)); if(ok.length) sel[g.id] = g.one ? ok.slice(0,1) : g.max ? ok.slice(-g.max) : ok; }
+    mk.sel = {...defaultSel(it), ...sel};
+  }
+  if(!gs.length) return '';
+  return `<div class="mk" id="mk"><div class="mk-h"><div><b>${L().mk}</b><small>${L().mkSub}</small></div>
+      <div class="mk-cup" aria-hidden="true"><span class="lid"></span><span class="glass" id="mkGlass"><i class="base"></i></span><b id="mkCount"></b></div></div>
+    ${gs.map(g=>`<div class="mk-g" style="--h:${g.h}"><div class="mk-gh"><b>${g[lang]}</b><small class="${g.req?'req':''}">${g.req?L().mkReq:g.one?L().mkOne:g.max?L().mkUpTo(g.max):L().mkAny}</small></div>
+      <div class="mk-o" role="group" aria-label="${g[lang]}">${g.opts.map(o=>`<button type="button" data-xo="${g.id}.${o.id}" aria-pressed="false" ${o.out?'disabled':''}>${o[lang]}${o.p?`<i>+${o.p}</i>`:''}</button>`).join('')}</div></div>`).join('')}</div>`;
+}
+/* chips, cup layers, the add button's key and the rolling price */
+let mkShown = 0, mkRaf;
+function mkSync(animate = true){
+  const it = BY[mk.id]; if(!it || !orderable(it)) return;
+  const key = keyFor(it, mk.sel), line = parseLine(key) || {opts:[], unit: it.p};
+  document.querySelectorAll('#sheet [data-xo]').forEach(b=>{ const [g, o] = b.dataset.xo.split('.'), on = (mk.sel[g]||[]).includes(o); b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+  const glass = $('#mkGlass');
+  if(glass){
+    const want = line.opts.map(o=>`${EXTRAS.find(g=>g.opts.includes(o)).h}`);
+    const have = [...glass.querySelectorAll('i:not(.base)')];
+    have.slice(want.length).forEach(x=>x.remove());
+    want.forEach((h, i)=>{ let x = have[i]; if(!x){ x = document.createElement('i'); glass.appendChild(x); } x.style.setProperty('--h', h); });
+    $('#mkCount').textContent = line.opts.length || '';
+  }
+  const btn = $('#sheet .add-btn'); if(!btn) return;
+  btn.dataset.add = key;
+  const sum = btn.querySelector('.mk-sum'), to = line.unit;
+  if(!groupsFor(it).length){ sum.textContent = ''; return; }
+  cancelAnimationFrame(mkRaf);
+  if(!animate || matchMedia('(prefers-reduced-motion: reduce)').matches){ mkShown = to; sum.textContent = `· ${fmt(to)}`; return; }
+  const from = mkShown, t0 = performance.now();
+  const step = t => { const k = Math.min(1, (t - t0) / 380), v = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3))); sum.textContent = `· ${fmt(v)}`; if(k < 1) mkRaf = requestAnimationFrame(step); else mkShown = to; };
+  mkRaf = requestAnimationFrame(step);
+}
+function mkPick(btn){
+  const [gid, oid] = btn.dataset.xo.split('.'), g = EXTRAS.find(x=>x.id===gid); if(!g) return;
+  let cur = mk.sel[gid] || [];
+  const on = cur.includes(oid);
+  if(on){ if(g.req && cur.length === 1) return; cur = cur.filter(x=>x!==oid); }
+  else if(g.one) cur = [oid];
+  else { cur = [...cur, oid]; if(g.max && cur.length > g.max) cur = cur.slice(-g.max); }   /* over the cap: the oldest pick makes room */
+  mk.sel[gid] = cur;
+  buzz(); mkSync();
+  if(!on){
+    const o = g.opts.find(x=>x.id===oid), r = btn.getBoundingClientRect();
+    if(o.p && !matchMedia('(prefers-reduced-motion: reduce)').matches){
+      const f = document.createElement('span'); f.className = 'mk-fly'; f.textContent = `+${o.p}`;
+      f.style.left = `${r.left + r.width/2}px`; f.style.top = `${r.top - 6}px`;
+      document.body.appendChild(f); setTimeout(()=>f.remove(), 950);
+    }
+    const cup = document.querySelector('.mk-cup'); if(cup){ cup.classList.remove('bump'); void cup.offsetWidth; cup.classList.add('bump'); }
+  }
 }
 function openSheet(id){
   const it = BY[id]; if(!it) return;
   const sh = $('#sheet'), wasOpen = sh.classList.contains('on');
   if($('#trayPanel').classList.contains('on')) $('#trayPanel').classList.remove('on');
+  if(openId !== id) mk = {id:null, sel:{}};
   openId = id; fillSheet(it); sh.scrollTop = 0;
   if(!wasOpen) lastFocus = document.activeElement;
   else { const f=sh.querySelector('.s-frame'); f.style.animation='none'; void f.offsetWidth; f.style.animation=''; }
@@ -915,26 +1035,35 @@ $('#copyBtn').addEventListener('click',async()=>{
 /* ---------- TRAY ---------- */
 let tray = {};
 try{ tray = JSON.parse(localStorage.getItem('aplus-tray')||'{}') || {}; }catch(e){ tray = {}; }
-const trayInit = () => Object.keys(tray).forEach(id=>{ if(!orderable(BY[id])) delete tray[id]; });
+/* a line whose extras changed in the studio (option sold out, new required choice) falls back to the plain item rather than vanishing */
+const trayInit = () => Object.entries(tray).forEach(([key, q])=>{
+  if(parseLine(key)) return;
+  delete tray[key];
+  const it = BY[key.split('|')[0]]; if(!orderable(it)) return;
+  const k = keyFor(it, defaultSel(it)); if(parseLine(k)) tray[k] = (tray[k]||0) + q;
+});
 const traySave = () => { try{ localStorage.setItem('aplus-tray', JSON.stringify(tray)); }catch(e){} };
-const trayCount = () => Object.values(tray).reduce((a,b)=>a+b,0);
-const trayTotal = () => Object.entries(tray).reduce((a,[id,q])=>a+BY[id].p*q,0);
+const trayLines = () => Object.entries(tray).map(([key, q])=>({key, q, ...parseLine(key)})).filter(l=>l.it);
+const trayCount = () => trayLines().reduce((a,l)=>a+l.q,0);
+const trayTotal = () => trayLines().reduce((a,l)=>a+l.unit*l.q,0);
 const buzz = () => { try{ navigator.vibrate && navigator.vibrate(12); }catch(e){} };
-function trayAdd(id, d=1){
-  const it = BY[id]; if(!orderable(it)) return;
-  tray[id] = (tray[id]||0) + d; if(tray[id] <= 0) delete tray[id];
+function trayAdd(key, d=1){
+  /* a bare id (card +, the helper chat) gets the item's required picks */
+  if(d>0 && !parseLine(key) && BY[key]) key = keyFor(BY[key], defaultSel(BY[key]));
+  if(!parseLine(key)) return;
+  tray[key] = (tray[key]||0) + d; if(tray[key] <= 0) delete tray[key];
   traySave(); trayRender(); buzz();
   if(d>0){ const b=$('#trayBar'); b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
 }
 function trayRender(){
-  const n = trayCount();
+  const n = trayCount(), lines = trayLines();
   document.body.classList.toggle('has-tray', n>0);
   $('#tbCount').textContent = n;
-  $('#tbTotal').textContent = `${trayTotal().toLocaleString('en-US')} ${L().cur}`;
-  const rows = Object.entries(tray).map(([id,q])=>{ const it=BY[id]; return `<div class="t-row"><div class="n">${nm(it)}</div>
-      <div class="qty"><button type="button" data-tq="${id}" data-d="-1" aria-label="−">−</button><span>${q}</span><button type="button" data-tq="${id}" data-d="1" aria-label="+">+</button></div>
-      <div class="e">${q} × ${it.p} = ${(q*it.p).toLocaleString('en-US')} ${L().cur}</div></div>`; }).join('');
-  const msg = [L().waMsg, ...(table?[L().table(table)]:[]), ...Object.entries(tray).map(([id,q])=>`${q} × ${nm(BY[id])} = ${q*BY[id].p} ${L().cur}`), `${L().total}: ${trayTotal()} ${L().cur}`].join('\n');
+  $('#tbTotal').textContent = fmt(trayTotal());
+  const rows = lines.map(({key,q,it,opts,unit})=>`<div class="t-row"><div class="n">${nm(it)}${opts.length?`<small>+ ${optList(opts)}</small>`:''}</div>
+      <div class="qty"><button type="button" data-tq="${key}" data-d="-1" aria-label="−">−</button><span>${q}</span><button type="button" data-tq="${key}" data-d="1" aria-label="+">+</button></div>
+      <div class="e">${q} × ${unit} = ${fmt(q*unit)}</div></div>`).join('');
+  const msg = [L().waMsg, ...(table?[L().table(table)]:[]), ...lines.map(({q,it,opts,unit})=>`${q} × ${nm(it)}${opts.length?` (+ ${optList(opts)})`:''} = ${q*unit} ${L().cur}`), `${L().total}: ${trayTotal()} ${L().cur}`].join('\n');
   $('#trayBody').innerHTML = `<h3 class="tray-h" id="trayTitle">${L().tray}${table?` · ${L().table(table)}`:''}</h3><p class="tray-note">${n?L().trayNote:''}</p>
     ${n ? rows + `<div class="t-total"><span>${L().total}</span><strong>${trayTotal().toLocaleString('en-US')} ${L().cur}</strong></div>
       <div class="t-actions"><a href="https://wa.me/963969717279?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/></svg>${L().send}</a>
@@ -953,7 +1082,12 @@ document.addEventListener('click', e=>{
   const q = e.target.closest('[data-tq]');
   if(e.target.closest('#trayClear')){ tray={}; traySave(); trayRender(); e.stopPropagation(); return; }
   if(q){ trayAdd(q.dataset.tq, +q.dataset.d); e.stopPropagation(); return; }
-  if(plus){ const id = plus.closest('.card').dataset.id; if(orderable(BY[id])){ trayAdd(id); plus.classList.remove('pop'); void plus.offsetWidth; plus.classList.add('pop'); } e.stopPropagation(); return; }
+  /* items with extras open the sheet at the picker instead, so the customer sees what they can add */
+  if(plus){ const id = plus.closest('.card').dataset.id; e.stopPropagation();
+    if(orderable(BY[id]) && groupsFor(BY[id]).length){ openSheet(id); setTimeout(()=>$('#mk')?.scrollIntoView({block:'center', behavior:'smooth'}), 380); return; }
+    if(orderable(BY[id])){ trayAdd(id); plus.classList.remove('pop'); void plus.offsetWidth; plus.classList.add('pop'); } return; }
+  const xo = e.target.closest('[data-xo]');
+  if(xo){ e.stopPropagation(); mkPick(xo); return; }
   const sh = e.target.closest('[data-share]');
   if(sh){ e.stopPropagation(); shareItem(BY[sh.dataset.share], sh); return; }
   /* the sheet's button has a label span; the chat's button is just text */

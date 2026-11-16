@@ -44,6 +44,7 @@ The menu itself is `menu.json`; the page loads it on every visit, so changes sho
 - **Sold out today:** the switch on each card. The menu greys the item out with "خلص اليوم" and it can't be ordered. Switch it back when it's in stock.
 - **New / A+ signature / Coming soon:** switches in the editor. New shows a gold "جديد" badge.
 - **Sections:** the "Sections" chip. Rename, reorder, change the icon, add, or delete empty ones.
+- **Extras:** the gold "Extras" chip opens the Extras bar: add-on groups like Syrup, Extra shot or Sugar that customers pick in the item's sheet ("زبّطه على ذوقك"). Each group has English and Arabic names, options with their own price (0 = free) and a sold-out switch, a rule (pick one / pick several / up to N / must choose), and a Pause switch. Connect a group to whole sections, then use "Fine-tune" to switch single items on or off. The item editor shows the same links ("Extras customers can add"), and each card shows how many extras it has. Extras add to the tray total and are listed in the WhatsApp order. "Quick add" has ready-made groups to start from.
 - **History:** every save keeps the previous menu (the last 60). Restore any of them; the restore itself can be undone.
 - **Photos:** drop one on a card, or many at once on the dashed box (matched by file name). The ring counts how many items have one.
 - If two people edit at the same time, the second save is refused with a message instead of overwriting the first.
